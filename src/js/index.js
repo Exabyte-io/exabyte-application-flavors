@@ -1,4 +1,8 @@
 export ALL_INPUT_TEMPLATES from "./assets";
+
+export allowedResults from "./allowed_results";
+export allowedMonitors from "./allowed_monitors";
+
 export espresso_tree from "./espresso/tree";
 export jupyterlab_tree from "./jupyterLab/tree";
 export ml_tree from "./ml/tree";
