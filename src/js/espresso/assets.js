@@ -7,7 +7,7 @@ const allAssets = [
      *  PW.X
      */
     {
-        "content": readAssetFile(applicationName, "pw_scf.in.jinja2"),
+        "content": readAssetFile(applicationName, "pw_scf.j2.in"),
         "name": "pw_scf.in",
         "contextProviders": [
             "KGridFormDataManager",
@@ -18,7 +18,7 @@ const allAssets = [
         "executableName": "pw.x"
     },
     {
-        "content": readAssetFile(applicationName, "pw_scf_bands_hse.in.jinja2"),
+        "content": readAssetFile(applicationName, "pw_scf_bands_hse.j2.in"),
         "name": "pw_scf_bands_hse.in",
         "contextProviders": [
             "QEPWXInputDataManager",
@@ -30,7 +30,7 @@ const allAssets = [
         "executableName": "pw.x"
     },
     {
-        "content": readAssetFile(applicationName, "pw_esm.in.jinja2"),
+        "content": readAssetFile(applicationName, "pw_esm.j2.in"),
         "name": "pw_esm.in",
         "contextProviders": [
             "KGridFormDataManager",
@@ -42,7 +42,7 @@ const allAssets = [
         "executableName": "pw.x"
     },
     {
-        "content": readAssetFile(applicationName, "pw_esm_relax.in.jinja2"),
+        "content": readAssetFile(applicationName, "pw_esm_relax.j2.in"),
         "name": "pw_esm_relax.in",
         "contextProviders": [
             "KGridFormDataManager",
@@ -55,7 +55,7 @@ const allAssets = [
     },
 
     {
-        "content": readAssetFile(applicationName, "pw_scf_kpt_conv.in.jinja2"),
+        "content": readAssetFile(applicationName, "pw_scf_kpt_conv.j2.in"),
         "name": "pw_scf_kpt_conv.in",
         "contextProviders": [
             "QEPWXInputDataManager",
@@ -65,7 +65,7 @@ const allAssets = [
         "executableName": "pw.x"
     },
     {
-        "content": readAssetFile(applicationName, "pw_nscf.in.jinja2"),
+        "content": readAssetFile(applicationName, "pw_nscf.j2.in"),
         "name": "pw_nscf.in",
         "contextProviders": [
             "KGridFormDataManager",
@@ -76,7 +76,7 @@ const allAssets = [
         "executableName": "pw.x"
     },
     {
-        "content": readAssetFile(applicationName, "pw_relax.in.jinja2"),
+        "content": readAssetFile(applicationName, "pw_relax.j2.in"),
         "name": "pw_relax.in",
         "contextProviders": [
             "KGridFormDataManager",
@@ -87,7 +87,7 @@ const allAssets = [
         "executableName": "pw.x"
     },
     {
-        "content": readAssetFile(applicationName, "pw_vc_relax.in.jinja2"),
+        "content": readAssetFile(applicationName, "pw_vc_relax.j2.in"),
         "name": "pw_vc_relax.in",
         "contextProviders": [
             "KGridFormDataManager",
@@ -98,7 +98,7 @@ const allAssets = [
         "executableName": "pw.x"
     },
     {
-        "content": readAssetFile(applicationName, "pw_bands.in.jinja2"),
+        "content": readAssetFile(applicationName, "pw_bands.j2.in"),
         "name": "pw_bands.in",
         "contextProviders": [
             "KPathFormDataManager",
@@ -113,7 +113,7 @@ const allAssets = [
      *  PH.X
      */
     {
-        "content": readAssetFile(applicationName, "ph_grid.in.jinja2"),
+        "content": readAssetFile(applicationName, "ph_grid.j2.in"),
         "name": "ph_grid.in",
         "contextProviders": [
             "QGridFormDataManager",
@@ -122,7 +122,7 @@ const allAssets = [
         "executableName": "ph.x"
     },
     {
-        "content": readAssetFile(applicationName, "ph_path.in.jinja2"),
+        "content": readAssetFile(applicationName, "ph_path.j2.in"),
         "name": "ph_path.in",
         "contextProviders": [
             "QPathFormDataManager",
@@ -131,28 +131,28 @@ const allAssets = [
         "executableName": "ph.x"
     },
     {
-        "content": readAssetFile(applicationName, "ph_gamma.in.jinja2"),
+        "content": readAssetFile(applicationName, "ph_gamma.j2.in"),
         "name": "ph_gamma.in",
         "contextProviders": [],
         "applicationName": applicationName,
         "executableName": "ph.x"
     },
     {
-        "content": readAssetFile(applicationName, "ph_init_qpoints.in.jinja2"),
+        "content": readAssetFile(applicationName, "ph_init_qpoints.j2.in"),
         "name": "ph_init_qpoints.in",
         "contextProviders": ["QGridFormDataManager"],
         "applicationName": applicationName,
         "executableName": "ph.x"
     },
     {
-        "content": readAssetFile(applicationName, "ph_grid_restart.in.jinja2"),
+        "content": readAssetFile(applicationName, "ph_grid_restart.j2.in"),
         "name": "ph_grid_restart.in",
         "contextProviders": ["QGridFormDataManager"],
         "applicationName": applicationName,
         "executableName": "ph.x"
     },
     {
-        "content": readAssetFile(applicationName, "ph_single_irr_qpt.in.jinja2"),
+        "content": readAssetFile(applicationName, "ph_single_irr_qpt.j2.in"),
         "name": "ph_single_irr_qpt.in",
         "contextProviders": ["QGridFormDataManager"],
         "applicationName": applicationName,
@@ -163,7 +163,7 @@ const allAssets = [
      *  MATDYN.X
      */
     {
-        "content": readAssetFile(applicationName, "matdyn_grid.in.jinja2"),
+        "content": readAssetFile(applicationName, "matdyn_grid.j2.in"),
         "name": "matdyn_grid.in",
         "contextProviders": [
             "IGridFormDataManager",
@@ -172,7 +172,7 @@ const allAssets = [
         "executableName": "ph.x"
     },
     {
-        "content": readAssetFile(applicationName, "matdyn_path.in.jinja2"),
+        "content": readAssetFile(applicationName, "matdyn_path.j2.in"),
         "name": "matdyn_path.in",
         "contextProviders": [
             "IPathFormDataManager",
@@ -185,7 +185,7 @@ const allAssets = [
      *  BANDS.X
      */
     {
-        "content": readAssetFile(applicationName, "bands.in.jinja2"),
+        "content": readAssetFile(applicationName, "bands.j2.in"),
         "name": "bands.in",
         "contextProviders": [],
         "applicationName": applicationName,
@@ -196,7 +196,7 @@ const allAssets = [
      *  Q2R.X
      */
     {
-        "content": readAssetFile(applicationName, "q2r.in.jinja2"),
+        "content": readAssetFile(applicationName, "q2r.j2.in"),
         "name": "q2r.in",
         "contextProviders": [],
         "applicationName": applicationName,
@@ -207,7 +207,7 @@ const allAssets = [
      *  PROJWFC.X
      */
     {
-        "content": readAssetFile(applicationName, "projwfc.in.jinja2"),
+        "content": readAssetFile(applicationName, "projwfc.j2.in"),
         "name": "projwfc.in",
         "contextProviders": [],
         "applicationName": applicationName,
@@ -218,7 +218,7 @@ const allAssets = [
      *  DOS.X
      */
     {
-        "content": readAssetFile(applicationName, "dos.in.jinja2"),
+        "content": readAssetFile(applicationName, "dos.j2.in"),
         "name": "dos.in",
         "contextProviders": [],
         "applicationName": applicationName,
@@ -229,7 +229,7 @@ const allAssets = [
      *  PP.X
      */
     {
-        "content": readAssetFile(applicationName, "pp_density.in.jinja2"),
+        "content": readAssetFile(applicationName, "pp_density.j2.in"),
         "name": "pp_density.in",
         "contextProviders": [],
         "applicationName": applicationName,
@@ -240,7 +240,7 @@ const allAssets = [
      *  NEB.X
      */
     {
-        "content": readAssetFile(applicationName, "neb.in.jinja2"),
+        "content": readAssetFile(applicationName, "neb.j2.in"),
         "name": "neb.in",
         "contextProviders": [
             "KGridFormDataManager",
@@ -256,7 +256,7 @@ const allAssets = [
      *  Sternheimer GW
      */
     {
-        "content": readAssetFile(applicationName, "gw_bands_plasmon_pole.in.jinja2"),
+        "content": readAssetFile(applicationName, "gw_bands_plasmon_pole.j2.in"),
         "name": "gw_bands_plasmon_pole.in",
         "contextProviders": [
             "KGridFormDataManager",
@@ -267,7 +267,7 @@ const allAssets = [
         "executableName": "gw.x"
     },
     {
-        "content": readAssetFile(applicationName, "gw_bands_full_frequency.in.jinja2"),
+        "content": readAssetFile(applicationName, "gw_bands_full_frequency.j2.in"),
         "name": "gw_bands_full_frequency.in",
         "contextProviders": [
             "KGridFormDataManager",

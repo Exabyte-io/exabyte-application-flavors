@@ -5,7 +5,7 @@ const executableName = "nwchem"
 
 const allAssets = [
     {
-        "content": readAssetFile(applicationName, "nwchem_total_energy.inp.jinja2"),
+        "content": readAssetFile(applicationName, "nwchem_total_energy.j2.inp"),
         "name": "nwchem_total_energy.inp",
         "contextProviders": [
             "NWChemInputDataManager"
