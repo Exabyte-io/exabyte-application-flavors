@@ -1,49 +1,46 @@
-import {makeObjectsFromContextProviderNames} from "../utils";
+import {makeObjectsFromContextProviderNames, readAssetFile} from "../utils";
 
-import BASH_HELLO_WORLD from "./assets/bash_hello_world.sh";
-import BASH_ESPRESSO_PW_SCF from "./assets/bash_job_espresso_pw_scf.sh";
-import BASH_ESPRESSO_COLLECT_DYNMAT from "./assets/bash_espresso_collect_dynmat.sh";
-import BASH_VASP_PREPARE_NEB_IMAGES from "./assets/bash_vasp_prepare_neb_images.sh";
-import BASH_ESPRESSO_LINK_OUTDIR_SAVE from "./assets/bash_espresso_link_outdir_save.sh";
+const applicationName = "shell";
+const executableName = "sh";
 
 const allAssets = [
     /*
      *  BASH
      */
     {
-        "content": BASH_HELLO_WORLD,
+        "content": readAssetFile(applicationName, "bash_hello_world.sh.jinja2"),
         "name": "hello_world.sh",
         "contextProviders": [],
-        "applicationName": "shell",
-        "executableName": "sh"
+        "applicationName": applicationName,
+        "executableName": executableName
     },
     {
-        "content": BASH_ESPRESSO_PW_SCF,
+        "content": readAssetFile(applicationName, "bash_job_espresso_pw_scf.sh.jinja2"),
         "name": "job_espresso_pw_scf.sh",
         "contextProviders": [],
-        "applicationName": "shell",
-        "executableName": "sh"
+        "applicationName": applicationName,
+        "executableName": executableName
     },
     {
-        "content": BASH_ESPRESSO_LINK_OUTDIR_SAVE,
+        "content": readAssetFile(applicationName, "bash_espresso_link_outdir_save.sh.jinja2"),
         "name": "espresso_link_outdir_save.sh",
         "contextProviders": [],
-        "applicationName": "shell",
-        "executableName": "sh"
+        "applicationName": applicationName,
+        "executableName": executableName
     },
     {
-        "content": BASH_ESPRESSO_COLLECT_DYNMAT,
+        "content": readAssetFile(applicationName, "bash_espresso_collect_dynmat.sh.jinja2"),
         "name": "espresso_collect_dynmat.sh",
         "contextProviders": [],
-        "applicationName": "shell",
-        "executableName": "sh"
+        "applicationName": applicationName,
+        "executableName": executableName
     },
     {
-        "content": BASH_VASP_PREPARE_NEB_IMAGES,
+        "content": readAssetFile(applicationName, "bash_vasp_prepare_neb_images.sh.jinja2"),
         "name": "bash_vasp_prepare_neb_images.sh",
         "contextProviders": ["VASPNEBInputDataManager"],
-        "applicationName": "shell",
-        "executableName": "sh"
+        "applicationName": applicationName,
+        "executableName": executableName
     },
 ];
 

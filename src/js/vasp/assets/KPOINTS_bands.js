@@ -1,7 +1,0 @@
-export default `kpoints path
-{{kpath.length}}
-reciprocal
-{% for point in kpath -%}
-{% for d in point.coordinates %}{{d}} {% endfor -%}{{point.steps}}
-{% endfor %}
-`;

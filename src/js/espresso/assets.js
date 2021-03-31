@@ -1,59 +1,24 @@
-import {makeObjectsFromContextProviderNames} from "../utils";
+import {makeObjectsFromContextProviderNames, readAssetFile} from "../utils";
 
-import PW_SCF from "./assets/pw_scf.in";
-import PW_SCF_KPT_CONV from "./assets/pw_scf_kpt_conv.in";
-import PW_NSCF from "./assets/pw_nscf.in";
-import PW_RELAX from "./assets/pw_relax.in";
-import PW_VC_RELAX from "./assets/pw_vc_relax.in";
-import PW_BANDS from "./assets/pw_bands.in";
-
-import PH_PATH from "./assets/ph_path.in";
-import PH_GRID from "./assets/ph_grid.in";
-import PH_GAMMA from "./assets/ph_gamma.in";
-import PH_INIT_QPOINTS from "./assets/ph_init_qpoints.in";
-import PH_GRID_RESTART from "./assets/ph_grid_restart.in";
-import PH_SINGLE_IRR_QPT from "./assets/ph_single_irr_qpt.in";
-
-import MATDYN_GRID from "./assets/matdyn_grid.in";
-import MATDYN_PATH from "./assets/matdyn_path.in";
-
-import Q2R from "./assets/q2r.in";
-
-import BANDS from "./assets/bands.in";
-
-import PROJWFC from "./assets/projwfc.in";
-
-import DOS from "./assets/dos.in";
-
-import PP_DENSITY from "./assets/pp_density.in";
-
-import NEB from "./assets/neb.in";
-
-import PW_ESM from "./assets/pw_esm.in";
-import PW_ESM_RELAX from "./assets/pw_esm_relax.in";
-
-import PW_SCF_BANDS_HSE from "./assets/pw_scf_bands_hse.in";
-
-import GW_BANDS_PLASMON_POLE from "./assets/gw_bands_plasmon_pole.in";
-import GW_BANDS_FULL_FREQUENCY from "./assets/gw_bands_full_frequency.in";
+const applicationName = "espresso";
 
 const allAssets = [
     /*
      *  PW.X
      */
     {
-        "content": PW_SCF,
+        "content": readAssetFile(applicationName, "pw_scf.in.jinja2"),
         "name": "pw_scf.in",
         "contextProviders": [
             "KGridFormDataManager",
             "QEPWXInputDataManager",
             "PlanewaveCutoffDataManager",
         ],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "pw.x"
     },
     {
-        "content": PW_SCF_BANDS_HSE,
+        "content": readAssetFile(applicationName, "pw_scf_bands_hse.in.jinja2"),
         "name": "pw_scf_bands_hse.in",
         "contextProviders": [
             "QEPWXInputDataManager",
@@ -61,11 +26,11 @@ const allAssets = [
             "QGridFormDataManager",
             "ExplicitKPathFormDataManager",
         ],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "pw.x"
     },
     {
-        "content": PW_ESM,
+        "content": readAssetFile(applicationName, "pw_esm.in.jinja2"),
         "name": "pw_esm.in",
         "contextProviders": [
             "KGridFormDataManager",
@@ -73,11 +38,11 @@ const allAssets = [
             "PlanewaveCutoffDataManager",
             "BoundaryConditionsFormDataManager",
         ],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "pw.x"
     },
     {
-        "content": PW_ESM_RELAX,
+        "content": readAssetFile(applicationName, "pw_esm_relax.in.jinja2"),
         "name": "pw_esm_relax.in",
         "contextProviders": [
             "KGridFormDataManager",
@@ -85,62 +50,62 @@ const allAssets = [
             "PlanewaveCutoffDataManager",
             "BoundaryConditionsFormDataManager",
         ],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "pw.x"
     },
 
     {
-        "content": PW_SCF_KPT_CONV,
+        "content": readAssetFile(applicationName, "pw_scf_kpt_conv.in.jinja2"),
         "name": "pw_scf_kpt_conv.in",
         "contextProviders": [
             "QEPWXInputDataManager",
             "PlanewaveCutoffDataManager",
         ],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "pw.x"
     },
     {
-        "content": PW_NSCF,
+        "content": readAssetFile(applicationName, "pw_nscf.in.jinja2"),
         "name": "pw_nscf.in",
         "contextProviders": [
             "KGridFormDataManager",
             "QEPWXInputDataManager",
             "PlanewaveCutoffDataManager",
         ],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "pw.x"
     },
     {
-        "content": PW_RELAX,
+        "content": readAssetFile(applicationName, "pw_relax.in.jinja2"),
         "name": "pw_relax.in",
         "contextProviders": [
             "KGridFormDataManager",
             "QEPWXInputDataManager",
             "PlanewaveCutoffDataManager",
         ],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "pw.x"
     },
     {
-        "content": PW_VC_RELAX,
+        "content": readAssetFile(applicationName, "pw_vc_relax.in.jinja2"),
         "name": "pw_vc_relax.in",
         "contextProviders": [
             "KGridFormDataManager",
             "QEPWXInputDataManager",
             "PlanewaveCutoffDataManager",
         ],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "pw.x"
     },
     {
-        "content": PW_BANDS,
+        "content": readAssetFile(applicationName, "pw_bands.in.jinja2"),
         "name": "pw_bands.in",
         "contextProviders": [
             "KPathFormDataManager",
             "QEPWXInputDataManager",
             "PlanewaveCutoffDataManager",
         ],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "pw.x"
     },
 
@@ -148,49 +113,49 @@ const allAssets = [
      *  PH.X
      */
     {
-        "content": PH_GRID,
+        "content": readAssetFile(applicationName, "ph_grid.in.jinja2"),
         "name": "ph_grid.in",
         "contextProviders": [
             "QGridFormDataManager",
         ],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "ph.x"
     },
     {
-        "content": PH_PATH,
+        "content": readAssetFile(applicationName, "ph_path.in.jinja2"),
         "name": "ph_path.in",
         "contextProviders": [
             "QPathFormDataManager",
         ],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "ph.x"
     },
     {
-        "content": PH_GAMMA,
+        "content": readAssetFile(applicationName, "ph_gamma.in.jinja2"),
         "name": "ph_gamma.in",
         "contextProviders": [],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "ph.x"
     },
     {
-        "content": PH_INIT_QPOINTS,
+        "content": readAssetFile(applicationName, "ph_init_qpoints.in.jinja2"),
         "name": "ph_init_qpoints.in",
         "contextProviders": ["QGridFormDataManager"],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "ph.x"
     },
     {
-        "content": PH_GRID_RESTART,
+        "content": readAssetFile(applicationName, "ph_grid_restart.in.jinja2"),
         "name": "ph_grid_restart.in",
         "contextProviders": ["QGridFormDataManager"],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "ph.x"
     },
     {
-        "content": PH_SINGLE_IRR_QPT,
+        "content": readAssetFile(applicationName, "ph_single_irr_qpt.in.jinja2"),
         "name": "ph_single_irr_qpt.in",
         "contextProviders": ["QGridFormDataManager"],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "ph.x"
     },
 
@@ -198,21 +163,21 @@ const allAssets = [
      *  MATDYN.X
      */
     {
-        "content": MATDYN_GRID,
+        "content": readAssetFile(applicationName, "matdyn_grid.in.jinja2"),
         "name": "matdyn_grid.in",
         "contextProviders": [
             "IGridFormDataManager",
         ],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "ph.x"
     },
     {
-        "content": MATDYN_PATH,
+        "content": readAssetFile(applicationName, "matdyn_path.in.jinja2"),
         "name": "matdyn_path.in",
         "contextProviders": [
             "IPathFormDataManager",
         ],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "ph.x"
     },
 
@@ -220,10 +185,10 @@ const allAssets = [
      *  BANDS.X
      */
     {
-        "content": BANDS,
+        "content": readAssetFile(applicationName, "bands.in.jinja2"),
         "name": "bands.in",
         "contextProviders": [],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "bands.x"
     },
 
@@ -231,10 +196,10 @@ const allAssets = [
      *  Q2R.X
      */
     {
-        "content": Q2R,
+        "content": readAssetFile(applicationName, "q2r.in.jinja2"),
         "name": "q2r.in",
         "contextProviders": [],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "q2r.x"
     },
 
@@ -242,10 +207,10 @@ const allAssets = [
      *  PROJWFC.X
      */
     {
-        "content": PROJWFC,
+        "content": readAssetFile(applicationName, "projwfc.in.jinja2"),
         "name": "projwfc.in",
         "contextProviders": [],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "projwfc.x"
     },
 
@@ -253,10 +218,10 @@ const allAssets = [
      *  DOS.X
      */
     {
-        "content": DOS,
+        "content": readAssetFile(applicationName, "dos.in.jinja2"),
         "name": "dos.in",
         "contextProviders": [],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "dos.x"
     },
 
@@ -264,10 +229,10 @@ const allAssets = [
      *  PP.X
      */
     {
-        "content": PP_DENSITY,
+        "content": readAssetFile(applicationName, "pp_density.in.jinja2"),
         "name": "pp_density.in",
         "contextProviders": [],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "pp.x"
     },
 
@@ -275,7 +240,7 @@ const allAssets = [
      *  NEB.X
      */
     {
-        "content": NEB,
+        "content": readAssetFile(applicationName, "neb.in.jinja2"),
         "name": "neb.in",
         "contextProviders": [
             "KGridFormDataManager",
@@ -283,7 +248,7 @@ const allAssets = [
             "QENEBInputDataManager",
             "PlanewaveCutoffDataManager",
         ],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "neb.x"
     },
 
@@ -291,25 +256,25 @@ const allAssets = [
      *  Sternheimer GW
      */
     {
-        "content": GW_BANDS_PLASMON_POLE,
+        "content": readAssetFile(applicationName, "gw_bands_plasmon_pole.in.jinja2"),
         "name": "gw_bands_plasmon_pole.in",
         "contextProviders": [
             "KGridFormDataManager",
             "QGridFormDataManager",
             "ExplicitKPath2PIBAFormDataManager",
         ],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "gw.x"
     },
     {
-        "content": GW_BANDS_FULL_FREQUENCY,
+        "content": readAssetFile(applicationName, "gw_bands_full_frequency.in.jinja2"),
         "name": "gw_bands_full_frequency.in",
         "contextProviders": [
             "KGridFormDataManager",
             "QGridFormDataManager",
             "ExplicitKPath2PIBAFormDataManager",
         ],
-        "applicationName": "espresso",
+        "applicationName": applicationName,
         "executableName": "gw.x"
     },
 

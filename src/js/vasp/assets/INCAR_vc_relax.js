@@ -1,8 +1,0 @@
-export default `ISMEAR = 0
-SIGMA = 0.05
-ISIF = 3
-IBRION = 2
-NSW = 300
-LWAVE = .FALSE.
-LCHARG = .FALSE.
-`;

@@ -1,16 +1,17 @@
-import {makeObjectsFromContextProviderNames} from "../utils";
+import {makeObjectsFromContextProviderNames, readAssetFile} from "../utils";
 
-import NWChemTotalEnergy from "./assets/nwchem_total_energy.inp";
+const applicationName = "nwchem"
+const executableName = "nwchem"
 
 const allAssets = [
     {
-        "content": NWChemTotalEnergy,
+        "content": readAssetFile(applicationName, "nwchem_total_energy.inp.jinja2"),
         "name": "nwchem_total_energy.inp",
         "contextProviders": [
             "NWChemInputDataManager"
         ],
-        "applicationName": "nwchem",
-        "executableName": "nwchem"
+        "applicationName": applicationName,
+        "executableName": executableName
     }
 ];
 

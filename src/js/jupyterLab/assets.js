@@ -1,30 +1,29 @@
-import {makeObjectsFromContextProviderNames} from "../utils";
+import {makeObjectsFromContextProviderNames, readAssetFile} from "../utils";
 
-import INSTALL_SH from "./assets/install.sh";
-import CONFIG_PY from "./assets/configure.py";
-import CONFIGURE_SH from "./assets/configure.sh";
+const applicationName = "jupyterLab"
+const executableName = "jupyter"
 
 const allAssets = [
     {
-        "content": INSTALL_SH,
+        "content": readAssetFile(applicationName, "install.sh.jinja2"),
         "name": "install.sh",
         "contextProviders": [],
-        "applicationName": "jupyterLab",
-        "executableName": "jupyter"
+        "applicationName": applicationName,
+        "executableName": executableName
     },
     {
-        "content": CONFIG_PY,
+        "content": readAssetFile(applicationName, "configure.py.jinja2"),
         "name": "config.py",
         "contextProviders": [],
-        "applicationName": "jupyterLab",
-        "executableName": "jupyter"
+        "applicationName": applicationName,
+        "executableName": executableName
     },
     {
-        "content": CONFIGURE_SH,
+        "content": readAssetFile(applicationName, "configure.sh.jinja2"),
         "name": "configure.sh",
         "contextProviders": [],
-        "applicationName": "jupyterLab",
-        "executableName": "jupyter"
+        "applicationName": applicationName,
+        "executableName": executableName
     },
 
 ];
