@@ -1,0 +1,6 @@
+export default `Automatic mesh
+0
+Gamma
+  {% for d in kgrid.dimensions %}{{d}} {% endfor %}
+  {% for s in kgrid.shifts %}{{s}} {% endfor %}
+`;

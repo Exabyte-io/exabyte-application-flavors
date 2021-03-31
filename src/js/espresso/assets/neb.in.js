@@ -1,0 +1,57 @@
+export default `BEGIN
+BEGIN_PATH_INPUT
+&PATH
+  restart_mode      = 'from_scratch'
+  string_method     = 'neb',
+  nstep_path        = 50,
+  ds                = 2.D0,
+  opt_scheme        = "broyden",
+  num_of_images     = {{ 2 + (input.INTERMEDIATE_IMAGES.length || neb.nImages) }},
+  k_max             = 0.3D0,
+  k_min             = 0.2D0,
+  CI_scheme         = "auto",
+  path_thr          = 0.1D0,
+/
+END_PATH_INPUT
+BEGIN_ENGINE_INPUT
+&CONTROL
+    prefix = '__prefix__'
+    outdir = {% raw %}'{{ JOB_WORK_DIR }}/outdir'{% endraw %}
+    pseudo_dir = {% raw %}'{{ JOB_WORK_DIR }}/pseudo'{% endraw %}
+/
+&SYSTEM
+    ibrav = {{ input.IBRAV }}
+    nat = {{ input.NAT }}
+    ntyp = {{ input.NTYP }}
+    ecutwfc = {{ cutoffs.wavefunction }}
+    ecutrho = {{ cutoffs.density }}
+    occupations = 'smearing'
+    degauss = 0.03
+    nspin = 2
+    starting_magnetization = 0.5
+/
+&ELECTRONS
+    conv_thr    = 1.D-8
+    mixing_beta = 0.3
+/
+ATOMIC_SPECIES
+{{ input.ATOMIC_SPECIES }}
+BEGIN_POSITIONS
+FIRST_IMAGE
+ATOMIC_POSITIONS crystal
+{{ input.FIRST_IMAGE }}
+{%- for IMAGE in input.INTERMEDIATE_IMAGES %} 
+INTERMEDIATE_IMAGE
+ATOMIC_POSITIONS crystal
+{{ IMAGE }}
+{%- endfor %}
+LAST_IMAGE
+ATOMIC_POSITIONS crystal
+{{ input.LAST_IMAGE }}
+END_POSITIONS
+CELL_PARAMETERS angstrom
+{{ input.CELL_PARAMETERS }}
+K_POINTS automatic
+{% for d in kgrid.dimensions %}{{d}} {% endfor %}{% for s in kgrid.shifts %}{{s}} {% endfor %}
+END_ENGINE_INPUT
+END`;

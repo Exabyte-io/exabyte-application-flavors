@@ -1,0 +1,128 @@
+export default `# ----------------------------------------------------------------- #
+#                                                                   #
+#   General settings for PythonML jobs on the Exabyte.io Platform   #
+#                                                                   #
+#   This file generally shouldn't be modified directly by users.    #
+#   The "datafile" and "is_workflow_running_to_predict" variables   #
+#   are defined in the head subworkflow, and are templated into     #
+#   this file. This helps facilitate the workflow's behavior        #
+#   differing whether it is in a "train" or "predict" mode.         #
+#                                                                   #
+#   Also in this file is the "Context" object, which helps maintain #
+#   certain Python objects between workflow units, and between      #
+#   predict runs.                                                   #
+#                                                                   #
+#   Whenever a python object needs to be stored for subsequent runs #
+#   (such as in the case of a trained model), context.save() can be #
+#   called to save it. The object can then be loaded again by using #
+#   context.load().                                                 #
+# ----------------------------------------------------------------- #
+
+
+import pickle, os
+
+# The variables "is_workflow_running_to_predict" and "is_workflow_running_to_train" are used to control whether
+# the workflow is in a "training" mode or a "prediction" mode. The "IS_WORKFLOW_RUNNING_TO_PREDICT" variable is set by
+# an assignment unit in the "Set Up the Job" subworkflow that executes at the start of the job. It is automatically
+# changed when the predict workflow is generated, so users should not need to modify this variable.
+is_workflow_running_to_predict = {% raw %}{{IS_WORKFLOW_RUNNING_TO_PREDICT}}{% endraw %}
+is_workflow_running_to_train = not is_workflow_running_to_predict
+
+# Set the datafile variable. The "datafile" is the data that will be read in, and will be used by subsequent
+# workflow units for either training or prediction, depending on the workflow mode.
+if is_workflow_running_to_predict:
+    datafile = "{% raw %}{{PREDICT_DATA}}{% endraw %}"
+else:
+    datafile = "{% raw %}{{TRAINING_DATA}}{% endraw %}"
+
+# Target_column_name is used during training to identify the variable the model is traing to predict.
+# For example, consider a CSV containing three columns, "Y", "X1", and "X2". If the goal is to train a model
+# that will predict the value of "Y," then target_column_name would be set to "Y"
+target_column_name = "target"
+
+# The "Context" class allows for data to be saved and loaded between units, and between train and predict runs.
+# Variables which have been saved using the "Save" method are written to disk, and the predict workflow is automatically
+# configured to obtain these files when it starts.
+#
+# IMPORTANT NOTE: Do *not* adjust the value of "context_dir_pathname" in the Context object. If the value is changed, then
+# files will not be correctly copied into the generated predict workflow. This will cause the predict workflow to be
+# generated in a broken state, and it will not be able to make any predictions.
+class Context(object):
+    """
+    Saves and loads objects from the disk, useful for preserving data between workflow units
+
+    Attributes:
+        context_paths (dict): Dictionary of the format {variable_name: path}, that governs where
+                              pickle saves files.
+
+    Methods:
+        save: Used to save objects to the context directory
+        load: Used to load objects from the context directory
+    """
+
+    def __init__(self, context_file_basename="workflow_context_file_mapping"):
+        """
+        Constructor for Context objects
+
+        Args:
+            context_file_basename (str): Name of the file to store context paths in
+        """
+
+        # Warning: DO NOT modify the context_dir_pathname variable below
+        # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+        context_dir_pathname = "{% raw %}{{ CONTEXT_DIR_RELATIVE_PATH }}{% endraw %}"
+        # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self._context_dir_pathname = context_dir_pathname
+        self._context_file = os.path.join(context_dir_pathname, context_file_basename)
+
+        # Make context dir if it does not exist
+        if not os.path.exists(context_dir_pathname):
+            os.makedirs(context_dir_pathname)
+
+        # Read in the context sources dictionary, if it exists
+        if os.path.exists(self._context_file):
+            with open(self._context_file, "rb") as file_handle:
+                self.context_paths: dict = pickle.load(file_handle)
+        else:
+            # Items is a dictionary of {varname: path}
+            self.context_paths = {}
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self._update_context()
+
+    def _update_context(self):
+        with open(self._context_file, "wb") as file_handle:
+            pickle.dump(self.context_paths, file_handle)
+
+    def load(self, name: str):
+        """
+        Returns a contextd object
+
+        Args:
+            name (str): The name in self.context_paths of the object
+        """
+        path = self.context_paths[name]
+        with open(path, "rb") as file_handle:
+            obj = pickle.load(file_handle)
+        return obj
+
+    def save(self, obj: object, name: str):
+        """
+        Saves an object to disk using pickle
+
+        Args:
+            name (str): Friendly name for the object, used for lookup in load() method
+            obj (object): Object to store on disk
+        """
+        path = os.path.join(self._context_dir_pathname, f"{name}.pkl")
+        self.context_paths[name] = path
+        with open(path, "wb") as file_handle:
+            pickle.dump(obj, file_handle)
+        self._update_context()
+
+# Generate a context object, so that the "with settings.context" can be used by other units in this workflow.
+context = Context()
+`;

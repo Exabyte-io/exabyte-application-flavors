@@ -1,0 +1,35 @@
+{
+  "name": "@exabyte-io/application-flavors.js",
+  "version": "2021.04.12",
+  "description": "Computational application configuration for the Exabyte.io platform",
+  "scripts": {
+    "prepublishOnly": "rm -rf lib; npm run transpile",
+    "transpile": "mkdir -p lib; babel src/js --out-dir lib/js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Exabyte-io/exabyte-application-flavors.git"
+  },
+  "main": "lib/js/index.js",
+  "author": "Exabyte Inc.",
+  "email": "info@exabyte.io",
+  "bugs": {
+    "url": "https://github.com/Exabyte-io/exabyte-application-flavors/issues"
+  },
+  "homepage": "https://github.com/Exabyte-io/exabyte-application-flavors",
+  "devDependencies": {},
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@babel/cli": "7.0.0",
+    "@babel/core": "7.0.0",
+    "@babel/plugin-proposal-export-default-from": "^7.12.13",
+    "@babel/preset-env": "7.0.0",
+    "underscore": "^1.8.3",
+    "underscore.string": "^3.3.4"
+  },
+  "engines": {
+    "node": "~8.11.4",
+    "npm": "~6.4.1"
+  }
+}

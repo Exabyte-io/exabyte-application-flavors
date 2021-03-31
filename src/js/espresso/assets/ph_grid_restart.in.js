@@ -1,0 +1,12 @@
+export default `&INPUTPH
+    tr2_ph = 1.0d-18,
+    recover = .true.
+    ldisp = .true.
+    prefix = '__prefix__'
+    outdir = {% raw %}'{{ JOB_WORK_DIR }}/outdir'{% endraw %}
+    fildyn = 'dyn'
+    {% for d in qgrid.dimensions -%}
+    nq{{loop.index}} = {{d}} 
+    {% endfor %}
+/
+`;

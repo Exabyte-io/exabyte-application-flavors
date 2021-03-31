@@ -1,0 +1,6 @@
+export default `&INPUT
+    fildyn = 'dyn'
+    zasr = 'simple'
+    flfrc = 'force_constants.fc'
+/
+`;
