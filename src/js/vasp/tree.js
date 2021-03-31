@@ -1,6 +1,6 @@
 import _ from "underscore";
 
-import {deepClone} from "/imports/utils/index";
+import {deepClone} from "../utils";
 
 import monitors from "../allowed_monitors";
 import allowedResults from "../allowed_results";
