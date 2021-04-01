@@ -1,6 +1,6 @@
 import assert from "assert"
 import chai from "chai"
-import {ALL_INPUT_TEMPLATES as ALL_INPUT_TEMPLATES_FUNC, getAppTree, allowedResults, allowedMonitors} from "../index";
+import {getAllAppTemplates, getAppTree, allowedResults, allowedMonitors} from "../index";
 
 describe('allowedResults is not an empty list', () => {
     assert(Array.isArray(allowedResults))
@@ -13,7 +13,7 @@ describe('allowedMonitors is not an empty object', () => {
 });
 
 describe('Every element in ALL_INPUT_TEMPLATES is an object with the required keys', () => {
-    const ALL_INPUT_TEMPLATES = ALL_INPUT_TEMPLATES_FUNC()
+    const ALL_INPUT_TEMPLATES = getAllAppTemplates()
     assert(Array.isArray(ALL_INPUT_TEMPLATES))
     assert(ALL_INPUT_TEMPLATES.length > 0)
     ALL_INPUT_TEMPLATES.forEach( function(template, index) {
