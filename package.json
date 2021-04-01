@@ -5,7 +5,7 @@
   "scripts": {
     "prepublishOnly": "rm -rf lib; npm run transpile",
     "transpile": "mkdir -p lib; babel src/js --out-dir lib/js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --require @babel/register src/js/tests/test.js"
   },
   "repository": {
     "type": "git",
@@ -18,13 +18,17 @@
     "url": "https://github.com/Exabyte-io/exabyte-application-flavors/issues"
   },
   "homepage": "https://github.com/Exabyte-io/exabyte-application-flavors",
-  "devDependencies": {},
-  "license": "Apache-2.0",
-  "dependencies": {
+  "devDependencies": {
     "@babel/cli": "7.0.0",
     "@babel/core": "7.0.0",
     "@babel/plugin-proposal-export-default-from": "7.0.0",
     "@babel/preset-env": "7.0.0",
+    "@babel/register": "7.0.0",
+    "mocha": "^2.5.3",
+    "chai": "^3.5.0"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
     "underscore": "^1.8.3",
     "underscore.string": "^3.3.4"
   },
