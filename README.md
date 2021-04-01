@@ -4,7 +4,7 @@ This repository contains the runtime assets for the various application flavors 
 # Installation
 ## Javascript
 ```shell
-npm install @exabyte-io/esse.js
+npm install @exabyte-io/application-flavors.js
 ```
 
 
