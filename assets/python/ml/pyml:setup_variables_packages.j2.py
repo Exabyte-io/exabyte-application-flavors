@@ -43,17 +43,12 @@ target_column_name = "target"
 is_workflow_running_to_predict = {% raw %}{{IS_WORKFLOW_RUNNING_TO_PREDICT}}{% endraw %}
 is_workflow_running_to_train = not is_workflow_running_to_predict
 
-# Set the datafile variable. The "datafile" is the data that will be read in, and will be used by subsequent
+# Sets the datafile variable. The "datafile" is the data that will be read in, and will be used by subsequent
 # workflow units for either training or prediction, depending on the workflow mode.
 if is_workflow_running_to_predict:
-    datafile = "{% raw %}{{PREDICT_DATA}}{% endraw %}"
+    datafile = "{% raw %}{{DATASET_FILE_NAME}}{% endraw %}"
 else:
-    datafile = "{% raw %}{{TRAINING_DATA}}{% endraw %}"
-
-# Target_column_name is used during training to identify the variable the model is traing to predict.
-# For example, consider a CSV containing three columns, "Y", "X1", and "X2". If the goal is to train a model
-# that will predict the value of "Y," then target_column_name would be set to "Y"
-target_column_name = "target"
+    datafile = "{% raw %}{{DATASET_FILE_NAME}}{% endraw %}"
 
 # The "Context" class allows for data to be saved and loaded between units, and between train and predict runs.
 # Variables which have been saved using the "Save" method are written to disk, and the predict workflow is automatically
