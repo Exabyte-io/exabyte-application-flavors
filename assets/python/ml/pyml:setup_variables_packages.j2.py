@@ -21,6 +21,21 @@
 
 import pickle, os
 
+# =========================
+# User-modifiable variables
+# =========================
+# Variables in this section can (and oftentimes need to) be modified by the user
+
+# Target_column_name is used during training to identify the variable the model is traing to predict.
+# For example, consider a CSV containing three columns, "Y", "X1", and "X2". If the goal is to train a model
+# that will predict the value of "Y," then target_column_name would be set to "Y"
+target_column_name = "target"
+
+# =============================
+# Non user-modifiable variables
+# =============================
+# Variables in this section generally do not need to be modified.
+
 # The variables "is_workflow_running_to_predict" and "is_workflow_running_to_train" are used to control whether
 # the workflow is in a "training" mode or a "prediction" mode. The "IS_WORKFLOW_RUNNING_TO_PREDICT" variable is set by
 # an assignment unit in the "Set Up the Job" subworkflow that executes at the start of the job. It is automatically
