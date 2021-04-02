@@ -31,8 +31,8 @@ with settings.context as context:
         descriptor_scaler = sklearn.preprocessing.StandardScaler()
 
         # Scale the data
-        target_scaler.fit_transform(target)
-        descriptor_scaler.fit_transform(descriptors)
+        target = target_scaler.fit_transform(target)
+        descriptors = descriptor_scaler.fit_transform(descriptors)
 
         # Save the target and predict scaler (for future predictions)
         context.save(target_scaler, "target_scaler")
