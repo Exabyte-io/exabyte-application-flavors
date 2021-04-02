@@ -1,7 +1,7 @@
 {
   "name": "@exabyte-io/application-flavors.js",
   "version": "2021.04.12",
-  "description": "Computational application configuration for the Exabyte.io platform",
+  "description": "Input file templates and related computational configuration parameters for the applications used in the platform.",
   "scripts": {
     "prepublishOnly": "rm -rf lib; npm run transpile",
     "transpile": "mkdir -p lib; babel src/js --out-dir lib/js",
