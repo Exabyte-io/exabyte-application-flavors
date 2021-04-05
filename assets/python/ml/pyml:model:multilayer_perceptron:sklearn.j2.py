@@ -40,12 +40,20 @@ with settings.context as context:
         # Train the NN model and save
         model.fit(descriptors, target)
         context.save(model, "sklearn_mlp")
-
-        # Print RMSE to stdout and save
         predictions = model.predict(descriptors)
-        context.save(predictions, "predictions")
-        target_scaler = context.load("target_scaler")
 
+        # Scale predictions so they have the same shape as the saved target
+        predictions = predictions.reshape(-1, 1)
+        context.save(predictions, "predictions")
+
+        # Scale for RMSE calc
+        target_scaler = context.load("target_scaler")
+        # Unflatten the target
+        target = target.reshape(-1, 1)
+        y_true = target_scaler.inverse_transform(target)
+        y_pred = target_scaler.inverse_transform(predictions)
+
+        # RMSE
         mse = sklearn.metrics.mean_squared_error(y_true=target_scaler.inverse_transform(target),
                                                  y_pred=target_scaler.inverse_transform(predictions))
         rmse = np.sqrt(mse)
@@ -62,7 +70,9 @@ with settings.context as context:
 
         # Make some predictions and unscale
         predictions = model.predict(descriptors)
+        predictions = predictions.reshape(-1, 1)
         target_scaler = context.load("target_scaler")
+
         predictions = target_scaler.inverse_transform(predictions)
 
         # Save the predictions to file

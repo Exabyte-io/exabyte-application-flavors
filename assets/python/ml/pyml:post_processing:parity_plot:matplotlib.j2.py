@@ -23,10 +23,14 @@ with settings.context as context:
     if settings.is_workflow_running_to_train:
         # Load data
         targets = context.load("target")
+
         predictions = context.load("predictions")
+
+        print(targets.shape, predictions.shape)
 
         # Un-transform the data
         target_scaler = context.load("target_scaler")
+
         targets = target_scaler.inverse_transform(targets)
         predictions = target_scaler.inverse_transform(predictions)
 
