@@ -28,9 +28,7 @@ with settings.context as context:
         # Restore data
         descriptors = context.load("descriptors")
         target = context.load("target")
-
-        # Transform targets from shape (100,1) to shape (100,); required by sklearn's MLP Regressor
-        target = target.ravel()
+        target = target.flatten()
 
         # Initialize the NN model
         model = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=(100,),
