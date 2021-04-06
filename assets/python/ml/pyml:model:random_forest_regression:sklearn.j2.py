@@ -43,7 +43,7 @@ with settings.context as context:
                                                        ccp_alpha=0.0,
                                                        verbose=0)
 
-        # Train themodel and save
+        # Train them odel and save
         model.fit(descriptors, target)
         context.save(model, "random_forest_regression")
         predictions = model.predict(descriptors)

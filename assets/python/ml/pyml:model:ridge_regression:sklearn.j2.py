@@ -30,7 +30,7 @@ with settings.context as context:
         # Initialize the model
         model = sklearn.linear_model.Ridge(alpha=1.0)
 
-        # Train themodel and save
+        # Train the model and save
         model.fit(descriptors, target)
         context.save(model, "ridge_regression")
         predictions = model.predict(descriptors)

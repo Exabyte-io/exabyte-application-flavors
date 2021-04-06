@@ -36,7 +36,7 @@ with settings.context as context:
                                            positive=True,
                                            selection="cyclic")
 
-        # Train themodel and save
+        # Train the model and save
         model.fit(descriptors, target)
         context.save(model, "lasso_regression")
         predictions = model.predict(descriptors)

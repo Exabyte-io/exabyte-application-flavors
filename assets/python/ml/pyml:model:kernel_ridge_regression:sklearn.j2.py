@@ -31,7 +31,7 @@ with settings.context as context:
         model = sklearn.kernel_ridge.KernelRidge(alpha=1.0,
                                                  kernel="linear")
 
-        # Train themodel and save
+        # Train the model and save
         model.fit(descriptors, target)
         context.save(model, "kernel_ridge_regression")
         predictions = model.predict(descriptors)

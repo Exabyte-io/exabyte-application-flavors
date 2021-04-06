@@ -50,9 +50,9 @@ with settings.context as context:
                                                   oob_score=False,
                                                   verbose=0)
 
-        # Train themodel and save
+        # Train the model and save
         model.fit(descriptors, target)
-        context.save(model, "random_forest_regression")
+        context.save(model, "bagged_trees_regression")
         predictions = model.predict(descriptors)
 
         # Scale predictions so they have the same shape as the saved target
@@ -79,7 +79,7 @@ with settings.context as context:
         descriptors = context.load("descriptors")
 
         # Restore model
-        model = context.load("random_forest_regression")
+        model = context.load("bagged_trees_regression")
 
         # Make some predictions and unscale
         predictions = model.predict(descriptors)
