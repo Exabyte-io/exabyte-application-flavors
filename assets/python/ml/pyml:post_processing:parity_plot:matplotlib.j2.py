@@ -26,8 +26,6 @@ with settings.context as context:
 
         predictions = context.load("predictions")
 
-        print(targets.shape, predictions.shape)
-
         # Un-transform the data
         target_scaler = context.load("target_scaler")
 
