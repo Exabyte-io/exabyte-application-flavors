@@ -32,7 +32,7 @@ with settings.context as context:
         # Initialize the base regressor
         base_estimator = sklearn.tree.DecisionTreeRegressor(criterion="mse",
                                                             splitter="best",
-                                                            max_depth="None",
+                                                            max_depth=None,
                                                             min_samples_split=2,
                                                             min_samples_leaf=1,
                                                             min_weight_fraction_leaf=0.0,
@@ -46,7 +46,7 @@ with settings.context as context:
                                                   max_samples=1.0,
                                                   max_features=1.0,
                                                   bootstrap=True,
-                                                  bootstreap_features=False,
+                                                  bootstrap_features=False,
                                                   oob_score=False,
                                                   verbose=0)
 
