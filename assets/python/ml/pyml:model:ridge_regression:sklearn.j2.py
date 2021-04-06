@@ -1,6 +1,6 @@
 # ----------------------------------------------------------------- #
 #                                                                   #
-#   Workflow unit to a ridge-regression model with Scikit-Learn     #
+#   Workflow unit for a ridge-regression model with Scikit-Learn    #
 #                                                                   #
 #   When then workflow is in Training mode, the model is trained    #
 #   and then it is saved, along with the RMSE and some              #
