@@ -2,7 +2,7 @@
 #                                                                   #
 #   Pandas Remove Duplicates workflow unit                          #
 #                                                                   #
-#   This workflow unit drops all duplicate rows, if it is running   #
+#   This workflow unit drops all missing rows, if it is running     #
 #   in the "train" mode.                                            #
 # ----------------------------------------------------------------- #
 
