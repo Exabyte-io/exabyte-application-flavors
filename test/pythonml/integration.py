@@ -3,49 +3,42 @@ import os, shutil, sys
 import re
 import subprocess
 import functools
+import yaml
+from parameterized import parameterized
 
-settings_file_location = "fixtures/settings.py"
-training_data_location = "fixtures/data_to_train_with.csv"
-predict_data_location = "fixtures/data_to_predict_with.csv"
+with open("integration_configuration.yaml", "r") as inp:
+    configuration, names_table, test_configs = yaml.safe_load_all(inp)
 
-# Sort out some abbreviations for where things are
-# todo: Might refactor this into a dataclass for better error checking / code completion
-prefix = "../../assets/python/ml/pyml:"
-names_table = {
-    "IO_csv": "data_input:read_csv:pandas",
-    "IO_tts": "data_input:train_test_split:pandas",
-    "PRE_mm": "pre_processing:min_max_scaler:sklearn",
-    "PRE_rd": "pre_processing:remove_duplicates:pandas",
-    "PRE_rm": "pre_processing:remove_missing:pandas",
-    "PRE_st": "pre_processing:standardization:sklearn",
-    "REG_abt": "model:adaboosted_trees_regression:sklearn",
-    "REG_btr": "model:bagged_trees_regression:sklearn",
-    "REG_gbt": "model:gradboosted_trees_regression:sklearn",
-    "REG_krr": "model:kernel_ridge_regression:sklearn",
-    "REG_lasso": "model:lasso_regression:sklearn",
-    "REG_mlp": "model:multilayer_perceptron:sklearn",
-    "REG_rf": "model:random_forest_regression:sklearn",
-    "REG_rr": "model:ridge_regression:sklearn",
-    "POS_pp": "post_processing:parity_plot:matplotlib",
-}
-suffix = ".j2.py"
+asset_path = configuration["asset_path"]
+fixtures_path = configuration["fixtures"]["path"]
+settings_filename = configuration["fixtures"]["settings"]
+regression_training_set = configuration["fixtures"]["regression_training_set"]
+regression_predict_set = configuration["fixtures"]["regression_predict_set"]
+
+files_to_remove = configuration["files_to_remove"]
+extensions_to_remove = configuration["extensions_to_remove"]
+
+
+def custom_name_func(testcase_func, param_num, param):
+    config_name = list(test_configs)[int(param_num)]
+    return "%s_%s" % (
+        testcase_func.__name__,
+        parameterized.to_safe_name(config_name),
+    )
+
+
+test_cases = test_configs.values()
 
 
 class TestWorkflowScripts(unittest.TestCase):
     def setUp(self) -> None:
-        shutil.copy(settings_file_location, "settings.py")
-        shutil.copy(training_data_location, "data_to_train_with.csv")
-        shutil.copy(predict_data_location, "data_to_predict_with.csv")
+        shutil.copy(os.path.join(fixtures_path, settings_filename), settings_filename)
+        shutil.copy(os.path.join(fixtures_path, regression_training_set), regression_training_set)
+        shutil.copy(os.path.join(fixtures_path, regression_predict_set), regression_predict_set)
 
     def tearDown(self) -> None:
-        files_to_remove = (".job_context",
-                           "my_parity_plot.png",
-                           "predictions.csv",
-                           "settings.py",
-                           "data_to_train_with.csv",
-                           "data_to_predict_with.csv")
         for file in os.listdir():
-            if (file in files_to_remove) or file.endswith(suffix):
+            if (file in files_to_remove) or any([file.endswith(ext) for ext in extensions_to_remove]):
                 try:
                     os.remove(file)
                 except (IsADirectoryError, PermissionError):
@@ -56,8 +49,8 @@ class TestWorkflowScripts(unittest.TestCase):
     def simulate_workflow(self, in_test):
         to_run = []
         for to_copy in in_test:
-            source = prefix + names_table[to_copy] + suffix
-            destination = names_table[to_copy] + suffix
+            source = asset_path + names_table[to_copy]
+            destination = names_table[to_copy]
             to_run.append(destination)
             shutil.copy(source, destination)
 
@@ -76,87 +69,14 @@ class TestWorkflowScripts(unittest.TestCase):
             for line in edited_lines:
                 outp.write(line)
 
-    def run_test(self, in_test):
+    @parameterized.expand(test_cases, testcase_func_name=custom_name_func)
+    def test_workflows(self, *units_in_test):
         # print("====Training Phase")
-        self.simulate_workflow(in_test)
-        if "POS_pp" in in_test:
+        self.simulate_workflow(units_in_test)
+        if "POS_pp" in units_in_test:
             self.assertTrue(os.path.exists("my_parity_plot.png"))
         # print("===Setting to Predict Mode")
         self.set_to_training_phase()
         # print("====Prediction Phase")
-        self.simulate_workflow(in_test)
+        self.simulate_workflow(units_in_test)
         self.assertTrue(os.path.exists("predictions.csv"))
-
-    def test_io_minMax_ridge_pp(self):
-        in_test = (
-            "IO_csv",
-            "PRE_mm",
-            "REG_rr",
-            "POS_pp"
-        )
-        self.run_test(in_test)
-
-    def test_io_minMax_removeDupes_randomForest_pp(self):
-        in_test = (
-            "IO_csv",
-            "PRE_mm",
-            "PRE_rd",
-            "REG_rf",
-            "POS_pp"
-        )
-        self.run_test(in_test)
-
-    def test_io_minMax_removeMissing_MLP_pp(self):
-        in_test = (
-            "IO_csv",
-            "PRE_mm",
-            "PRE_rm",
-            "REG_mlp",
-            "POS_pp"
-        )
-        self.run_test(in_test)
-
-    def test_io_standScale_LASSO_pp(self):
-        in_test = (
-            "IO_csv",
-            "PRE_st",
-            "REG_lasso",
-            "POS_pp"
-        )
-        self.run_test(in_test)
-
-    def test_io_standScale_krr_pp(self):
-        in_test = (
-            "IO_csv",
-            "PRE_st",
-            "REG_krr",
-            "POS_pp"
-        )
-        self.run_test(in_test)
-
-    def test_io_standScale_GBT_pp(self):
-        in_test = (
-            "IO_csv",
-            "PRE_st",
-            "REG_gbt",
-            "POS_pp"
-        )
-        self.run_test(in_test)
-
-    def test_io_minMax_BTR_pp(self):
-        in_test = (
-            "IO_csv",
-            "PRE_mm",
-            "REG_btr",
-            "POS_pp"
-        )
-        self.run_test(in_test)
-
-    def test_io_minMax_ABT_pp(self):
-        in_test = (
-            "IO_csv",
-            "PRE_mm",
-            "REG_abt",
-            "POS_pp"
-        )
-        self.run_test(in_test)
