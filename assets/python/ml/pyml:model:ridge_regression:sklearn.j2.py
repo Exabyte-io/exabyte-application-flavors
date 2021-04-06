@@ -1,17 +1,13 @@
 # ----------------------------------------------------------------- #
 #                                                                   #
-#   Workflow unit to train a simple feedforward neural network      #
-#   model on a regression problem using Scikit-Learn.               #
+#   Workflow unit to a ridge-regression model with Scikit-Learn     #
 #                                                                   #
-#   In this template, we use the default values for                 #
-#   hidden_layer_sizes, activation, solver, and learning rate.      #
-#                                                                   #
-#   When then workflow is in Training mode, the network is trained  #
-#   and the model is saved, along with the RMSE and some            #
+#   When then workflow is in Training mode, the model is trained    #
+#   and then it is saved, along with the RMSE and some              #
 #   predictions made using the training data (e.g. for use in a     #
 #   parity plot or calculation of other error metrics).             #
 #                                                                   #
-#   When the workflow is run in Predict mode, the network is        #
+#   When the workflow is run in Predict mode, the model   is        #
 #   loaded, predictions are made, they are un-transformed using     #
 #   the trained scaler from the training run, and they are          #
 #   written to a filed named "predictions.csv"                      #
