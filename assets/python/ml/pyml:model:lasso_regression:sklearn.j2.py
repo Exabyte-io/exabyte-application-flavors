@@ -1,6 +1,7 @@
 # ----------------------------------------------------------------- #
 #                                                                   #
 #   Workflow unit for a LASSO-regression model with Scikit-Learn    #
+#   Model parameters derived from sklearn defaults.                 #
 #                                                                   #
 #   When then workflow is in Training mode, the model is trained    #
 #   and then it is saved, along with the RMSE and some              #
@@ -27,7 +28,13 @@ with settings.context as context:
         target = target.flatten()
 
         # Initialize the model
-        model = sklearn.linear_model.Lasso(alpha=1.0)
+        model = sklearn.linear_model.Lasso(alpha=1.0,
+                                           fit_intercept=True,
+                                           normalize=False,
+                                           precompute=False,
+                                           tol=1e-4,
+                                           positive=True,
+                                           selection="cyclic")
 
         # Train themodel and save
         model.fit(descriptors, target)

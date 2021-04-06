@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------- #
 #                                                                   #
 #   Workflow unit for a random forest regression model with         #
-#   Scikit-Learn                                                    #
+#   Scikit-Learn. Parameters derived from sklearn's defaults.       #
 #                                                                   #
 #   When then workflow is in Training mode, the model is trained    #
 #   and then it is saved, along with the RMSE and some              #
