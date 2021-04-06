@@ -46,9 +46,9 @@ is_workflow_running_to_train = not is_workflow_running_to_predict
 # Sets the datafile variable. The "datafile" is the data that will be read in, and will be used by subsequent
 # workflow units for either training or prediction, depending on the workflow mode.
 if is_workflow_running_to_predict:
-    datafile = "{% raw %}{{DATASET_FILE_NAME}}{% endraw %}"
+    datafile = "{% raw %}{{DATASET_BASENAME}}{% endraw %}"
 else:
-    datafile = "{% raw %}{{DATASET_FILE_NAME}}{% endraw %}"
+    datafile = "{% raw %}{{DATASET_BASENAME}}{% endraw %}"
 
 # The "Context" class allows for data to be saved and loaded between units, and between train and predict runs.
 # Variables which have been saved using the "Save" method are written to disk, and the predict workflow is automatically
