@@ -1,17 +1,21 @@
 # General test configuration options
 
+# Python files will be copied from this directory
 asset_path: ../../assets/python/ml/
 
+# Specific assets that are needed for the test (such as a pre-rendered settings.py)
 fixtures:
   path: "fixtures"
   settings: settings.py
   regression_training_set: data_to_train_with.csv
   regression_predict_set: data_to_predict_with.csv
 
+# Specific files and directories to remove during test cleanup
 files_to_remove:
   - settings.py
   - .job_context
 
+# Specific extensions to remove during test cleanup
 extensions_to_remove:
   - .csv
   - .png
@@ -20,6 +24,21 @@ extensions_to_remove:
 
 ---
 # Shorthand definitions for the various flavors we've made so far. Used in the "Test Cases" document below.
+# Naming convention is <some_prefix>_<short_string_for_file>
+#
+# Prefixes below:
+# IO - I/O
+# PRE - Pre-Processing
+# REG - Regression
+# CLS - Classification
+# UNS - Unsupervised
+# POS - Post-Processing
+#
+# The short strings for files are generally based on their name. For example:
+# tts = train_test_split
+# mm = min_max_scaler
+# krr = kernelized_ridge_regression
+# gbt = gradboosted_trees_regression
 
 IO_csv: "pyml:data_input:read_csv:pandas.j2.py"
 IO_tts: "pyml:data_input:train_test_split:pandas.j2.py"
@@ -39,6 +58,9 @@ POS_pp: "pyml:post_processing:parity_plot:matplotlib.j2.py"
 
 ---
 # Test cases
+# Each key represents a different test name
+# Each value underneath the key represents a shorthand for a file (see above)
+# Scripts wil be executed in the exact sequence that they are given in
 
 ReadCSV_MinMax_RidgeReg_Parity:
   - IO_csv
