@@ -9,46 +9,87 @@ from parameterized import parameterized
 with open("integration_configuration.yaml", "r") as inp:
     configuration = yaml.safe_load(inp)
 
+unit_shortnames = configuration["unit_shortnames"]
+
+# ToDo: Refactor data clumps below into classes
+
+# Figure out paths
 asset_path = configuration["asset_path"]
 fixtures_path = configuration["fixtures"]["path"]
 settings_filename = configuration["fixtures"]["settings"]
-regression_training_set = configuration["fixtures"]["regression_training_set"]
-regression_predict_set = configuration["fixtures"]["regression_predict_set"]
 
+
+# Get the path to the training data
+def get_dataset_filenames(config):
+    training_set_name = config["training_set_name"]
+    predict_set_name = config["predict_set_name"]
+    return training_set_name, predict_set_name
+
+
+regression_training_file, regression_predict_file = get_dataset_filenames(
+    configuration["fixtures"]["regression"])
+classification_training_file, classification_predict_file = get_dataset_filenames(
+    configuration["fixtures"]["classification"])
+clustering_training_file, clustering_predict_file = get_dataset_filenames(
+    configuration["fixtures"]["clustering"])
+
+# Which files should we remove
 files_to_remove = configuration["files_to_remove"]
 extensions_to_remove = configuration["extensions_to_remove"]
 
-unit_shortnames = configuration["unit_shortnames"]
 
-tests_to_run = configuration["tests"]
-
-
-def custom_name_func(testcase_func, param_num, param):
-    config_name = list(tests_to_run)[int(param_num)]
-    return "%s_%s" % (
-        testcase_func.__name__,
-        parameterized.to_safe_name(config_name),
-    )
+# Extract the list of tests
+def get_test_names_configs(configuration):
+    names = [i[0] for i in configuration]
+    tests = [i[1]["units_to_run"] for i in configuration]
+    return tests, names
 
 
-test_cases = (i["units_to_run"] for i in tests_to_run.values())
+all_tests = configuration["tests"]
+
+regression_configs = list(filter(lambda i: i[1]["category"] == "regression", all_tests.items()))
+tests_regression, names_regression = get_test_names_configs(regression_configs)
+
+classification_configs = list(filter(lambda i: i[1]["category"] == "classification", all_tests.items()))
+tests_classification, names_classification = get_test_names_configs(classification_configs)
+
+clustering_configs = list(filter(lambda i: i[1]["category"] == "clustering", all_tests.items()))
+tests_clustering, names_clustering = get_test_names_configs(clustering_configs)
 
 
-class TestWorkflowScripts(unittest.TestCase):
+def custom_name_func(test_names):
+    def inner(testcase_func, param_num, param):
+        config_name = list(test_names)[int(param_num)]
+        return "%s_%s" % (
+            testcase_func.__name__,
+            parameterized.to_safe_name(config_name),)
+
+    return inner
+
+
+class BasePythonMLTest(unittest.TestCase):
+    category = ""
+
     def setUp(self) -> None:
-        shutil.copy(os.path.join(fixtures_path, settings_filename), settings_filename)
-        shutil.copy(os.path.join(fixtures_path, regression_training_set), regression_training_set)
-        shutil.copy(os.path.join(fixtures_path, regression_predict_set), regression_predict_set)
+        with open(os.path.join(fixtures_path, settings_filename), "r") as inp, open(settings_filename, "w") as outp:
+            for line in inp:
+                line = re.sub("PROBLEM_CATEGORY_HERE", self.category, line)
+                outp.write(line)
 
-    def tearDown(self) -> None:
-        for file in os.listdir():
-            if (file in files_to_remove) or any([file.endswith(ext) for ext in extensions_to_remove]):
-                try:
-                    os.remove(file)
-                except (IsADirectoryError, PermissionError):
-                    shutil.rmtree(file)
-                except FileNotFoundError:
-                    pass
+        if self.category == "regression":
+            training_file = regression_training_file
+            predict_file = regression_predict_file
+        elif self.category == "classification":
+            training_file = classification_training_file
+            predict_file = classification_predict_file
+        elif self.category == "clustering":
+            training_file = clustering_training_file
+            predict_file = clustering_predict_file
+        else:
+            training_file = predict_file = -1
+
+        shutil.copy(os.path.join(fixtures_path, training_file), "data_to_train_with.csv")
+        shutil.copy(os.path.join(fixtures_path, predict_file), "data_to_predict_with.csv")
 
     def simulate_workflow(self, in_test):
         to_run = []
@@ -69,18 +110,37 @@ class TestWorkflowScripts(unittest.TestCase):
             lines = inp.readlines()
             sub_partial = functools.partial(re.sub, "(?<=is_workflow_running_to_predict\s=\s)False", "True")
             edited_lines = "".join(map(sub_partial, lines))
+
+
         with open("settings.py", "w") as outp:
             for line in edited_lines:
                 outp.write(line)
 
-    @parameterized.expand(test_cases, testcase_func_name=custom_name_func)
+    def tearDown(self) -> None:
+        for file in os.listdir():
+            if (file in files_to_remove) or any([file.endswith(ext) for ext in extensions_to_remove]):
+                try:
+                    os.remove(file)
+                except (IsADirectoryError, PermissionError):
+                    shutil.rmtree(file)
+                except FileNotFoundError:
+                    pass
+
+
+class TestRegression(BasePythonMLTest):
+    category = "regression"
+
+    @parameterized.expand(tests_regression, testcase_func_name=custom_name_func(names_regression))
     def test_workflows(self, *units_in_test):
+
         # print("====Training Phase")
         self.simulate_workflow(units_in_test)
         if "POS_pp" in units_in_test:
             self.assertTrue(os.path.exists("my_parity_plot.png"))
+
         # print("===Setting to Predict Mode")
         self.set_to_training_phase()
+
         # print("====Prediction Phase")
         self.simulate_workflow(units_in_test)
         self.assertTrue(os.path.exists("predictions.csv"))

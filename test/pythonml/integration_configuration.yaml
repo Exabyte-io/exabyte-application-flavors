@@ -7,8 +7,15 @@ asset_path: ../../assets/python/ml/
 fixtures:
   path: "fixtures"
   settings: settings.py
-  regression_training_set: data_to_train_with.csv
-  regression_predict_set: data_to_predict_with.csv
+  regression:
+    training_set_name: regression_training_data.csv
+    predict_set_name: regression_predict_data.csv
+  classification:
+    training_set_name: classification_training_data.csv
+    predict_set_name: classification_predict_data.csv
+  clustering:
+    training_set_name: clustering_blobs.csv
+    predict_set_name: clustering_blobs.csv
 
 # Specific files and directories to remove during test cleanup
 files_to_remove:
@@ -62,8 +69,8 @@ unit_shortnames:
 # Scripts wil be executed in the exact sequence that they are given in
 
 tests:
-
   ReadCSV_MinMax_RidgeReg_Parity:
+    category: regression
     units_to_run:
       - IO_csv
       - PRE_mm
@@ -72,6 +79,7 @@ tests:
 
 
   ReadCSV_MinMax_RemoveDupes_RandomForest_Parity:
+    category: regression
     units_to_run:
       - IO_csv
       - PRE_mm
@@ -80,6 +88,7 @@ tests:
       - POS_pp
 
   ReadCSV_MinMax_RemoveMissing_MLP_Parity:
+    category: regression
     units_to_run:
       - IO_csv
       - PRE_mm
@@ -88,6 +97,7 @@ tests:
       - POS_pp
 
   ReadCSV_Standardize_LASSO_Parity:
+    category: regression
     units_to_run:
       - IO_csv
       - PRE_st
@@ -95,6 +105,7 @@ tests:
       - POS_pp
 
   ReadCSV_TrainTest_Standardize_KernelizedRidge_Parity:
+    category: regression
     units_to_run:
       - IO_csv
       - IO_tts
@@ -103,6 +114,7 @@ tests:
       - POS_pp
 
   ReadCSV_Standardize_GradientBoostedTrees_Parity:
+    category: regression
     units_to_run:
       - IO_csv
       - PRE_st
@@ -110,6 +122,7 @@ tests:
       - POS_pp
 
   ReadCSV_TrainTest_MinMax_BaggedTrees_Parity:
+    category: regression
     units_to_run:
       - IO_csv
       - IO_tts
@@ -118,6 +131,7 @@ tests:
       - POS_pp
 
   ReadCSV_MinMax_AdaptiveBoostedTrees_Parity:
+    category: regression
     units_to_run:
       - IO_csv
       - PRE_mm
@@ -125,6 +139,7 @@ tests:
       - POS_pp
 
   ReadCSV_TrainTest_MinMax_Standardize_MLP_Parity:
+    category: regression
     units_to_run:
       - IO_csv
       - IO_tts
