@@ -1,12 +1,10 @@
 # ----------------------------------------------------------------- #
 #                                                                   #
-#   Workflow unit for a random forest regression model with         #
+#   Workflow unit for a random forest classification model with     #
 #   Scikit-Learn. Parameters derived from sklearn's defaults.       #
 #                                                                   #
 #   When then workflow is in Training mode, the model is trained    #
-#   and then it is saved, along with the RMSE and some              #
-#   predictions made using the training data (e.g. for use in a     #
-#   parity plot or calculation of other error metrics).             #
+#   and then it is saved, along with the confusion matrix.          #
 #                                                                   #
 #   When the workflow is run in Predict mode, the model   is        #
 #   loaded, predictions are made, they are un-transformed using     #
