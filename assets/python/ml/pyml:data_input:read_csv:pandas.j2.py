@@ -23,12 +23,21 @@ import settings
 with settings.context as context:
     data = pandas.read_csv(settings.datafile)
 
+    # Train
+    # By default, we don't do train/test splitting; in other words, the train/test set are one and the same.
+    # Other units (such as a train/test splitter) down the line can adjust this as-needed.
     if settings.is_workflow_running_to_train:
-        # If we're training, we have an extra targets column to extract
         target = data.pop(settings.target_column_name).to_numpy()
         target = target.reshape(-1, 1)  # Reshape array to be used by sklearn
-        context.save(target, "target")
+        descriptors = data.to_numpy()
 
-    # Save descriptors
-    descriptors = data.to_numpy()
-    context.save(descriptors, "descriptors")
+        context.save(target, "train_target")
+        context.save(descriptors, "train_descriptors")
+        context.save(target, "test_target")
+        context.save(descriptors, "test_descriptors")
+
+    # Predict
+    else:
+        descriptors = data.to_numpy()
+        context.save(descriptors, "descriptors")
+

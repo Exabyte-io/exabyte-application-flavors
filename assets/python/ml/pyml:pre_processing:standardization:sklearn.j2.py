@@ -22,25 +22,32 @@ import settings
 with settings.context as context:
     # Train
     if settings.is_workflow_running_to_train:
-        # Restore data
-        descriptors = context.load("descriptors")
-        target = context.load("target")
+        # Restore the data
+        train_target = context.load("train_target")
+        train_descriptors = context.load("train_descriptors")
+        test_target = context.load("test_target")
+        test_descriptors = context.load("test_descriptors")
 
         # Initialize the scalers
-        target_scaler = sklearn.preprocessing.StandardScaler()
-        descriptor_scaler = sklearn.preprocessing.StandardScaler()
+        scaler = sklearn.preprocessing.StandardScaler
+        target_scaler = scaler()
+        descriptor_scaler = scaler()
 
         # Scale the data
-        target = target_scaler.fit_transform(target)
-        descriptors = descriptor_scaler.fit_transform(descriptors)
+        train_target = target_scaler.fit_transform(train_target)
+        train_descriptors = descriptor_scaler.fit_transform(train_descriptors)
+        test_target = target_scaler.transform(test_target)
+        test_descriptors = descriptor_scaler.transform(test_descriptors)
 
         # Save the target and predict scaler (for future predictions)
         context.save(target_scaler, "target_scaler")
         context.save(descriptor_scaler, "descriptor_scaler")
 
         # Store the data
-        context.save(target, "target")
-        context.save(descriptors, "descriptors")
+        context.save(train_target, "train_target")
+        context.save(train_descriptors, "train_descriptors")
+        context.save(test_target, "test_target")
+        context.save(test_descriptors, "test_descriptors")
 
     # Predict
     else:
