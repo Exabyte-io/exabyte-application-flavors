@@ -47,11 +47,11 @@ extensions_to_remove:
 # gradBoostTree = gradboosted_trees_regression
 unit_shortnames:
   # I/O Units
-  IO_readcsv: "pyml:data_input:read_csv:pandas.j2.py"
+  IO_readCSV: "pyml:data_input:read_csv:pandas.j2.py"
   IO_ttSplit: "pyml:data_input:train_test_split:sklearn.j2.py"
 
   # Pre-Processors
-  PRE_minmaxScale: "pyml:pre_processing:min_max_scaler:sklearn.j2.py"
+  PRE_minMaxScale: "pyml:pre_processing:min_max_scaler:sklearn.j2.py"
   PRE_dropDupes: "pyml:pre_processing:remove_duplicates:pandas.j2.py"
   PRE_dropMissing: "pyml:pre_processing:remove_missing:pandas.j2.py"
   PRE_standScale: "pyml:pre_processing:standardization:sklearn.j2.py"
@@ -89,8 +89,8 @@ tests:
   Reg_ReadCSV_MinMax_RidgeReg_Parity:
     category: regression
     units_to_run:
-      - IO_readcsv
-      - PRE_minmaxScale
+      - IO_readCSV
+      - PRE_minMaxScale
       - REG_RidgeReg
       - POS_plotParity
 
@@ -98,8 +98,8 @@ tests:
   Reg_ReadCSV_MinMax_RemoveDupes_RandomForest_Parity:
     category: regression
     units_to_run:
-      - IO_readcsv
-      - PRE_minmaxScale
+      - IO_readCSV
+      - PRE_minMaxScale
       - PRE_dropDupes
       - REG_randomForest
       - POS_plotParity
@@ -107,8 +107,8 @@ tests:
   Reg_ReadCSV_MinMax_RemoveMissing_MLP_Parity:
     category: regression
     units_to_run:
-      - IO_readcsv
-      - PRE_minmaxScale
+      - IO_readCSV
+      - PRE_minMaxScale
       - PRE_dropMissing
       - REG_mlp
       - POS_plotParity
@@ -116,7 +116,7 @@ tests:
   Reg_ReadCSV_Standardize_LASSO_Parity:
     category: regression
     units_to_run:
-      - IO_readcsv
+      - IO_readCSV
       - PRE_standScale
       - REG_lasso
       - POS_plotParity
@@ -124,7 +124,7 @@ tests:
   Reg_ReadCSV_TrainTest_Standardize_KernelizedRidge_Parity:
     category: regression
     units_to_run:
-      - IO_readcsv
+      - IO_readCSV
       - IO_ttSplit
       - PRE_standScale
       - REG_kernelRidge
@@ -133,7 +133,7 @@ tests:
   Reg_ReadCSV_Standardize_GradientBoostedTrees_Parity:
     category: regression
     units_to_run:
-      - IO_readcsv
+      - IO_readCSV
       - PRE_standScale
       - REG_gradBoostTree
       - POS_plotParity
@@ -141,29 +141,38 @@ tests:
   Reg_ReadCSV_TrainTest_MinMax_BaggedTrees_Parity:
     category: regression
     units_to_run:
-      - IO_readcsv
+      - IO_readCSV
       - IO_ttSplit
-      - PRE_minmaxScale
+      - PRE_minMaxScale
       - REG_bagTree
       - POS_plotParity
 
   Reg_ReadCSV_MinMax_AdaptiveBoostedTrees_Parity:
     category: regression
     units_to_run:
-      - IO_readcsv
-      - PRE_minmaxScale
+      - IO_readCSV
+      - PRE_minMaxScale
       - REG_adaBoostTree
       - POS_plotParity
 
   Reg_ReadCSV_TrainTest_MinMax_MLP_Parity:
     category: regression
     units_to_run:
-      - IO_readcsv
+      - IO_readCSV
       - IO_ttSplit
-      - PRE_minmaxScale
+      - PRE_minMaxScale
       - REG_mlp
       - POS_plotParity
 
   # Classification
+  Cls_ReadCSV_TrainTest_MinMax_RF_ROC:
+    category: classification
+    units_to_run:
+      - IO_readCSV
+      - IO_ttSplit
+      - PRE_minMaxScale
+      - CLS_randomForest
+      - POS_plotROC
+
 
   # Clustering
