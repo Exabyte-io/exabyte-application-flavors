@@ -4,8 +4,6 @@ This set of tests is configured using the `integration_configuration.yaml` file,
 units are to be present in a test, and the order they're to be run in. It also contains general settings, such as where
 the test fixtures are located, and which files need to be cleaned up when a test job is complete.
 
----
-
 ## Test Configuration
 
 Tests are configured inside of the `integration_configuration.yaml` file. The following variables are defined therein:
@@ -48,8 +46,6 @@ This section is where the test configurations are actually defined. Each test mu
 named after the units contained in it. The `category` attribute describes the type of problem it performs: regression,
 classification, or clustering. The `units_to_run` list contains, in orde, the units that will be run during the
 workflow.
-
----
 
 ## Creating New Tests
 
