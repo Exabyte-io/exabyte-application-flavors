@@ -81,7 +81,7 @@ export default () => {
             "executableName": executableName,
         },
         {
-            "content": readAssetFile("python/ml", "pyml:data_input:train_test_split:pandas.j2.py"),
+            "content": readAssetFile("python/ml", "pyml:data_input:train_test_split:sklearn.j2.py"),
             "name": "data_input_train_test_split_sklearn.py",
             "contextProviders": [],
             "applicationName": applicationName,
@@ -172,7 +172,7 @@ export default () => {
             "executableName": executableName
         },
         {
-            "content": readAssetFile("python/ml", "pyml:post_processing:pca_2d_cluster:matplotlib.j2.py"),
+            "content": readAssetFile("python/ml", "pyml:post_processing:pca_2d_clusters:matplotlib.j2.py"),
             "name": "post_processing_pca_2d_clusters_matplotlib.py",
             "contextProviders": [],
             "applicationName": applicationName,
