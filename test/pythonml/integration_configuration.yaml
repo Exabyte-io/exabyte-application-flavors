@@ -41,26 +41,41 @@ extensions_to_remove:
 # POS - Post-Processing
 #
 # The short strings for files are generally based on their name. For example:
-# tts = train_test_split
-# mm = min_max_scaler
-# krr = kernelized_ridge_regression
-# gbt = gradboosted_trees_regression
+# ttSplit = train_test_split
+# minMaxScale = min_max_scaler
+# kernelRidge = kernelized_ridge_regression
+# gradBoostTree = gradboosted_trees_regression
 unit_shortnames:
-  IO_csv: "pyml:data_input:read_csv:pandas.j2.py"
-  IO_tts: "pyml:data_input:train_test_split:sklearn.j2.py"
-  PRE_mm: "pyml:pre_processing:min_max_scaler:sklearn.j2.py"
-  PRE_rd: "pyml:pre_processing:remove_duplicates:pandas.j2.py"
-  PRE_rm: "pyml:pre_processing:remove_missing:pandas.j2.py"
-  PRE_st: "pyml:pre_processing:standardization:sklearn.j2.py"
-  REG_abt: "pyml:model:adaboosted_trees_regression:sklearn.j2.py"
-  REG_btr: "pyml:model:bagged_trees_regression:sklearn.j2.py"
-  REG_gbt: "pyml:model:gradboosted_trees_regression:sklearn.j2.py"
-  REG_krr: "pyml:model:kernel_ridge_regression:sklearn.j2.py"
+  # I/O Units
+  IO_readcsv: "pyml:data_input:read_csv:pandas.j2.py"
+  IO_ttSplit: "pyml:data_input:train_test_split:sklearn.j2.py"
+
+  # Pre-Processors
+  PRE_minmaxScale: "pyml:pre_processing:min_max_scaler:sklearn.j2.py"
+  PRE_dropDupes: "pyml:pre_processing:remove_duplicates:pandas.j2.py"
+  PRE_dropMissing: "pyml:pre_processing:remove_missing:pandas.j2.py"
+  PRE_standScale: "pyml:pre_processing:standardization:sklearn.j2.py"
+
+  # Regressors
+  REG_adaBoostTree: "pyml:model:adaboosted_trees_regression:sklearn.j2.py"
+  REG_bagTree: "pyml:model:bagged_trees_regression:sklearn.j2.py"
+  REG_gradBoostTree: "pyml:model:gradboosted_trees_regression:sklearn.j2.py"
+  REG_kernelRidge: "pyml:model:kernel_ridge_regression:sklearn.j2.py"
   REG_lasso: "pyml:model:lasso_regression:sklearn.j2.py"
   REG_mlp: "pyml:model:multilayer_perceptron:sklearn.j2.py"
-  REG_rf: "pyml:model:random_forest_regression:sklearn.j2.py"
-  REG_rr: "pyml:model:ridge_regression:sklearn.j2.py"
-  POS_pp: "pyml:post_processing:parity_plot:matplotlib.j2.py"
+  REG_randomForest: "pyml:model:random_forest_regression:sklearn.j2.py"
+  REG_RidgeReg: "pyml:model:ridge_regression:sklearn.j2.py"
+
+  # Classifiers
+  CLS_randomForest: "pyml:model:random_forest_classification:sklearn.j2.py"
+
+  # Unsupervised Learners
+  UNS_kMeans: "pyml:model:k_means_clustering:sklearn.j2.py"
+
+  # Post-Processors
+  POS_plotParity: "pyml:post_processing:parity_plot:matplotlib.j2.py"
+  POS_plotClust: "pyml:post_processing:pca_2d_clusters:matplotlib.j2.py"
+  POS_plotROC: "pyml:post_processing:roc_curve:sklearn.j2.py"
 
 # ============================================================================
 # Test cases
@@ -69,80 +84,86 @@ unit_shortnames:
 # Scripts wil be executed in the exact sequence that they are given in
 
 tests:
+  # Regression
+
   ReadCSV_MinMax_RidgeReg_Parity:
     category: regression
     units_to_run:
-      - IO_csv
-      - PRE_mm
-      - REG_rr
-      - POS_pp
+      - IO_readcsv
+      - PRE_minmaxScale
+      - REG_RidgeReg
+      - POS_plotParity
 
 
   ReadCSV_MinMax_RemoveDupes_RandomForest_Parity:
     category: regression
     units_to_run:
-      - IO_csv
-      - PRE_mm
-      - PRE_rd
-      - REG_rf
-      - POS_pp
+      - IO_readcsv
+      - PRE_minmaxScale
+      - PRE_dropDupes
+      - REG_randomForest
+      - POS_plotParity
 
   ReadCSV_MinMax_RemoveMissing_MLP_Parity:
     category: regression
     units_to_run:
-      - IO_csv
-      - PRE_mm
-      - PRE_rm
+      - IO_readcsv
+      - PRE_minmaxScale
+      - PRE_dropMissing
       - REG_mlp
-      - POS_pp
+      - POS_plotParity
 
   ReadCSV_Standardize_LASSO_Parity:
     category: regression
     units_to_run:
-      - IO_csv
-      - PRE_st
+      - IO_readcsv
+      - PRE_standScale
       - REG_lasso
-      - POS_pp
+      - POS_plotParity
 
   ReadCSV_TrainTest_Standardize_KernelizedRidge_Parity:
     category: regression
     units_to_run:
-      - IO_csv
-      - IO_tts
-      - PRE_st
-      - REG_krr
-      - POS_pp
+      - IO_readcsv
+      - IO_ttSplit
+      - PRE_standScale
+      - REG_kernelRidge
+      - POS_plotParity
 
   ReadCSV_Standardize_GradientBoostedTrees_Parity:
     category: regression
     units_to_run:
-      - IO_csv
-      - PRE_st
-      - REG_gbt
-      - POS_pp
+      - IO_readcsv
+      - PRE_standScale
+      - REG_gradBoostTree
+      - POS_plotParity
 
   ReadCSV_TrainTest_MinMax_BaggedTrees_Parity:
     category: regression
     units_to_run:
-      - IO_csv
-      - IO_tts
-      - PRE_mm
-      - REG_btr
-      - POS_pp
+      - IO_readcsv
+      - IO_ttSplit
+      - PRE_minmaxScale
+      - REG_bagTree
+      - POS_plotParity
 
   ReadCSV_MinMax_AdaptiveBoostedTrees_Parity:
     category: regression
     units_to_run:
-      - IO_csv
-      - PRE_mm
-      - REG_abt
-      - POS_pp
+      - IO_readcsv
+      - PRE_minmaxScale
+      - REG_adaBoostTree
+      - POS_plotParity
 
   ReadCSV_TrainTest_MinMax_Standardize_MLP_Parity:
     category: regression
     units_to_run:
-      - IO_csv
-      - IO_tts
-      - PRE_mm
+      - IO_readcsv
+      - IO_ttSplit
+      - PRE_minmaxScale
       - REG_mlp
-      - POS_pp
+      - POS_plotParity
+
+  # Classification
+
+  # Clustering
