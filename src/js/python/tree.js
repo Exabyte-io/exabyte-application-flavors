@@ -95,7 +95,7 @@ export default {
                     }
                 ]
             },
-            "pyml:data_input:train_test_split:pandas": {
+            "pyml:data_input:train_test_split:sklearn": {
                 "input": [
                     {
                         "name": "data_input_train_test_split_sklearn.py",
@@ -199,7 +199,7 @@ export default {
                     }
                 ]
             },
-            "pyml:post_processing:pca_2d_cluster:matplotlib": {
+            "pyml:post_processing:pca_2d_clusters:matplotlib": {
                 "input": [
                     {
                         "name": "post_processing_pca_2d_clusters_matplotlib.py",
