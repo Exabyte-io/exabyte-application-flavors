@@ -4,7 +4,7 @@
 #                                                                   #
 #   Splits the dataset into a training and testing set. The         #
 #   variable `percent_held_as_test` controls how much of the        #
-#   input dataset is removed for use as a testing set. By default,  3
+#   input dataset is removed for use as a testing set. By default,  #
 #   this unit puts 20% of the dataset into the testing set, and     #
 #   places the remaining 80% into the training set.                 #
 #                                                                   #
