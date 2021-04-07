@@ -28,26 +28,24 @@ with settings.context as context:
         test_target = context.load("test_target")
         test_descriptors = context.load("test_descriptors")
 
-        # Initialize the scalers
+        # Descriptor MinMax Scaler
         scaler = sklearn.preprocessing.MinMaxScaler
-        target_scaler = scaler()
         descriptor_scaler = scaler()
-
-        # Scale the data
-        train_target = target_scaler.fit_transform(train_target)
         train_descriptors = descriptor_scaler.fit_transform(train_descriptors)
-        test_target = target_scaler.transform(test_target)
         test_descriptors = descriptor_scaler.transform(test_descriptors)
-
-        # Save the target and predict scaler (for future predictions)
-        context.save(target_scaler, "target_scaler")
         context.save(descriptor_scaler, "descriptor_scaler")
-
-        # Store the data
-        context.save(train_target, "train_target")
         context.save(train_descriptors, "train_descriptors")
-        context.save(test_target, "test_target")
         context.save(test_descriptors, "test_descriptors")
+
+        # Our target is only continuous if it's a regression problem
+        if settings.is_regression:
+            target_scaler = scaler()
+            train_target = target_scaler.fit_transform(train_target)
+            test_target = target_scaler.transform(test_target)
+            context.save(target_scaler, "target_scaler")
+            context.save(train_target, "train_target")
+            context.save(test_target, "test_target")
+
     # Predict
     else:
         # Restore data
