@@ -33,8 +33,6 @@ with settings.context as context:
         target = target.reshape(-1, 1)  # Reshape array to be used by sklearn
         descriptors = data.to_numpy()
 
-        target.dtype
-
         context.save(target, "train_target")
         context.save(descriptors, "train_descriptors")
         context.save(target, "test_target")
