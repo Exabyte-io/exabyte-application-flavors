@@ -44,7 +44,6 @@ with settings.context as context:
         }[to_drop]
         for direction in directions:
             df = df.dropna(direction)
-        print(df)
 
         train_target = df.pop("target").to_numpy()
         train_target = train_target.reshape(-1, 1)
