@@ -93,6 +93,9 @@ class Context(object):
     def __exit__(self, exc_type, exc_value, traceback):
         self._update_context()
 
+    def __contains__(self, item):
+        return item in self.context_paths
+
     def _update_context(self):
         with open(self._context_file, "wb") as file_handle:
             pickle.dump(self.context_paths, file_handle)
@@ -125,3 +128,5 @@ class Context(object):
 
 # Generate a context object, so that the "with settings.context" can be used by other units in this workflow.
 context = Context()
+
+is_using_train_test_split = "is_using_train_test_split" in context and (context.load("is_using_train_test_split"))

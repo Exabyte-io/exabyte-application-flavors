@@ -28,10 +28,15 @@ import settings
 with settings.context as context:
     # Train
     if settings.is_workflow_running_to_train:
-        # Restore data
-        descriptors = context.load("descriptors")
-        target = context.load("target")
-        target = target.flatten()
+        # Restore the data
+        train_target = context.load("train_target")
+        train_descriptors = context.load("train_descriptors")
+        test_target = context.load("test_target")
+        test_descriptors = context.load("test_descriptors")
+
+        # Flatten the targets
+        train_target = train_target.flatten()
+        test_target = test_target.flatten()
 
         # Initialize the NN model
         model = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=(100,),
@@ -50,25 +55,27 @@ with settings.context as context:
                                                     epsilon=1e-8,
                                                     n_iter_no_change=10)
 
-        # Train the NN model and save
-        model.fit(descriptors, target)
+        # Train the model and save
+        model.fit(train_descriptors, train_target)
         context.save(model, "sklearn_mlp")
-        predictions = model.predict(descriptors)
+        train_predictions = model.predict(train_descriptors)
+        test_predictions = model.predict(test_descriptors)
 
         # Scale predictions so they have the same shape as the saved target
-        predictions = predictions.reshape(-1, 1)
-        context.save(predictions, "predictions")
+        train_predictions = train_predictions.reshape(-1, 1)
+        test_predictions = test_predictions.reshape(-1, 1)
+        context.save(train_predictions, "train_predictions")
+        context.save(test_predictions, "test_predictions")
 
-        # Scale for RMSE calc
+        # Scale for RMSE calc on the test set
         target_scaler = context.load("target_scaler")
         # Unflatten the target
-        target = target.reshape(-1, 1)
-        y_true = target_scaler.inverse_transform(target)
-        y_pred = target_scaler.inverse_transform(predictions)
+        test_target = test_target.reshape(-1, 1)
+        y_true = target_scaler.inverse_transform(test_target)
+        y_pred = target_scaler.inverse_transform(test_predictions)
 
         # RMSE
-        mse = sklearn.metrics.mean_squared_error(y_true=target_scaler.inverse_transform(target),
-                                                 y_pred=target_scaler.inverse_transform(predictions))
+        mse = sklearn.metrics.mean_squared_error(y_true, y_pred)
         rmse = np.sqrt(mse)
         print(f"RMSE = {rmse}")
         context.save(rmse, "RMSE")
