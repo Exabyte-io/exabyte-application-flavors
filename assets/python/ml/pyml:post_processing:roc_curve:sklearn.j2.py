@@ -9,6 +9,7 @@
 
 
 import matplotlib.pyplot as plt
+import matplotlib.collections
 import sklearn.metrics
 import numpy as np
 import settings
@@ -28,17 +29,27 @@ with settings.context as context:
         # ROC curve function in sklearn prefers the positive class
         false_positive_rate, true_positive_rate, thresholds = sklearn.metrics.roc_curve(test_target, test_probabilities,
                                                                                         pos_label=1)
+        thresholds[0] -= 1  # Sklearn arbitrarily adds 1 to the first threshold
         roc_auc = np.round(sklearn.metrics.auc(false_positive_rate, true_positive_rate), 3)
 
         # Plot the curve
-        plt.plot(false_positive_rate, true_positive_rate, c="#203d78", label=f"ROC Cure, AUC={roc_auc}")
+        fig, ax = plt.subplots()
+        points = np.array([false_positive_rate, true_positive_rate]).T.reshape(-1, 1, 2)
+        segments = np.concatenate([points[:-1], points[1:]], axis=1)
+        norm = plt.Normalize(thresholds.min(), thresholds.max())
+        lc = matplotlib.collections.LineCollection(segments, cmap='jet_r', norm=norm, linewidths=2)
+        lc.set_array(thresholds)
+        line = ax.add_collection(lc)
+        fig.colorbar(line, ax=ax).set_label('Threshold')
+
+        # Padding to ensure we see the line
+        ax.margins(0.01)
+
+        # plt.plot(false_positive_rate, true_positive_rate, c=colors, label=f"ROC2 Cure, AUC={roc_auc}")
+        plt.title(f"ROC curve, AUC={roc_auc}")
         plt.xlabel("False Positive Rate")
         plt.ylabel("True Positive Rate")
-        plt.xlim([0,1])
-        plt.ylim([0,1])
-        plt.legend()
-
-        plt.savefig("my_roc_curve.png")
+        plt.savefig("my_roc_curve.png", dpi=600)
 
     # Predict
     else:
