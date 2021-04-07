@@ -30,7 +30,7 @@ with settings.context as context:
         target = data.pop(settings.target_column_name).to_numpy()
         if settings.is_classification:
             target = target.astype(int)
-        target = target.reshape(-1, 1)  # Reshape array to be used by sklearn
+        target = target.reshape(-1, 1)  # Reshape array from a row vector into a column vector
         descriptors = data.to_numpy()
 
         target.dtype
