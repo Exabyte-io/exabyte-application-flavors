@@ -86,7 +86,7 @@ unit_shortnames:
 tests:
   # Regression
 
-  ReadCSV_MinMax_RidgeReg_Parity:
+  Reg_ReadCSV_MinMax_RidgeReg_Parity:
     category: regression
     units_to_run:
       - IO_readcsv
@@ -95,7 +95,7 @@ tests:
       - POS_plotParity
 
 
-  ReadCSV_MinMax_RemoveDupes_RandomForest_Parity:
+  Reg_ReadCSV_MinMax_RemoveDupes_RandomForest_Parity:
     category: regression
     units_to_run:
       - IO_readcsv
@@ -104,7 +104,7 @@ tests:
       - REG_randomForest
       - POS_plotParity
 
-  ReadCSV_MinMax_RemoveMissing_MLP_Parity:
+  Reg_ReadCSV_MinMax_RemoveMissing_MLP_Parity:
     category: regression
     units_to_run:
       - IO_readcsv
@@ -113,7 +113,7 @@ tests:
       - REG_mlp
       - POS_plotParity
 
-  ReadCSV_Standardize_LASSO_Parity:
+  Reg_ReadCSV_Standardize_LASSO_Parity:
     category: regression
     units_to_run:
       - IO_readcsv
@@ -121,7 +121,7 @@ tests:
       - REG_lasso
       - POS_plotParity
 
-  ReadCSV_TrainTest_Standardize_KernelizedRidge_Parity:
+  Reg_ReadCSV_TrainTest_Standardize_KernelizedRidge_Parity:
     category: regression
     units_to_run:
       - IO_readcsv
@@ -130,7 +130,7 @@ tests:
       - REG_kernelRidge
       - POS_plotParity
 
-  ReadCSV_Standardize_GradientBoostedTrees_Parity:
+  Reg_ReadCSV_Standardize_GradientBoostedTrees_Parity:
     category: regression
     units_to_run:
       - IO_readcsv
@@ -138,7 +138,7 @@ tests:
       - REG_gradBoostTree
       - POS_plotParity
 
-  ReadCSV_TrainTest_MinMax_BaggedTrees_Parity:
+  Reg_ReadCSV_TrainTest_MinMax_BaggedTrees_Parity:
     category: regression
     units_to_run:
       - IO_readcsv
@@ -147,7 +147,7 @@ tests:
       - REG_bagTree
       - POS_plotParity
 
-  ReadCSV_MinMax_AdaptiveBoostedTrees_Parity:
+  Reg_ReadCSV_MinMax_AdaptiveBoostedTrees_Parity:
     category: regression
     units_to_run:
       - IO_readcsv
@@ -155,7 +155,7 @@ tests:
       - REG_adaBoostTree
       - POS_plotParity
 
-  ReadCSV_TrainTest_MinMax_Standardize_MLP_Parity:
+  Reg_ReadCSV_TrainTest_MinMax_MLP_Parity:
     category: regression
     units_to_run:
       - IO_readcsv
