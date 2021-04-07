@@ -94,7 +94,127 @@ export default {
                         "templateName": "pyml_custom.py"
                     }
                 ]
-            }
+            },
+            "pyml:data_input:train_test_split:pandas": {
+                "input": [
+                    {
+                        "name": "data_input_train_test_split_sklearn.py",
+                        "templateName": "data_input_train_test_split_sklearn.py"
+                    }
+                ]
+            },
+            "pyml:pre_processing:min_max_scaler:sklearn": {
+                "input": [
+                    {
+                        "name": "pre_processing_min_max_sklearn.py",
+                        "templateName": "pre_processing_min_max_sklearn.py"
+                    }
+                ]
+            },
+            "pyml:pre_processing:remove_duplicates:pandas": {
+                "input": [
+                    {
+                        "name": "pre_processing_remove_duplicates_pandas.py",
+                        "templateName": "pre_processing_remove_duplicates_pandas.py"
+                    }
+                ]
+            },
+            "pyml:pre_processing:remove_missing:pandas": {
+                "input": [
+                    {
+                        "name": "pre_processing_remove_missing_pandas.py",
+                        "templateName": "pre_processing_remove_missing_pandas.py"
+                    }
+                ]
+            },
+            "pyml:model:adaboosted_trees_regression:sklearn": {
+                "input": [
+                    {
+                        "name": "model_adaboosted_trees_regression_sklearn.py",
+                        "templateName": "model_adaboosted_trees_regression_sklearn.py"
+                    }
+                ]
+            },
+            "pyml:model:bagged_trees_regression:sklearn": {
+                "input": [
+                    {
+                        "name": "model_bagged_trees_regression_sklearn.py",
+                        "templateName": "model_bagged_trees_regression_sklearn.py"
+                    }
+                ]
+            },
+            "pyml:model:gradboosted_trees_regression:sklearn": {
+                "input": [
+                    {
+                        "name": "model_gradboosted_trees_regression_sklearn.py",
+                        "templateName": "model_gradboosted_trees_regression_sklearn.py"
+                    }
+                ]
+            },
+            "pyml:model:k_means_clustering:sklearn": {
+                "input": [
+                    {
+                        "name": "model_k_means_clustering_sklearn.py",
+                        "templateName": "model_k_means_clustering_sklearn.py"
+                    }
+                ]
+            },
+            "pyml:model:kernel_ridge_regression:sklearn": {
+                "input": [
+                    {
+                        "name": "model_kernel_ridge_regression_sklearn.py",
+                        "templateName": "model_kernel_ridge_regression_sklearn.py"
+                    }
+                ]
+            },
+            "pyml:model:lasso_regression:sklearn": {
+                "input": [
+                    {
+                        "name": "model_lasso_regression_sklearn.py",
+                        "templateName": "model_lasso_regression_sklearn.py"
+                    }
+                ]
+            },
+            "pyml:model:random_forest_classification:sklearn": {
+                "input": [
+                    {
+                        "name": "model_random_forest_classification_sklearn.py",
+                        "templateName": "model_random_forest_classification_sklearn.py"
+                    }
+                ]
+            },
+            "pyml:model:random_forest_regression:sklearn": {
+                "input": [
+                    {
+                        "name": "model_random_forest_regression_sklearn.py",
+                        "templateName": "model_random_forest_regression_sklearn.py"
+                    }
+                ]
+            },
+            "pyml:model:ridge_regression:sklearn": {
+                "input": [
+                    {
+                        "name": "model_ridge_regression_sklearn.py",
+                        "templateName": "model_ridge_regression_sklearn.py"
+                    }
+                ]
+            },
+            "pyml:post_processing:pca_2d_cluster:matplotlib": {
+                "input": [
+                    {
+                        "name": "post_processing_pca_2d_clusters_matplotlib.py",
+                        "templateName": "post_processing_pca_2d_clusters_matplotlib.py"
+                    }
+                ]
+            },
+            "pyml:post_processing:roc_curve:sklearn": {
+                "input": [
+                    {
+                        "name": "post_processing_roc_curve_sklearn.py",
+                        "templateName": "post_processing_roc_curve_sklearn.py"
+                    }
+                ]
+            },
         }
     }
 }

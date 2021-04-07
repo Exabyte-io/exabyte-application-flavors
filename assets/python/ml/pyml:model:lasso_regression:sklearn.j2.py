@@ -1,7 +1,9 @@
 # ----------------------------------------------------------------- #
 #                                                                   #
 #   Workflow unit for a LASSO-regression model with Scikit-Learn    #
-#   Model parameters derived from sklearn defaults.                 #
+#   Model parameters derived from sklearn defaults. The alpha       #
+#   parameter has been lowered from its default value of 1.0 to     #
+#   0.1.                                                            #
 #                                                                   #
 #   When then workflow is in Training mode, the model is trained    #
 #   and then it is saved, along with the RMSE and some              #
@@ -33,7 +35,7 @@ with settings.context as context:
         test_target = test_target.flatten()
 
         # Initialize the model
-        model = sklearn.linear_model.Lasso(alpha=1.0,
+        model = sklearn.linear_model.Lasso(alpha=0.1,
                                            fit_intercept=True,
                                            normalize=False,
                                            precompute=False,

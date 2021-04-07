@@ -21,24 +21,54 @@
 
 import pickle, os
 
-# The variables "is_workflow_running_to_predict" and "is_workflow_running_to_train" are used to control whether
-# the workflow is in a "training" mode or a "prediction" mode. The "IS_WORKFLOW_RUNNING_TO_PREDICT" variable is set by
-# an assignment unit in the "Set Up the Job" subworkflow that executes at the start of the job. It is automatically
-# changed when the predict workflow is generated, so users should not need to modify this variable.
-is_workflow_running_to_predict = {% raw %}{{IS_WORKFLOW_RUNNING_TO_PREDICT}}{% endraw %}
-is_workflow_running_to_train = not is_workflow_running_to_predict
-
-# Set the datafile variable. The "datafile" is the data that will be read in, and will be used by subsequent
-# workflow units for either training or prediction, depending on the workflow mode.
-if is_workflow_running_to_predict:
-    datafile = "{% raw %}{{PREDICT_DATA}}{% endraw %}"
-else:
-    datafile = "{% raw %}{{TRAINING_DATA}}{% endraw %}"
+# =========================
+# User-modifiable variables
+# =========================
+# Variables in this section can (and oftentimes need to) be modified by the user
 
 # Target_column_name is used during training to identify the variable the model is traing to predict.
 # For example, consider a CSV containing three columns, "Y", "X1", and "X2". If the goal is to train a model
 # that will predict the value of "Y," then target_column_name would be set to "Y"
 target_column_name = "target"
+
+# The type of ML problem being performed. Can be either "Regression", "Classification," or "Clustering."
+problem_category = "classification"
+
+# =============================
+# Non user-modifiable variables
+# =============================
+# Variables in this section generally do not need to be modified.
+
+# The problem category, regression or classification or clustering. In regression, the target (predicted) variable
+# is continues. In classification, it is categorical. In clustering, there is no target - a set of labels is
+# automatically generated.
+if problem_category.lower() == "regression":
+    is_regression = True
+    is_classification = is_clustering = False
+elif problem_category.lower() == "classification":
+    is_classification = True
+    is_regression = is_clustering = False
+elif problem_category.lower() == "clustering":
+    is_clustering = True
+    is_regression = is_classification = False
+else:
+    raise ValueError(
+        "Variable 'problem_category' must be either 'regression', 'classification', or 'clustering'. Check settings.py")
+
+# The variables "is_workflow_running_to_predict" and "is_workflow_running_to_train" are used to control whether
+# the workflow is in a "training" mode or a "prediction" mode. The "IS_WORKFLOW_RUNNING_TO_PREDICT" variable is set by
+# an assignment unit in the "Set Up the Job" subworkflow that executes at the start of the job. It is automatically
+# changed when the predict workflow is generated, so users should not need to modify this variable.
+is_workflow_running_to_predict={% raw %}{{IS_WORKFLOW_RUNNING_TO_PREDICT}}{% endraw %} or is_clustering
+is_workflow_running_to_train = not is_workflow_running_to_predict
+
+# Sets the datafile variable. The "datafile" is the data that will be read in, and will be used by subsequent
+# workflow units for either training or prediction, depending on the workflow mode.=
+if is_workflow_running_to_predict:
+    datafile = "{% raw %}{{PREDICT_DATA}}{% endraw %}"
+else:
+    datafile = "{% raw %}{{TRAINING_DATA}}{% endraw %}"
+
 
 # The "Context" class allows for data to be saved and loaded between units, and between train and predict runs.
 # Variables which have been saved using the "Save" method are written to disk, and the predict workflow is automatically
@@ -125,6 +155,7 @@ class Context(object):
         with open(path, "wb") as file_handle:
             pickle.dump(obj, file_handle)
         self._update_context()
+
 
 # Generate a context object, so that the "with settings.context" can be used by other units in this workflow.
 context = Context()

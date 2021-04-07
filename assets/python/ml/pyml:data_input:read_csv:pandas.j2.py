@@ -17,7 +17,7 @@
 
 
 import pandas
-
+import sklearn.preprocessing
 import settings
 
 with settings.context as context:
@@ -28,8 +28,12 @@ with settings.context as context:
     # Other units (such as a train/test splitter) down the line can adjust this as-needed.
     if settings.is_workflow_running_to_train:
         target = data.pop(settings.target_column_name).to_numpy()
+        if settings.is_classification:
+            target = target.astype(int)
         target = target.reshape(-1, 1)  # Reshape array to be used by sklearn
         descriptors = data.to_numpy()
+
+        target.dtype
 
         context.save(target, "train_target")
         context.save(descriptors, "train_descriptors")
@@ -40,4 +44,3 @@ with settings.context as context:
     else:
         descriptors = data.to_numpy()
         context.save(descriptors, "descriptors")
-
