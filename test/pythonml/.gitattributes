@@ -1,3 +1,1 @@
-fixtures/data_to_predict_with.csv filter=lfs diff=lfs merge=lfs -text
-fixtures/data_to_train_with.csv filter=lfs diff=lfs merge=lfs -text
-fixtures/settings.py filter=lfs diff=lfs merge=lfs -text
+fixtures/** filter=lfs diff=lfs merge=lfs -text
