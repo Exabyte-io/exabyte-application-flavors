@@ -100,9 +100,11 @@ class BasePythonMLTest(unittest.TestCase):
             shutil.copy(source, destination)
 
         for file in to_run:
-            # print(file)
             pipes = subprocess.Popen((sys.executable, file), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             stdout, stderr = pipes.communicate()
+
+            sys.stdout.write(stdout.decode())
+
             self.assertFalse(stderr, f"\nSTDERR:\n{stderr.decode()}")
 
     def set_to_training_phase(self):
@@ -116,13 +118,16 @@ class BasePythonMLTest(unittest.TestCase):
                 outp.write(line)
 
     def run_tests(self, units_in_test):
-        # print("====Training Phase")
+
+        # Training Phase
         self.simulate_workflow(units_in_test)
         if self.plot_unit in units_in_test:
             self.assertTrue(os.path.exists(self.plot_name))
-        # print("===Setting to Predict Mode")
+
+        # Reconfigure for predictions
         self.set_to_training_phase()
-        # print("====Prediction Phase")
+
+        # Predict Phase
         self.simulate_workflow(units_in_test)
         self.assertTrue(os.path.exists("predictions.csv"))
 

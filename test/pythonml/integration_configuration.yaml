@@ -74,7 +74,7 @@ unit_shortnames:
 
   # Post-Processors
   POS_plotParity: "pyml:post_processing:parity_plot:matplotlib.j2.py"
-  POS_plotClust: "pyml:post_processing:pca_2d_clusters:matplotlib.j2.py"
+  POS_plotClusters: "pyml:post_processing:pca_2d_clusters:matplotlib.j2.py"
   POS_plotROC: "pyml:post_processing:roc_curve:sklearn.j2.py"
 
 # ============================================================================
@@ -174,5 +174,46 @@ tests:
       - CLS_randomForest
       - POS_plotROC
 
+  Cls_ReadCSV_DropDupes_MinMax_RF_ROC:
+    category: classification
+    units_to_run:
+      - IO_readCSV
+      - PRE_dropDupes
+      - PRE_minMaxScale
+      - CLS_randomForest
+      - POS_plotROC
+
+  Cls_ReadCSV_StandScale_RF_ROC:
+    category: classification
+    units_to_run:
+      - IO_readCSV
+      - PRE_standScale
+      - CLS_randomForest
+      - POS_plotROC
 
   # Clustering
+  Uns_ReadCSV_TrainTest_MinMax_KMeans_Plot:
+    category: clustering
+    units_to_run:
+      - IO_readCSV
+      - IO_ttSplit
+      - PRE_minMaxScale
+      - UNS_kMeans
+      - POS_plotClusters
+
+  Uns_ReadCSV_DropDupes_MinMax_kMeans_ROC:
+    category: clustering
+    units_to_run:
+      - IO_readCSV
+      - PRE_dropDupes
+      - PRE_minMaxScale
+      - UNS_kMeans
+      - POS_plotClusters
+
+  Uns_ReadCSV_StandScale_kMeans_ROC:
+    category: clustering
+    units_to_run:
+      - IO_readCSV
+      - PRE_standScale
+      - UNS_kMeans
+      - POS_plotClusters
