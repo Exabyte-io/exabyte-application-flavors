@@ -24,7 +24,7 @@ with settings.context as context:
     data = pandas.read_csv(settings.datafile)
 
     # Train
-    # By default, we don't do train/test splitting; in other words, the train/test set are one and the same.
+    # By default, we don't do train/test splitting: the train and test represent the same dataset at first.
     # Other units (such as a train/test splitter) down the line can adjust this as-needed.
     if settings.is_workflow_running_to_train:
         target = data.pop(settings.target_column_name).to_numpy()
