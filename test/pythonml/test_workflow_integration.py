@@ -111,10 +111,20 @@ class BasePythonMLTest(unittest.TestCase):
             sub_partial = functools.partial(re.sub, "(?<=is_workflow_running_to_predict\s=\s)False", "True")
             edited_lines = "".join(map(sub_partial, lines))
 
-
         with open("settings.py", "w") as outp:
             for line in edited_lines:
                 outp.write(line)
+
+    def run_tests(self, units_in_test):
+        # print("====Training Phase")
+        self.simulate_workflow(units_in_test)
+        if self.plot_unit in units_in_test:
+            self.assertTrue(os.path.exists(self.plot_name))
+        # print("===Setting to Predict Mode")
+        self.set_to_training_phase()
+        # print("====Prediction Phase")
+        self.simulate_workflow(units_in_test)
+        self.assertTrue(os.path.exists("predictions.csv"))
 
     def tearDown(self) -> None:
         for file in os.listdir():
@@ -129,18 +139,32 @@ class BasePythonMLTest(unittest.TestCase):
 
 class TestRegression(BasePythonMLTest):
     category = "regression"
+    plot_name = "my_parity_plot.png"
+    plot_unit = "POS_plotParity"
 
-    @parameterized.expand(tests_regression, testcase_func_name=custom_name_func(names_regression))
+    @parameterized.expand(tests_regression, testcase_func_name=custom_name_func(names_regression),
+                          skip_on_empty=True)
     def test_workflows(self, *units_in_test):
+        self.run_tests(units_in_test)
 
-        # print("====Training Phase")
-        self.simulate_workflow(units_in_test)
-        if "POS_pp" in units_in_test:
-            self.assertTrue(os.path.exists("my_parity_plot.png"))
 
-        # print("===Setting to Predict Mode")
-        self.set_to_training_phase()
+class TestClassification(BasePythonMLTest):
+    category = "classification"
+    plot_name = "my_roc_curve.png"
+    plot_unit = "POS_plotROC"
 
-        # print("====Prediction Phase")
-        self.simulate_workflow(units_in_test)
-        self.assertTrue(os.path.exists("predictions.csv"))
+    @parameterized.expand(tests_classification, testcase_func_name=custom_name_func(names_classification),
+                          skip_on_empty=True)
+    def test_workflows(self, *units_in_test):
+        self.run_tests(units_in_test)
+
+
+class TestClustering(BasePythonMLTest):
+    category = "clustering"
+    plot_name = "my_clusters.png"
+    plot_unit = "POS_plotClust"
+
+    @parameterized.expand(tests_clustering, testcase_func_name=custom_name_func(names_clustering),
+                          skip_on_empty=True)
+    def test_workflows(self, *units_in_test):
+        self.run_tests(units_in_test)
