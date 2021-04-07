@@ -40,7 +40,7 @@ extensions_to_remove:
 # gbt = gradboosted_trees_regression
 unit_shortnames:
   IO_csv: "pyml:data_input:read_csv:pandas.j2.py"
-  IO_tts: "pyml:data_input:train_test_split:pandas.j2.py"
+  IO_tts: "pyml:data_input:train_test_split:sklearn.j2.py"
   PRE_mm: "pyml:pre_processing:min_max_scaler:sklearn.j2.py"
   PRE_rd: "pyml:pre_processing:remove_duplicates:pandas.j2.py"
   PRE_rm: "pyml:pre_processing:remove_missing:pandas.j2.py"
@@ -94,9 +94,10 @@ tests:
       - REG_lasso
       - POS_pp
 
-  ReadCSV_Standardize_KernelizedRidge_Parity:
+  ReadCSV_TrainTest_Standardize_KernelizedRidge_Parity:
     units_to_run:
       - IO_csv
+      - IO_tts
       - PRE_st
       - REG_krr
       - POS_pp
@@ -108,9 +109,10 @@ tests:
       - REG_gbt
       - POS_pp
 
-  ReadCSV_MinMax_BaggedTrees_Parity:
+  ReadCSV_TrainTest_MinMax_BaggedTrees_Parity:
     units_to_run:
       - IO_csv
+      - IO_tts
       - PRE_mm
       - REG_btr
       - POS_pp
@@ -120,4 +122,12 @@ tests:
       - IO_csv
       - PRE_mm
       - REG_abt
+      - POS_pp
+
+  ReadCSV_TrainTest_MinMax_Standardize_MLP_Parity:
+    units_to_run:
+      - IO_csv
+      - IO_tts
+      - PRE_mm
+      - REG_mlp
       - POS_pp
