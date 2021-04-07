@@ -61,7 +61,7 @@ is_workflow_running_to_predict={% raw %}{{IS_WORKFLOW_RUNNING_TO_PREDICT}}{% end
 is_workflow_running_to_train = not is_workflow_running_to_predict
 
 # Sets the datafile variable. The "datafile" is the data that will be read in, and will be used by subsequent
-# workflow units for either training or prediction, depending on the workflow mode.=
+# workflow units for either training or prediction, depending on the workflow mode.
 if is_workflow_running_to_predict:
     datafile = "{% raw %}{{PREDICT_DATA}}{% endraw %}"
 else:
