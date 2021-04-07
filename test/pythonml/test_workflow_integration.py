@@ -7,7 +7,7 @@ import yaml
 from parameterized import parameterized
 
 with open("integration_configuration.yaml", "r") as inp:
-    configuration, names_table, test_configs = yaml.safe_load_all(inp)
+    configuration = yaml.safe_load(inp)
 
 asset_path = configuration["asset_path"]
 fixtures_path = configuration["fixtures"]["path"]
@@ -18,16 +18,20 @@ regression_predict_set = configuration["fixtures"]["regression_predict_set"]
 files_to_remove = configuration["files_to_remove"]
 extensions_to_remove = configuration["extensions_to_remove"]
 
+unit_shortnames = configuration["unit_shortnames"]
+
+tests_to_run = configuration["tests"]
+
 
 def custom_name_func(testcase_func, param_num, param):
-    config_name = list(test_configs)[int(param_num)]
+    config_name = list(tests_to_run)[int(param_num)]
     return "%s_%s" % (
         testcase_func.__name__,
         parameterized.to_safe_name(config_name),
     )
 
 
-test_cases = test_configs.values()
+test_cases = (i["units_to_run"] for i in tests_to_run.values())
 
 
 class TestWorkflowScripts(unittest.TestCase):
@@ -49,8 +53,8 @@ class TestWorkflowScripts(unittest.TestCase):
     def simulate_workflow(self, in_test):
         to_run = []
         for to_copy in in_test:
-            source = asset_path + names_table[to_copy]
-            destination = names_table[to_copy]
+            source = asset_path + unit_shortnames[to_copy]
+            destination = unit_shortnames[to_copy]
             to_run.append(destination)
             shutil.copy(source, destination)
 
