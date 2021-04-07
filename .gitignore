@@ -3,3 +3,7 @@
 /lib/
 package-lock.json
 /venv/
+/test/pythonml/*.csv
+/test/pythonml/*.j2.py
+/test/pythonml/settings.py
+/test/pythonml/.job_context
