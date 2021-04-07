@@ -27,15 +27,24 @@ with settings.context as context:
     # By default, we don't do train/test splitting; in other words, the train/test set are one and the same.
     # Other units (such as a train/test splitter) down the line can adjust this as-needed.
     if settings.is_workflow_running_to_train:
-        target = data.pop(settings.target_column_name).to_numpy()
+
+        # Handle the case where we are clustering
+        if settings.is_clustering:
+            target = data.to_numpy()[:, 0]  # Just get the first column, it's not going to get used anyway
+        else:
+            target = data.pop(settings.target_column_name).to_numpy()
+
+        # Handle the case where we are classifying
         if settings.is_classification:
             target = target.astype(int)
+
         target = target.reshape(-1, 1)  # Reshape array to be used by sklearn
+        context.save(target, "train_target")
+        context.save(target, "test_target")
+
         descriptors = data.to_numpy()
 
-        context.save(target, "train_target")
         context.save(descriptors, "train_descriptors")
-        context.save(target, "test_target")
         context.save(descriptors, "test_descriptors")
 
     # Predict
