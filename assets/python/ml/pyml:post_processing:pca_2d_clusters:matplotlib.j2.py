@@ -1,9 +1,20 @@
 # ----------------------------------------------------------------- #
 #                                                                   #
-#   ROC Curve Generator                                             #
+#   Cluster Visualization                                           #
 #                                                                   #
-#   Computes and displays the Receiver Operating Characteristic     #
-#   (ROC) curve. This is restricted to binary classification tasks. #
+#   This unit takes an N-dimensional feature space, and uses        #
+#   Principle-component Analysis (PCA) to project into a 2D space   #
+#   to facilitate plotting on a scatter plot.                       #
+#                                                                   #
+#   The 2D space we project into are the first two principle        #
+#   components identified in PCA, which are the two vectors with    #
+#   the highest variance.                                           #
+#                                                                   #
+#   Wikipedia Article on PCA:                                       #
+#   https://en.wikipedia.org/wiki/Principal_component_analysis      #
+#                                                                   #
+#   We then plot the labels assigned to the train an test set,      #
+#   and color by class.                                             #
 #                                                                   #
 # ----------------------------------------------------------------- #
 

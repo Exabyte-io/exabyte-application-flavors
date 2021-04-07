@@ -2,11 +2,23 @@
 #                                                                   #
 #   Workflow Unit to perform a train/test split                     #
 #                                                                   #
+#   Splits the dataset into a training and testing set. The         #
+#   variable `percent_held_as_test` controls how much of the        #
+#   input dataset is removed for use as a testing set. By default,  #
+#   this unit puts 20% of the dataset into the testing set, and     #
+#   places the remaining 80% into the training set.                 #
+#                                                                   #
+#   Does nothing in the case of predictions.                        #
+#                                                                   #
 # ----------------------------------------------------------------- #
 
 import sklearn.model_selection
 import numpy as np
 import settings
+
+# `percent_held_as_test` is the amount of the dataset held out as the testing set. If it is set to 0.2,
+# then 20% of the dataset is held out as a testing set. The remaining 80% is the training set.
+percent_held_as_test = 0.2
 
 with settings.context as context:
     # Train
@@ -18,9 +30,6 @@ with settings.context as context:
         # Combine datasets to facilitate train/test split
 
         # Do train/test split
-        # percent_held_as_test is the amount of the dataset held out as the testing set. If it is set to 0.2,
-        # then 20% of the dataset is held out as a testing set. The remaining 80% is the training set.
-        percent_held_as_test = 0.2
         train_descriptors, test_descriptors, train_target, test_target = sklearn.model_selection.train_test_split(
             train_descriptors, train_target, test_size=percent_held_as_test)
 

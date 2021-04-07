@@ -42,15 +42,13 @@ problem_category = "classification"
 # The problem category, regression or classification or clustering. In regression, the target (predicted) variable
 # is continues. In classification, it is categorical. In clustering, there is no target - a set of labels is
 # automatically generated.
+is_regression = is_classification = is_clustering = False
 if problem_category.lower() == "regression":
     is_regression = True
-    is_classification = is_clustering = False
 elif problem_category.lower() == "classification":
     is_classification = True
-    is_regression = is_clustering = False
 elif problem_category.lower() == "clustering":
     is_clustering = True
-    is_regression = is_classification = False
 else:
     raise ValueError(
         "Variable 'problem_category' must be either 'regression', 'classification', or 'clustering'. Check settings.py")
@@ -63,7 +61,7 @@ is_workflow_running_to_predict={% raw %}{{IS_WORKFLOW_RUNNING_TO_PREDICT}}{% end
 is_workflow_running_to_train = not is_workflow_running_to_predict
 
 # Sets the datafile variable. The "datafile" is the data that will be read in, and will be used by subsequent
-# workflow units for either training or prediction, depending on the workflow mode.=
+# workflow units for either training or prediction, depending on the workflow mode.
 if is_workflow_running_to_predict:
     datafile = "{% raw %}{{PREDICT_DATA}}{% endraw %}"
 else:
