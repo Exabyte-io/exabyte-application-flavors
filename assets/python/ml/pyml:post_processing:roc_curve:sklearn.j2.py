@@ -37,7 +37,7 @@ with settings.context as context:
         points = np.array([false_positive_rate, true_positive_rate]).T.reshape(-1, 1, 2)
         segments = np.concatenate([points[:-1], points[1:]], axis=1)
         norm = plt.Normalize(thresholds.min(), thresholds.max())
-        lc = matplotlib.collections.LineCollection(segments, cmap='jet_r', norm=norm, linewidths=2)
+        lc = matplotlib.collections.LineCollection(segments, cmap='jet', norm=norm, linewidths=2)
         lc.set_array(thresholds)
         line = ax.add_collection(lc)
         fig.colorbar(line, ax=ax).set_label('Threshold')
