@@ -57,16 +57,15 @@ else:
 # the workflow is in a "training" mode or a "prediction" mode. The "IS_WORKFLOW_RUNNING_TO_PREDICT" variable is set by
 # an assignment unit in the "Set Up the Job" subworkflow that executes at the start of the job. It is automatically
 # changed when the predict workflow is generated, so users should not need to modify this variable.
-is_workflow_running_to_predict={% raw %}{{IS_WORKFLOW_RUNNING_TO_PREDICT}}{% endraw %} or is_clustering
+is_workflow_running_to_predict = {% raw %}{{IS_WORKFLOW_RUNNING_TO_PREDICT}}{% endraw %}
 is_workflow_running_to_train = not is_workflow_running_to_predict
 
 # Sets the datafile variable. The "datafile" is the data that will be read in, and will be used by subsequent
 # workflow units for either training or prediction, depending on the workflow mode.
 if is_workflow_running_to_predict:
-    datafile = "{% raw %}{{PREDICT_DATA}}{% endraw %}"
+    datafile = "{% raw %}{{DATASET_BASENAME}}{% endraw %}"
 else:
-    datafile = "{% raw %}{{TRAINING_DATA}}{% endraw %}"
-
+    datafile = "{% raw %}{{DATASET_BASENAME}}{% endraw %}"
 
 # The "Context" class allows for data to be saved and loaded between units, and between train and predict runs.
 # Variables which have been saved using the "Save" method are written to disk, and the predict workflow is automatically
@@ -153,7 +152,6 @@ class Context(object):
         with open(path, "wb") as file_handle:
             pickle.dump(obj, file_handle)
         self._update_context()
-
 
 # Generate a context object, so that the "with settings.context" can be used by other units in this workflow.
 context = Context()
