@@ -192,7 +192,7 @@ tests:
       - POS_plotROC
 
   # Clustering
-  Uns_ReadCSV_TrainTest_MinMax_KMeans_Plot:
+  Uns_ReadCSV_TrainTest_MinMax_KMeans_ClusterPlot:
     category: clustering
     units_to_run:
       - IO_readCSV
@@ -201,7 +201,7 @@ tests:
       - UNS_kMeans
       - POS_plotClusters
 
-  Uns_ReadCSV_DropDupes_MinMax_kMeans_ROC:
+  Uns_ReadCSV_DropDupes_MinMax_kMeans_ClusterPlot:
     category: clustering
     units_to_run:
       - IO_readCSV
@@ -210,7 +210,7 @@ tests:
       - UNS_kMeans
       - POS_plotClusters
 
-  Uns_ReadCSV_StandScale_kMeans_ROC:
+  Uns_ReadCSV_StandScale_kMeans_ROC_ClusterPlot:
     category: clustering
     units_to_run:
       - IO_readCSV
