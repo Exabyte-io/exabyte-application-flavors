@@ -30,7 +30,7 @@ Then you can change your importing project's `package.json` to temporarily inclu
 ```
 Remember to revert this line to an NPM version when you're done developing.
 
-## Python Integraiton Tests
+## Python Integration Tests
 
 We use the built-in unittests module to run our unit tests. They can be run by doing:
 
