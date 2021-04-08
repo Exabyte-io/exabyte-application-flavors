@@ -48,7 +48,6 @@ with settings.context as context:
         context.save(descriptors, "train_descriptors")
         context.save(descriptors, "test_descriptors")
 
-    # Predict
     else:
         descriptors = data.to_numpy()
         context.save(descriptors, "descriptors")
