@@ -107,7 +107,7 @@ class BasePythonMLTest(unittest.TestCase):
 
             self.assertFalse(stderr, f"\nSTDERR:\n{stderr.decode()}")
 
-    def set_to_training_phase(self):
+    def set_to_predict_phase(self):
         with open("settings.py", "r") as inp:
             lines = inp.readlines()
             sub_partial = functools.partial(re.sub, "(?<=is_workflow_running_to_predict\s=\s)False", "True")
@@ -125,7 +125,7 @@ class BasePythonMLTest(unittest.TestCase):
             self.assertTrue(os.path.exists(self.plot_name))
 
         # Reconfigure for predictions
-        self.set_to_training_phase()
+        self.set_to_predict_phase()
 
         # Predict Phase
         self.simulate_workflow(units_in_test)
