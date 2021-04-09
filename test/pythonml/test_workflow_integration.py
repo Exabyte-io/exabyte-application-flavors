@@ -47,13 +47,13 @@ def get_test_names_configs(configuration):
 
 all_tests = configuration["tests"]
 
-regression_configs = list(filter(lambda i: i[1]["category"] == "regression", all_tests.items()))
+regression_configs = [i for i in all_tests.items() if i[1]["category"] == "regression"]
 tests_regression, names_regression = get_test_names_configs(regression_configs)
 
-classification_configs = list(filter(lambda i: i[1]["category"] == "classification", all_tests.items()))
+classification_configs = [i for i in all_tests.items() if i[1]["category"] == "classification"]
 tests_classification, names_classification = get_test_names_configs(classification_configs)
 
-clustering_configs = list(filter(lambda i: i[1]["category"] == "clustering", all_tests.items()))
+clustering_configs = [i for i in all_tests.items() if i[1]["category"] == "clustering"]
 tests_clustering, names_clustering = get_test_names_configs(clustering_configs)
 
 
