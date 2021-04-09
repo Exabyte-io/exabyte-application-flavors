@@ -64,11 +64,11 @@ export default {
                     monitors.standard_output
                 ]
             },
-            "pyml:post_processing:parity_plot_matplotlib": { // Name of the flavor
+            "pyml:post_processing:parity_plot:matplotlib": { // Name of the flavor
                 "input": [
                     {
-                        "name": "post_processing:parity_plot_matplotlib.py", // Name that appears on web-app
-                        "templateName": "post_processing:parity_plot_matplotlib.py" // Name as in assets.js
+                        "name": "post_processing:parity_plot:matplotlib.py", // Name that appears on web-app
+                        "templateName": "post_processing:parity_plot:matplotlib.py" // Name as in assets.js
                     },
                 ],
                 "monitors": [

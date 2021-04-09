@@ -61,7 +61,7 @@ export default () => {
         },
         {
             "content": readAssetFile("python/ml", "pyml:post_processing:parity_plot:matplotlib.j2.py"),
-            "name": "post_processing:parity_plot_matplotlib.py",
+            "name": "post_processing:parity_plot:matplotlib.py",
             "contextProviders": [],
             "applicationName": applicationName,
             "executableName": executableName
