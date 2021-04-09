@@ -29,3 +29,16 @@ Then you can change your importing project's `package.json` to temporarily inclu
 "@exabyte-io/application-flavors.js": "file:/some/path/to/application-flavors",
 ```
 Remember to revert this line to an NPM version when you're done developing.
+
+## Python Integration Tests
+
+We use the built-in unittests module to run our unit tests. They can be run by doing:
+
+```bash
+cd test/pythonml
+python -m unittest
+```
+
+This set of tests is configured using the `integration_configuration.yaml` file, which contains information for which
+units are to be present in a test, and the order they're to be run in. It also contains general settings, such as
+where the test fixtures are located, and which files need to be cleaned up when a test job is complete.
