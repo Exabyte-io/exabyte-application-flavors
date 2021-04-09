@@ -32,25 +32,11 @@ export default () => {
             "executableName": executableName
         },
         {
-            "content": readAssetFile("python/ml", "pyml:data_input:read_csv:pandas.j2.py"),
-            "name": "data_input_read_csv_pandas.py",
+            "content": readAssetFile("python/ml", "requirements.j2.txt"),
+            "name": "pyml_requirements.txt",
             "contextProviders": [],
             "applicationName": applicationName,
-            "executableName": executableName
-        },
-        {
-            "content": readAssetFile("python/ml", "pyml:pre_processing:standardization:sklearn.j2.py"),
-            "name": "pre_processing_standardization_sklearn.py",
-            "contextProviders": [],
-            "applicationName": applicationName,
-            "executableName": executableName
-        },
-        {
-            "content": readAssetFile("python/ml", "pyml:model:multilayer_perceptron:sklearn.j2.py"),
-            "name": "model_mlp_sklearn.py",
-            "contextProviders": [],
-            "applicationName": applicationName,
-            "executableName": executableName
+            "executableName": executableName,
         },
         {
             "content": readAssetFile("python/ml", "pyml:setup_variables_packages.j2.py"),
@@ -60,25 +46,18 @@ export default () => {
             "executableName": executableName
         },
         {
-            "content": readAssetFile("python/ml", "pyml:post_processing:parity_plot:matplotlib.j2.py"),
-            "name": "post_processing:parity_plot:matplotlib.py",
-            "contextProviders": [],
-            "applicationName": applicationName,
-            "executableName": executableName
-        },
-        {
-            "content": readAssetFile("python/ml", "requirements.j2.txt"),
-            "name": "pyml_requirements.txt",
-            "contextProviders": [],
-            "applicationName": applicationName,
-            "executableName": executableName,
-        },
-        {
             "content": readAssetFile("python/ml", "pyml:custom.j2.py"),
             "name": "pyml_custom.py",
             "contextProviders": [],
             "applicationName": applicationName,
             "executableName": executableName,
+        },
+        {
+            "content": readAssetFile("python/ml", "pyml:data_input:read_csv:pandas.j2.py"),
+            "name": "data_input_read_csv_pandas.py",
+            "contextProviders": [],
+            "applicationName": applicationName,
+            "executableName": executableName
         },
         {
             "content": readAssetFile("python/ml", "pyml:data_input:train_test_split:sklearn.j2.py"),
@@ -104,6 +83,13 @@ export default () => {
         {
             "content": readAssetFile("python/ml", "pyml:pre_processing:remove_missing:pandas.j2.py"),
             "name": "pre_processing_remove_missing_pandas.py",
+            "contextProviders": [],
+            "applicationName": applicationName,
+            "executableName": executableName
+        },
+        {
+            "content": readAssetFile("python/ml", "pyml:pre_processing:standardization:sklearn.j2.py"),
+            "name": "pre_processing_standardization_sklearn.py",
             "contextProviders": [],
             "applicationName": applicationName,
             "executableName": executableName
@@ -151,6 +137,13 @@ export default () => {
             "executableName": executableName
         },
         {
+            "content": readAssetFile("python/ml", "pyml:model:multilayer_perceptron:sklearn.j2.py"),
+            "name": "model_mlp_sklearn.py",
+            "contextProviders": [],
+            "applicationName": applicationName,
+            "executableName": executableName
+        },
+        {
             "content": readAssetFile("python/ml", "pyml:model:random_forest_classification:sklearn.j2.py"),
             "name": "model_random_forest_classification_sklearn.py",
             "contextProviders": [],
@@ -167,6 +160,13 @@ export default () => {
         {
             "content": readAssetFile("python/ml", "pyml:model:ridge_regression:sklearn.j2.py"),
             "name": "model_ridge_regression_sklearn.py",
+            "contextProviders": [],
+            "applicationName": applicationName,
+            "executableName": executableName
+        },
+        {
+            "content": readAssetFile("python/ml", "pyml:post_processing:parity_plot:matplotlib.j2.py"),
+            "name": "post_processing_parity_plot_matplotlib.py",
             "contextProviders": [],
             "applicationName": applicationName,
             "executableName": executableName
