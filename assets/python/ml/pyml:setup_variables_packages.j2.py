@@ -32,7 +32,7 @@ import pickle, os
 target_column_name = "target"
 
 # The type of ML problem being performed. Can be either "Regression", "Classification," or "Clustering."
-problem_category = "classification"
+problem_category = "regression"
 
 # =============================
 # Non user-modifiable variables
