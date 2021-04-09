@@ -115,7 +115,6 @@ export default {
                     }
                 ],
                 "monitors": [monitors.standard_output],
-                "tags": ["remove-all-results", "creates-predictions-csv-during-predict-phase"],
             },
             "pyml:model:bagged_trees_regression:sklearn": {
                 "input": [
@@ -125,7 +124,6 @@ export default {
                     }
                 ],
                 "monitors": [monitors.standard_output],
-                "tags": ["remove-all-results", "creates-predictions-csv-during-predict-phase"],
             },
             "pyml:model:gradboosted_trees_regression:sklearn": {
                 "input": [
@@ -135,7 +133,6 @@ export default {
                     }
                 ],
                 "monitors": [monitors.standard_output],
-                "tags": ["remove-all-results", "creates-predictions-csv-during-predict-phase"],
             },
             "pyml:model:k_means_clustering:sklearn": {
                 "input": [
@@ -145,7 +142,6 @@ export default {
                     }
                 ],
                 "monitors": [monitors.standard_output],
-                "tags": ["remove-all-results", "creates-predictions-csv-during-predict-phase"],
             },
             "pyml:model:kernel_ridge_regression:sklearn": {
                 "input": [
@@ -155,7 +151,6 @@ export default {
                     }
                 ],
                 "monitors": [monitors.standard_output],
-                "tags": ["remove-all-results", "creates-predictions-csv-during-predict-phase"],
             },
             "pyml:model:lasso_regression:sklearn": {
                 "input": [
@@ -165,7 +160,6 @@ export default {
                     }
                 ],
                 "monitors": [monitors.standard_output],
-                "tags": ["remove-all-results", "creates-predictions-csv-during-predict-phase"],
             },
             "pyml:model:multilayer_perceptron:sklearn": {
                 "input": [
@@ -175,7 +169,6 @@ export default {
                     }
                 ],
                 "monitors": [monitors.standard_output],
-                "tags": ["remove-all-results", "creates-predictions-csv-during-predict-phase"],
             },
             "pyml:model:random_forest_classification:sklearn": {
                 "input": [
@@ -185,7 +178,6 @@ export default {
                     }
                 ],
                 "monitors": [monitors.standard_output],
-                "tags": ["remove-all-results", "creates-predictions-csv-during-predict-phase"],
             },
             "pyml:model:random_forest_regression:sklearn": {
                 "input": [
@@ -195,7 +187,6 @@ export default {
                     }
                 ],
                 "monitors": [monitors.standard_output],
-                "tags": ["remove-all-results", "creates-predictions-csv-during-predict-phase"],
             },
             "pyml:model:ridge_regression:sklearn": {
                 "input": [
@@ -205,7 +196,6 @@ export default {
                     }
                 ],
                 "monitors": [monitors.standard_output],
-                "tags": ["remove-all-results", "creates-predictions-csv-during-predict-phase"],
             },
             "pyml:post_processing:parity_plot:matplotlib": {
                 "input": [
@@ -215,12 +205,6 @@ export default {
                     }
                 ],
                 "monitors": [monitors.standard_output],
-                "tags": ["remove-all-results"],
-                "results": [{
-                    "name": "file_content",
-                    "basename": "my_parity_plot.png",
-                    "filetype": "csv"
-                }]
             },
             "pyml:post_processing:pca_2d_clusters:matplotlib": {
                 "input": [
@@ -230,12 +214,6 @@ export default {
                     }
                 ],
                 "monitors": [monitors.standard_output],
-                "tags": ["remove-all-results"],
-                "results": [{
-                    "name": "file_content",
-                    "basename": "my_clusters.png",
-                    "filetype": "csv"
-                }]
             },
             "pyml:post_processing:roc_curve:sklearn": {
                 "input": [
@@ -245,12 +223,6 @@ export default {
                     }
                 ],
                 "monitors": [monitors.standard_output],
-                "tags": ["remove-all-results"],
-                "results": [{
-                    "name": "file_content",
-                    "basename": "my_roc_curve.png",
-                    "filetype": "csv"
-                }]
             },
         }
     }
