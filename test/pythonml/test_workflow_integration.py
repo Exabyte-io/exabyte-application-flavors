@@ -4,7 +4,8 @@ import re
 import subprocess
 import functools
 import yaml
-from parameterized import parameterized
+from parameterized import parameterized, param
+from typing import Dict, List, Any, Tuple, Callable
 
 with open("integration_configuration.yaml", "r") as inp:
     configuration = yaml.safe_load(inp)
@@ -20,7 +21,19 @@ settings_filename = configuration["fixtures"]["settings"]
 
 
 # Get the path to the training data
-def get_dataset_filenames(config):
+def get_dataset_filenames(config: Dict[str, str]) -> Tuple[str, str]:
+    """
+    Given the configuration for a category of unit test (regression, classification, or clustering), extract out the
+    filename of the training and predict test file. These correspond to the "training_set_name" and "predict_set_name"
+    keys inside of the fixtures variable defined in integration_configuration.yaml. For example, if regression is
+    chosen, "regression_training_data.csv" and "regression_predict_data.csv" will be returned.
+
+    Args:
+        config (Dict): Configuration extracted from fixtures in integration_configuration.yaml
+
+    Returns:
+        The filename of the training and predict set.
+    """
     training_set_name = config["training_set_name"]
     predict_set_name = config["predict_set_name"]
     return training_set_name, predict_set_name
@@ -39,7 +52,7 @@ extensions_to_remove = configuration["extensions_to_remove"]
 
 
 # Extract the list of tests
-def get_test_names_configs(configuration):
+def get_test_names_configs(configuration: List[Dict[str, Any]]) -> Tuple[List[List[str]], List[str]]:
     names = [i[0] for i in configuration]
     tests = [i[1]["units_to_run"] for i in configuration]
     return tests, names
@@ -57,8 +70,8 @@ clustering_configs = [i for i in all_tests.items() if i[1]["category"] == "clust
 tests_clustering, names_clustering = get_test_names_configs(clustering_configs)
 
 
-def custom_name_func(test_names):
-    def inner(testcase_func, param_num, param):
+def custom_name_func(test_names: List[str]) -> Callable:
+    def inner(testcase_func: Callable, param_num: int, param: param):
         config_name = list(test_names)[int(param_num)]
         return "%s_%s" % (
             testcase_func.__name__,
@@ -73,6 +86,9 @@ class BasePythonMLTest(unittest.TestCase):
     def setUp(self) -> None:
         with open(os.path.join(fixtures_path, settings_filename), "r") as inp, open(settings_filename, "w") as outp:
             for line in inp:
+                # Users can select the type of problem category in the settings.py file. Normally, it is set to
+                # "regression" by default, but to make the regex more convenient, the settings.py file in fixtures
+                # has this value set to "PROBLEM_CATEGORY_HERE"
                 line = re.sub("PROBLEM_CATEGORY_HERE", self.category, line)
                 outp.write(line)
 
@@ -91,7 +107,13 @@ class BasePythonMLTest(unittest.TestCase):
         shutil.copy(os.path.join(fixtures_path, training_file), "data_to_train_with.csv")
         shutil.copy(os.path.join(fixtures_path, predict_file), "data_to_predict_with.csv")
 
-    def simulate_workflow(self, in_test):
+    def simulate_workflow(self, in_test: List[str]):
+        """
+        Runs every unit in the workflow sequentially, simulating what Rupy does in production.
+
+        Args:
+            in_test (list):  Units in the workflow
+        """
         to_run = []
         for to_copy in in_test:
             source = asset_path + unit_shortnames[to_copy]
@@ -108,8 +130,14 @@ class BasePythonMLTest(unittest.TestCase):
             self.assertFalse(stderr, f"\nSTDERR:\n{stderr.decode()}")
 
     def set_to_predict_phase(self):
+        """
+        Adjusts settings.py to convert it from training mode to predict mode. In practice, this operation is
+        performed by Express when the predict workflow is generated.
+        """
         with open("settings.py", "r") as inp:
             lines = inp.readlines()
+            # is_workflow_running_to_predct controls whether the workflow is running in "Train" or "Predict" mode,
+            # so we change it to "True" to set the workflow to predict mode.
             sub_partial = functools.partial(re.sub, "(?<=is_workflow_running_to_predict\s=\s)False", "True")
             edited_lines = "".join(map(sub_partial, lines))
 
@@ -117,8 +145,15 @@ class BasePythonMLTest(unittest.TestCase):
             for line in edited_lines:
                 outp.write(line)
 
-    def run_tests(self, units_in_test):
+    def run_tests(self, units_in_test: List[str]):
+        """
+        Does the actual running of the tests. Begins by running every unit in the training workflow, then converts
+        to a predict workflow. Ends by running every unit in the predict workflow.
 
+        Args:
+            units_in_test (list): A list containing the units in the workflow. The names of the units are defined in
+                                  integration_configuration.yaml, as the unit_shortnames.
+        """
         # Training Phase
         self.simulate_workflow(units_in_test)
         if self.plot_unit in units_in_test:
