@@ -185,6 +185,20 @@ export default () => {
             "applicationName": applicationName,
             "executableName": executableName
         },
+        {
+            "content": readAssetFile("python/ml", "pyml:setup_classification_variables_packages.j2.py"),
+            "name": "pyml_classification_settings.py",
+            "contextProviders": [],
+            "applicationName": applicationName,
+            "executableName": executableName
+        },
+        {
+            "content": readAssetFile("python/ml", "pyml:setup_clustering_variables_packages.j2.py"),
+            "name": "pyml_clustering_settings.py",
+            "contextProviders": [],
+            "applicationName": applicationName,
+            "executableName": executableName
+        },
 
 
     ];

@@ -224,6 +224,32 @@ export default {
                 ],
                 "monitors": [monitors.standard_output],
             },
+            "pyml:setup_classification_variables_packages": {
+                "input": [
+                    {
+                        "name": "settings.py",
+                        "templateName": "pyml_classification_settings.py"
+                    },
+                    {
+                        "name": "requirements.txt",
+                        "templateName": "pyml_requirements.txt"
+                    },
+                ],
+                "monitors": [monitors.standard_output],
+            },
+            "pyml:setup_clustering_variables_packages": {
+                "input": [
+                    {
+                        "name": "settings.py",
+                        "templateName": "pyml_clustering_settings.py"
+                    },
+                    {
+                        "name": "requirements.txt",
+                        "templateName": "pyml_requirements.txt"
+                    },
+                ],
+                "monitors": [monitors.standard_output],
+            },
         }
     }
 }
