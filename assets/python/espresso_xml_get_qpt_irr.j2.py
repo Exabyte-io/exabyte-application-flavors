@@ -8,6 +8,7 @@
 # ---------------------------------------------------------- #
 import json
 from xml.dom import minidom
+from __future__ import print_function
 
 {# JOB_WORK_DIR will be initialized at runtime => avoid substituion below #}
 {%- raw -%}
@@ -38,4 +39,4 @@ for i in range(number_of_qpoints):
       })
 
 # store final values in standard output (STDOUT)
-print json.dumps(values, indent=4)
+print(json.dumps(values, indent=4))

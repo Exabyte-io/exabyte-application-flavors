@@ -17,18 +17,37 @@
 
 
 import pandas
-
+import sklearn.preprocessing
 import settings
 
 with settings.context as context:
     data = pandas.read_csv(settings.datafile)
 
+    # Train
+    # By default, we don't do train/test splitting: the train and test represent the same dataset at first.
+    # Other units (such as a train/test splitter) down the line can adjust this as-needed.
     if settings.is_workflow_running_to_train:
-        # If we're training, we have an extra targets column to extract
-        target = data.pop(settings.target_column_name).to_numpy()
-        target = target.reshape(-1, 1)  # Reshape array to be used by sklearn
-        context.save(target, "target")
 
-    # Save descriptors
-    descriptors = data.to_numpy()
-    context.save(descriptors, "descriptors")
+        # Handle the case where we are clustering
+        if settings.is_clustering:
+            target = data.to_numpy()[:, 0]  # Just get the first column, it's not going to get used anyway
+        else:
+            target = data.pop(settings.target_column_name).to_numpy()
+
+        # Handle the case where we are classifying
+        if settings.is_classification:
+            target = target.astype(int)
+
+        target = target.reshape(-1, 1)  # Reshape array from a row vector into a column vector
+
+        context.save(target, "train_target")
+        context.save(target, "test_target")
+
+        descriptors = data.to_numpy()
+
+        context.save(descriptors, "train_descriptors")
+        context.save(descriptors, "test_descriptors")
+
+    else:
+        descriptors = data.to_numpy()
+        context.save(descriptors, "descriptors")

@@ -1,13 +1,13 @@
 # ----------------------------------------------------------------- #
 #                                                                   #
-#   Sklearn Standard Scaler workflow unit                           #
+#   Sklearn MinMax Scaler workflow unit                             #
 #                                                                   #
-#   This workflow unit scales the data such that it a mean of 0 and #
-#   a variance of 1. It then saves the data for use further down    #
+#   This workflow unit scales the data such that it is on interval  #
+#   [0,1]. It then saves the data for use further down              #
 #   the road in the workflow, for use in un-transforming the data.  #
 #                                                                   #
 #   It is important that new predictions are made by scaling the    #
-#   new inputs using the mean and variance of the original training #
+#   new inputs using the min and max of the original training       #
 #   set. As a result, the scaler gets saved in the Training phase.  #
 #                                                                   #
 #   During a predict workflow, the scaler is loaded, and the        #
@@ -28,8 +28,8 @@ with settings.context as context:
         test_target = context.load("test_target")
         test_descriptors = context.load("test_descriptors")
 
-        # Descriptor Scaler
-        scaler = sklearn.preprocessing.StandardScaler
+        # Descriptor MinMax Scaler
+        scaler = sklearn.preprocessing.MinMaxScaler
         descriptor_scaler = scaler()
         train_descriptors = descriptor_scaler.fit_transform(train_descriptors)
         test_descriptors = descriptor_scaler.transform(test_descriptors)
