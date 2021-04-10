@@ -31,7 +31,7 @@ import pickle, os
 # that will predict the value of "Y," then target_column_name would be set to "Y"
 target_column_name = "target"
 
-# The type of ML problem being performed. Can be either "Regression", "Classification," or "Clustering."
+# The type of ML problem being performed. Can be either "regression", "classification," or "clustering."
 problem_category = "regression"
 
 # =============================
