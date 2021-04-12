@@ -6,9 +6,9 @@
 #  Expects control_ph.xml and patterns.?.xml files to exist  #
 #                                                            #
 # ---------------------------------------------------------- #
+from __future__ import print_function
 import json
 from xml.dom import minidom
-from __future__ import print_function
 
 {# JOB_WORK_DIR will be initialized at runtime => avoid substituion below #}
 {%- raw -%}
