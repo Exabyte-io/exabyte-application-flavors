@@ -115,6 +115,9 @@ export default {
                     }
                 ],
                 "monitors": [monitors.standard_output],
+                "results": [
+                    "workflow:pyml_predict"
+                ],
             },
             "pyml:model:bagged_trees_regression:sklearn": {
                 "input": [
@@ -122,6 +125,9 @@ export default {
                         "name": "model_bagged_trees_regression_sklearn.py",
                         "templateName": "model_bagged_trees_regression_sklearn.py"
                     }
+                ],
+                "results": [
+                    "workflow:pyml_predict"
                 ],
                 "monitors": [monitors.standard_output],
             },
@@ -132,6 +138,9 @@ export default {
                         "templateName": "model_gradboosted_trees_regression_sklearn.py"
                     }
                 ],
+                "results": [
+                    "workflow:pyml_predict"
+                ],
                 "monitors": [monitors.standard_output],
             },
             "pyml:model:k_means_clustering:sklearn": {
@@ -140,6 +149,9 @@ export default {
                         "name": "model_k_means_clustering_sklearn.py",
                         "templateName": "model_k_means_clustering_sklearn.py"
                     }
+                ],
+                "results": [
+                    "workflow:pyml_predict"
                 ],
                 "monitors": [monitors.standard_output],
             },
@@ -150,6 +162,9 @@ export default {
                         "templateName": "model_kernel_ridge_regression_sklearn.py"
                     }
                 ],
+                "results": [
+                    "workflow:pyml_predict"
+                ],
                 "monitors": [monitors.standard_output],
             },
             "pyml:model:lasso_regression:sklearn": {
@@ -158,6 +173,9 @@ export default {
                         "name": "model_lasso_regression_sklearn.py",
                         "templateName": "model_lasso_regression_sklearn.py"
                     }
+                ],
+                "results": [
+                    "workflow:pyml_predict"
                 ],
                 "monitors": [monitors.standard_output],
             },
@@ -168,6 +186,9 @@ export default {
                         "templateName": "model_mlp_sklearn.py"
                     }
                 ],
+                "results": [
+                    "workflow:pyml_predict"
+                ],
                 "monitors": [monitors.standard_output],
             },
             "pyml:model:random_forest_classification:sklearn": {
@@ -176,6 +197,9 @@ export default {
                         "name": "model_random_forest_classification_sklearn.py",
                         "templateName": "model_random_forest_classification_sklearn.py"
                     }
+                ],
+                "results": [
+                    "workflow:pyml_predict"
                 ],
                 "monitors": [monitors.standard_output],
             },
@@ -186,6 +210,9 @@ export default {
                         "templateName": "model_random_forest_regression_sklearn.py"
                     }
                 ],
+                "results": [
+                    "workflow:pyml_predict"
+                ],
                 "monitors": [monitors.standard_output],
             },
             "pyml:model:ridge_regression:sklearn": {
@@ -194,6 +221,9 @@ export default {
                         "name": "model_ridge_regression_sklearn.py",
                         "templateName": "model_ridge_regression_sklearn.py"
                     }
+                ],
+                "results": [
+                    "workflow:pyml_predict"
                 ],
                 "monitors": [monitors.standard_output],
             },
