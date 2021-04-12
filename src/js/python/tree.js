@@ -198,7 +198,7 @@ export default {
                         "templateName": "model_random_forest_classification_sklearn.py"
                     }
                 ],
-                                "results": [
+                "results": [
                     "workflow:pyml_predict"
                 ],
                 "monitors": [monitors.standard_output],
