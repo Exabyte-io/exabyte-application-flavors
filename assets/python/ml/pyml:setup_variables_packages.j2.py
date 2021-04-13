@@ -21,18 +21,19 @@
 
 import pickle, os
 
-# =========================
-# User-modifiable variables
-# =========================
-# Variables in this section can (and oftentimes need to) be modified by the user
+# ==================================================
+# Variables modified in the Important Settings menu
+# ==================================================
+# Variables in this section can (and oftentimes need to) be modified by the user in the "Important Settings" tab
+# of a workflow.
 
 # Target_column_name is used during training to identify the variable the model is traing to predict.
 # For example, consider a CSV containing three columns, "Y", "X1", and "X2". If the goal is to train a model
 # that will predict the value of "Y," then target_column_name would be set to "Y"
-target_column_name = "target"
+target_column_name = "{{ mlsettings.target_column_name }}"
 
 # The type of ML problem being performed. Can be either "regression", "classification," or "clustering."
-problem_category = "regression"
+problem_category = "{{ mlsettings.problem_category }}"
 
 # =============================
 # Non user-modifiable variables
