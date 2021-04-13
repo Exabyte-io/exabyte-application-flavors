@@ -64,7 +64,9 @@ export default () => {
         {
             "content": readAssetFile("python/ml", "pyml:data_input:train_test_split:sklearn.j2.py"),
             "name": "data_input_train_test_split_sklearn.py",
-            "contextProviders": [],
+            "contextProviders": [
+                "MLTrainTestSplitDataManager"
+            ],
             "applicationName": applicationName,
             "executableName": executableName
         },

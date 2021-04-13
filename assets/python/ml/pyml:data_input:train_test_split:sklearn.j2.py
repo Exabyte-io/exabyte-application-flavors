@@ -18,7 +18,7 @@ import settings
 
 # `percent_held_as_test` is the amount of the dataset held out as the testing set. If it is set to 0.2,
 # then 20% of the dataset is held out as a testing set. The remaining 80% is the training set.
-percent_held_as_test = 0.2
+percent_held_as_test = {{ mlTrainTestSplit.fraction_held_as_test_set }}
 
 with settings.context as context:
     # Train
