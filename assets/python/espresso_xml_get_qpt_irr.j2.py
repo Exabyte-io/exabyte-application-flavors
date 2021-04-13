@@ -6,6 +6,7 @@
 #  Expects control_ph.xml and patterns.?.xml files to exist  #
 #                                                            #
 # ---------------------------------------------------------- #
+from __future__ import print_function
 import json
 from xml.dom import minidom
 
@@ -38,4 +39,4 @@ for i in range(number_of_qpoints):
       })
 
 # store final values in standard output (STDOUT)
-print json.dumps(values, indent=4)
+print(json.dumps(values, indent=4))

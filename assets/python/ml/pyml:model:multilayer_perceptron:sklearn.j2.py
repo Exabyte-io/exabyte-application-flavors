@@ -1,21 +1,19 @@
-# ----------------------------------------------------------------- #
-#                                                                   #
-#   Workflow unit to train a simple feedforward neural network      #
-#   model on a regression problem using Scikit-Learn.               #
-#                                                                   #
-#   In this template, we use the default values for                 #
-#   hidden_layer_sizes, activation, solver, and learning rate.      #
-#                                                                   #
-#   When then workflow is in Training mode, the network is trained  #
-#   and the model is saved, along with the RMSE and some            #
-#   predictions made using the training data (e.g. for use in a     #
-#   parity plot or calculation of other error metrics).             #
-#                                                                   #
-#   When the workflow is run in Predict mode, the network is        #
-#   loaded, predictions are made, they are un-transformed using     #
-#   the trained scaler from the training run, and they are          #
-#   written to a filed named "predictions.csv"                      #
-# ----------------------------------------------------------------- #
+# ---------------------------------------------------------------------------------------------------------- #
+#                                                                                                            #
+#   Workflow unit to train a simple feedforward neural network model on a regression problem                 #
+#   using Scikit-Learn. In this template, we use the default values for hidden_layer_sizes, activation,      #
+#   solver, and learning rate. Other parameters are available (consult the sklearn docs), but in this        #
+#   case, we only include those relevant to the Adam optimizer.                                              #
+#   Sklearn docs:http://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPRegressor.html   #
+#                                                                                                            #
+#   When then workflow is in Training mode, the network is trained and the model is saved, along with the    #
+#   RMSE and some predictions made using the training data (e.g. for use in a parity plot or calculation     #
+#   of other error metrics).                                                                                 #
+#                                                                                                            #
+#   When the workflow is run in Predict mode, the network is loaded, predictions are made, they are          #
+#   un-transformed using the trained scaler from the training run, and they are written to a filed           #
+#   named "predictions.csv"                                                                                  #
+# ---------------------------------------------------------------------------------------------------------- #
 
 import sklearn.neural_network
 import sklearn.metrics
@@ -25,31 +23,45 @@ import settings
 with settings.context as context:
     # Train
     if settings.is_workflow_running_to_train:
-        # Restore data
-        descriptors = context.load("descriptors")
-        target = context.load("target")
+        # Restore the data
+        train_target = context.load("train_target")
+        train_descriptors = context.load("train_descriptors")
+        test_target = context.load("test_target")
+        test_descriptors = context.load("test_descriptors")
 
-        # Transform targets from shape (100,1) to shape (100,); required by sklearn's MLP Regressor
-        target = target.ravel()
+        # Flatten the targets
+        train_target = train_target.flatten()
+        test_target = test_target.flatten()
 
         # Initialize the NN model
         model = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=(100,),
                                                     activation="relu",
                                                     solver="adam",
-                                                    learning_rate="adaptive",
-                                                    max_iter=500)
+                                                    max_iter=200,
+                                                    early_stopping=False,
+                                                    validation_fraction=0.1)
 
-        # Train the NN model and save
-        model.fit(descriptors, target)
+        # Train the model and save
+        model.fit(train_descriptors, train_target)
         context.save(model, "sklearn_mlp")
+        train_predictions = model.predict(train_descriptors)
+        test_predictions = model.predict(test_descriptors)
 
-        # Print RMSE to stdout and save
-        predictions = model.predict(descriptors)
-        context.save(predictions, "predictions")
+        # Scale predictions so they have the same shape as the saved target
+        train_predictions = train_predictions.reshape(-1, 1)
+        test_predictions = test_predictions.reshape(-1, 1)
+        context.save(train_predictions, "train_predictions")
+        context.save(test_predictions, "test_predictions")
+
+        # Scale for RMSE calc on the test set
         target_scaler = context.load("target_scaler")
+        # Unflatten the target
+        test_target = test_target.reshape(-1, 1)
+        y_true = target_scaler.inverse_transform(test_target)
+        y_pred = target_scaler.inverse_transform(test_predictions)
 
-        mse = sklearn.metrics.mean_squared_error(y_true=target_scaler.inverse_transform(target),
-                                                 y_pred=target_scaler.inverse_transform(predictions))
+        # RMSE
+        mse = sklearn.metrics.mean_squared_error(y_true, y_pred)
         rmse = np.sqrt(mse)
         print(f"RMSE = {rmse}")
         context.save(rmse, "RMSE")
@@ -64,7 +76,9 @@ with settings.context as context:
 
         # Make some predictions and unscale
         predictions = model.predict(descriptors)
+        predictions = predictions.reshape(-1, 1)
         target_scaler = context.load("target_scaler")
+
         predictions = target_scaler.inverse_transform(predictions)
 
         # Save the predictions to file
