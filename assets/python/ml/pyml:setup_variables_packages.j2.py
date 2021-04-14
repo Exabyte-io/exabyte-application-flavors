@@ -30,10 +30,10 @@ import pickle, os
 # Target_column_name is used during training to identify the variable the model is traing to predict.
 # For example, consider a CSV containing three columns, "Y", "X1", and "X2". If the goal is to train a model
 # that will predict the value of "Y," then target_column_name would be set to "Y"
-target_column_name = "{{ mlsettings.target_column_name }}"
+target_column_name = "{{ mlSettings.target_column_name }}"
 
 # The type of ML problem being performed. Can be either "regression", "classification," or "clustering."
-problem_category = "{{ mlsettings.problem_category }}"
+problem_category = "{{ mlSettings.problem_category }}"
 
 # =============================
 # Non user-modifiable variables
