@@ -132,7 +132,10 @@ class BasePythonMLTest(unittest.TestCase):
             source = asset_path + unit_shortnames[to_copy]
             destination = unit_shortnames[to_copy]
             to_run.append(destination)
-            shutil.copy(source, destination)
+            if to_copy == "IO_ttSplit":
+                shutil.copy(os.path.join(fixtures_path, "train_test_split.py"), destination)
+            else:
+                shutil.copy(source, destination)
 
         for file in to_run:
             pipes = subprocess.Popen((sys.executable, file), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
