@@ -41,7 +41,9 @@ export default () => {
         {
             "content": readAssetFile("python/ml", "pyml:setup_variables_packages.j2.py"),
             "name": "pyml_settings.py",
-            "contextProviders": [],
+            "contextProviders": [
+                "MLSettingsDataManager",
+            ],
             "applicationName": applicationName,
             "executableName": executableName
         },
@@ -62,7 +64,9 @@ export default () => {
         {
             "content": readAssetFile("python/ml", "pyml:data_input:train_test_split:sklearn.j2.py"),
             "name": "data_input_train_test_split_sklearn.py",
-            "contextProviders": [],
+            "contextProviders": [
+                "MLTrainTestSplitDataManager"
+            ],
             "applicationName": applicationName,
             "executableName": executableName
         },
@@ -181,20 +185,6 @@ export default () => {
         {
             "content": readAssetFile("python/ml", "pyml:post_processing:roc_curve:sklearn.j2.py"),
             "name": "post_processing_roc_curve_sklearn.py",
-            "contextProviders": [],
-            "applicationName": applicationName,
-            "executableName": executableName
-        },
-        {
-            "content": readAssetFile("python/ml", "pyml:setup_classification_variables_packages.j2.py"),
-            "name": "pyml_classification_settings.py",
-            "contextProviders": [],
-            "applicationName": applicationName,
-            "executableName": executableName
-        },
-        {
-            "content": readAssetFile("python/ml", "pyml:setup_clustering_variables_packages.j2.py"),
-            "name": "pyml_clustering_settings.py",
             "contextProviders": [],
             "applicationName": applicationName,
             "executableName": executableName
