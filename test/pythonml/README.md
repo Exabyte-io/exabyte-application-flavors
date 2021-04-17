@@ -37,7 +37,7 @@ A list of file extensions, and any file with these extensions will be removed at
 ### `unit_shortnames`
 
 For convenience, we shorten the names of the flavors a bit to aid in defining the tests. For example, we might call "
-pyml:data_input:read_csv:pandas.j2.py" instead "IO_readCSV" for brevity. The shortnames are organized by category. See
+pyml:data_input:read_csv:pandas.pyi" instead "IO_readCSV" for brevity. The shortnames are organized by category. See
 commentary in this section of the YAML file for more information.
 
 ### `tests`
@@ -58,8 +58,8 @@ unit.
 If creating a test for a new type of unit (for example, if we did not have LASSO, and the current PR was hoping to add
 LASSO), the `unit_shortnames` object must first be updated. Inside, the keys represent a shorthand for referring to the
 unit. We might named our LASSO unit `REG_lasso`. The value of the key must be the name of the flavor's asset file. If
-LASSO existed in a file named `pyml:model:lasso_regression:sklearn.j2.py`, the key for LASSO would be "pyml:model:
-lasso_regression:sklearn.j2.py". Note that double quotes are required if the unit name has a colon (because of the YAML
+LASSO existed in a file named `pyml:model:lasso_regression:sklearn.pyi`, the key for LASSO would be "pyml:model:
+lasso_regression:sklearn.pyi". Note that double quotes are required if the unit name has a colon (because of the YAML
 standard).
 
 When adding new units, we recommend creating several tests to check different usage scenarios. For example, if a new

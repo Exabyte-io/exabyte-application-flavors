@@ -26,7 +26,7 @@ files_to_remove:
 extensions_to_remove:
   - .csv
   - .png
-  - .j2.py
+  - .pyi
 
 # ============================================================================
 # Shorthand definitions for the various flavors we've made so far. Used in the "Test Cases" document below.
@@ -47,35 +47,35 @@ extensions_to_remove:
 # gradBoostTree = gradboosted_trees_regression
 unit_shortnames:
   # I/O Units
-  IO_readCSV: "pyml:data_input:read_csv:pandas.j2.py"
-  IO_ttSplit: "pyml:data_input:train_test_split:sklearn.j2.py"
+  IO_readCSV: "pyml:data_input:read_csv:pandas.pyi"
+  IO_ttSplit: "pyml:data_input:train_test_split:sklearn.pyi"
 
   # Pre-Processors
-  PRE_minMaxScale: "pyml:pre_processing:min_max_scaler:sklearn.j2.py"
-  PRE_dropDupes: "pyml:pre_processing:remove_duplicates:pandas.j2.py"
-  PRE_dropMissing: "pyml:pre_processing:remove_missing:pandas.j2.py"
-  PRE_standScale: "pyml:pre_processing:standardization:sklearn.j2.py"
+  PRE_minMaxScale: "pyml:pre_processing:min_max_scaler:sklearn.pyi"
+  PRE_dropDupes: "pyml:pre_processing:remove_duplicates:pandas.pyi"
+  PRE_dropMissing: "pyml:pre_processing:remove_missing:pandas.pyi"
+  PRE_standScale: "pyml:pre_processing:standardization:sklearn.pyi"
 
   # Regressors
-  REG_adaBoostTree: "pyml:model:adaboosted_trees_regression:sklearn.j2.py"
-  REG_bagTree: "pyml:model:bagged_trees_regression:sklearn.j2.py"
-  REG_gradBoostTree: "pyml:model:gradboosted_trees_regression:sklearn.j2.py"
-  REG_kernelRidge: "pyml:model:kernel_ridge_regression:sklearn.j2.py"
-  REG_lasso: "pyml:model:lasso_regression:sklearn.j2.py"
-  REG_mlp: "pyml:model:multilayer_perceptron:sklearn.j2.py"
-  REG_randomForest: "pyml:model:random_forest_regression:sklearn.j2.py"
-  REG_RidgeReg: "pyml:model:ridge_regression:sklearn.j2.py"
+  REG_adaBoostTree: "pyml:model:adaboosted_trees_regression:sklearn.pyi"
+  REG_bagTree: "pyml:model:bagged_trees_regression:sklearn.pyi"
+  REG_gradBoostTree: "pyml:model:gradboosted_trees_regression:sklearn.pyi"
+  REG_kernelRidge: "pyml:model:kernel_ridge_regression:sklearn.pyi"
+  REG_lasso: "pyml:model:lasso_regression:sklearn.pyi"
+  REG_mlp: "pyml:model:multilayer_perceptron:sklearn.pyi"
+  REG_randomForest: "pyml:model:random_forest_regression:sklearn.pyi"
+  REG_RidgeReg: "pyml:model:ridge_regression:sklearn.pyi"
 
   # Classifiers
-  CLS_randomForest: "pyml:model:random_forest_classification:sklearn.j2.py"
+  CLS_randomForest: "pyml:model:random_forest_classification:sklearn.pyi"
 
   # Unsupervised Learners
-  UNS_kMeans: "pyml:model:k_means_clustering:sklearn.j2.py"
+  UNS_kMeans: "pyml:model:k_means_clustering:sklearn.pyi"
 
   # Post-Processors
-  POS_plotParity: "pyml:post_processing:parity_plot:matplotlib.j2.py"
-  POS_plotClusters: "pyml:post_processing:pca_2d_clusters:matplotlib.j2.py"
-  POS_plotROC: "pyml:post_processing:roc_curve:sklearn.j2.py"
+  POS_plotParity: "pyml:post_processing:parity_plot:matplotlib.pyi"
+  POS_plotClusters: "pyml:post_processing:pca_2d_clusters:matplotlib.pyi"
+  POS_plotROC: "pyml:post_processing:roc_curve:sklearn.pyi"
 
 # ============================================================================
 # Test cases
