@@ -3,8 +3,9 @@
 #   Sklearn Standard Scaler workflow unit                           #
 #                                                                   #
 #   This workflow unit scales the data such that it a mean of 0 and #
-#   a variance of 1. It then saves the data for use further down    #
-#   the road in the workflow, for use in un-transforming the data.  #
+#   a standard deviation of 1. It then saves the data for use       #
+#   further downthe road in the workflow, for use in                #
+#   un-transforming the data.                                       #
 #                                                                   #
 #   It is important that new predictions are made by scaling the    #
 #   new inputs using the mean and variance of the original training #
