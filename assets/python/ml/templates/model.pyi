@@ -24,24 +24,38 @@ with settings.context as context:
         {%- if category != "clustering" %}
         train_target = context.load("train_target")
         test_target = context.load("test_target")
-        {% endif -%}
+        {%- endif %}
         train_descriptors = context.load("train_descriptors")
         test_descriptors = context.load("test_descriptors")
 
+        {% if category != "clustering" %}
         # Flatten the targets
         train_target = train_target.flatten()
         test_target = test_target.flatten()
+        {%- endif %}
 
+        {#- ========== Base Estimators (Ensembles Only)! ========== #}
+        {% if ensemble %}
+        # Initialize the Base Estimator
+        base_estimator = {{ base_estimator_class }}(
+            {%- for var, arg in base_estimator_default_args.items() %}
+            {{ var }}={{ arg | convert_nonetype | quoted_strings | safe }},
+            {%- endfor %}
+        )
+        {% endif %}
         {# ========== Create and Train the Model ========== -#}
-        # Initialize the model
+        # Initialize the Model
         model = {{ model_class }}(
-                {%- for var, arg in default_args.items() %}
+                {%- for var, arg in model_default_args.items() %}
                 {{ var }}={{ arg | convert_nonetype | quoted_strings | safe }},
                 {%- endfor %}
+                {%- if ensemble %}
+                base_estimator=base_estimator,
+                {%- endif %}
         )
 
         # Train the model and save
-        model.fit(train_descriptors{% if category != clustering %}, train_target{% endif %})
+        model.fit(train_descriptors{% if category != "clustering" %}, train_target{% endif %})
         context.save(model, {{ name | quoted_strings | safe }})
         train_{{ result_ending }} = model.predict(train_descriptors)
         test_{{ result_ending }} = model.predict(test_descriptors)

@@ -1,24 +1,239 @@
 name: adaboosted_trees
 category: "regression"
-ensemble: True
-description: "Workflow unit for a ridge-regression model in Scikit-Learn. Alpha is taken from Scikit-Learn's defaults."
 provider: sklearn
+ensemble: True
+description: >
+  Workflow unit for a ridge-regression model in Scikit-Learn.
+  Alpha is taken from Scikit-Learn's defaults.
 imports:
   - sklearn.ensemble
   - sklearn.tree
 model_class: sklearn.ensemble.AdaBoostRegressor
-default_args:
-  alpha: 1.0
-  kernel: None
+model_default_args:
+  n_estimators: 50
+  learning_rate: 1
+  loss: "linear"
+base_estimator_class: sklearn.tree.DecisionTreeRegressor
+base_estimator_default_args:
+  criterion: "mse"
+  splitter: "best"
+  max_depth: None
+  min_samples_split: 2
+  min_samples_leaf: 1
+  min_weight_fraction_leaf: 0.0
+  max_features: None
+  max_leaf_nodes: None
+  min_impurity_decrease: 0.0
+  ccp_alpha: 0.0
+
 ---
-name: kernel_ridge
+
+name: bagged_trees
 category: "regression"
+provider: sklearn
+ensemble: True
+description: >
+  Workflow unit for a bagged trees regression model with Scikit-Learn.
+  Parameters for the estimator and ensemble are derived from Scikit-Learn's Defaults.
+imports:
+  - sklearn.ensemble
+  - sklearn.tree
+model_class: sklearn.ensemble.BaggingRegressor
+model_default_args:
+  n_estimators: 10,
+  max_samples: 1.0,
+  max-features: 1.0
+  bootstrap: True
+  bootstrap_features: False
+  oob_score: False
+  verbose: 0
+base_estimator_class: sklearn.tree.DecisionTreeRegressor
+base_estimator_default_args:
+  criterion: "mse"
+  splitter: "best"
+  max_depth: None
+  min_samples_split: 2
+  min_samples_leaf: 1
+  min_weight_fraction_leaf: 0.0
+  max_features: None
+  max_leaf_nodes: None
+  min_impurity_decrease: 0.0
+  ccp_alpha: 0.0
+
+---
+
+name: gradboosted_trees
+category: "regression"
+provider: sklearn
 ensemble: False
-description: "Workflow unit for a ridge-regression model in Scikit-Learn. Alpha is taken from Scikit-Learn's defaults."
+description: >
+  Workflow unit for gradient-boosted tree regression with Scikit-Learn.
+  Parameters for the estimator and ensemble are derived from Scikit-Learn's Defaults.
+  Note: In the gradient-boosted trees ensemble used, the weak learners used as estimators cannot be tuned with the same
+  level of fidelity allowed in the adaptive-boosted trees ensemble.
+imports:
+  - sklearn.ensemble
+model_class: sklearn.ensemble.GradientBoostingRegressor
+model_default_args:
+  loss: "ls"
+  learning_rate: 0.1
+  n_estimators: 100
+  subsample: 1.0
+  criterion: "friedman_mse"
+  min_samples_split: 2
+  min_samples_leaf: 1
+  min_weight_fraction_leaf: 0.0
+  max_depth: 3
+  min_impurity_decrease: 0.0
+  max_features: None
+  alpha: 0.9
+  verbose: 0
+  max_leaf_nodes: None
+  validation_fraction: 0.1
+  n_iter_no_change: None
+  tol: 1.e-4
+  ccp_alpha: 0.0
+
+---
+
+name: k_means
+category: clustering
+provider: sklearn
+ensemble: False
+description: >
+  Workflow unit for k-means clustering.
+imports:
+  - sklearn.cluster
+model_class: sklearn.cluster.KMeans
+model_default_args:
+  n_clusters: 4
+  init: "k-means++"
+  n_init: 10
+  max_iter: 300
+  tol: 1e-4
+  copy_x: True
+  algorithm: "Auto"
+  verbose: 0
+
+---
+
+name: kernel_ridge
+category: regression
+ensemble: False
+description: >
+  Workflow unit for a kernelized ridge-regression model with Scikit-Learn. Model parameters are derived from Scikit-Learn's defaults.
 provider: sklearn
 imports:
   - sklearn.kernel_ridge
 model_class: sklearn.kernel_ridge.KernelRidge
-default_args:
+model_default_args:
   alpha: 1.0
   kernel: "linear"
+
+---
+
+name: LASSO
+category: regression
+provider: sklearn
+ensemble: False
+description: >
+  Workflow unit for a LASSO-regression model with Scikit-Learn. Model parameters derived from Scikit-Learn's Defaults. Alpha has been lowered from the default of 1.0, to 0.1.
+imports:
+  - sklearn.linear_model
+model_class: sklearn.linear_model.Lasso
+model_default_args:
+  alpha: 0.1
+  fit_intercept: True
+  normalize: False
+  precompute: False
+  tol: 1.e-4
+  positive: True
+  selection: "cyclic"
+
+---
+
+name: multilayer_perceptron
+category: regression
+provider: sklearn
+ensemble: False
+description: >
+  Workflow unit to train a simple feedforward neural network model on a regression problem using scikit-learn. In this template, we use the default values for hidden_layer_sizes, activation, solver, and learning rate. Other parameters are available (consult the sklearn docs), but in this case, we only include those relevant to the Adam optimizer. Sklearn Docs: Sklearn docs:http://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPRegressor.html
+imports:
+  - sklearn.neural_network
+model_class: sklearn.neural_network.MLPRegressor
+model_default_args:
+  hidden_layer_sizes: (100,)
+  activation: "relu"
+  solver: "adam"
+  max_iter: 200
+  early_stopping: False
+  validation_fraction: 0.1
+
+---
+
+name: random_forest
+category: classification
+provider: sklearn
+ensemble: False
+description: >
+  Workflow unit for a random forest classification model with Scikit-Learn. Parameters derived from Scikit-Learn's defaults.
+imports:
+  - sklearn.ensemble
+model_class: sklearn.ensemble.RandomForestClassifier
+model_default_args:
+  n_estimators: 100
+  criterion: "gini"
+  max_depth: None
+  min_samples_split: 2
+  min_samples_lear: 1
+  min_weight_Fraction_leaf: 0.0
+  max_features: "auto"
+  max_leaf_nodes: None
+  min_impurity_decrease: 0.0
+  bootstrap: True
+  oob_score: False
+  verbose: 0
+  class_weight: None
+  ccp_alpha: 0.0
+  max_samples: None
+
+---
+
+name: random_forest
+category: regression
+provider: sklearn
+ensemble: False
+description: >
+  Workflow for a randomf orest regression model with Scikit-Learn. Parameters are derived from Scikit-Learn's defaults.
+imports:
+  - sklearn.ensemble
+model_class: sklearn.ensemble.RandomForestRegressor
+model_default_args:
+  n_estimators: 100
+  criterion: "mse"
+  max_depth: None
+  min_samples_split: 2
+  min_samples_lear: 1
+  min_weight_fraction_leaf: 0.0
+  max_features: "auto"
+  max_leaf_nodes: None
+  min_impurity_decrease: 0.0
+  bootstrap: True
+  max_samples: None
+  oob_score: False
+  ccp_alpha: 0.0
+  verbose: 0
+
+---
+
+name: ridge
+category: regression
+provider: sklearn
+ensemble: false
+description: >
+  Workflow unit for a ridge regression model with Scikit-Learn. Alpha is taken from Scikit-Learn's default parameters.
+imports:
+  - sklearn.linear_model
+model_class: sklearn.linear_model.Ridge
+model_default_args:
+  alpha: 1.0
