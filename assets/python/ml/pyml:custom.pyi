@@ -24,14 +24,17 @@ import settings
 with settings.context as context:
     # Train
     if settings.is_workflow_running_to_train:
-        descriptors = context.load("descriptors")
-        target = context.load("target")
+        train_target = context.load("train_target")
+        train_descriptors = context.load("train_descriptors")
+        test_target = context.load("test_target")
+        test_descriptors = context.load("test_descriptors")
 
         # Do some transformations to the data here
 
-        context.save(descriptors, "descriptor")
-        context.save(target, "target")
-
+        context.save(train_target, "train_target")
+        context.save(train_descriptors, "train_descriptors")
+        context.save(test_target, "test_target")
+        context.save(test_descriptors, "test_descriptors")
 
     # Predict
     else:
