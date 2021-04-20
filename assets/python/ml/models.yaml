@@ -1,0 +1,24 @@
+name: adaboosted_trees
+category: "regression"
+ensemble: True
+description: "Workflow unit for a ridge-regression model in Scikit-Learn. Alpha is taken from Scikit-Learn's defaults."
+provider: sklearn
+imports:
+  - sklearn.ensemble
+  - sklearn.tree
+model_class: sklearn.ensemble.AdaBoostRegressor
+default_args:
+  alpha: 1.0
+  kernel: None
+---
+name: kernel_ridge
+category: "regression"
+ensemble: False
+description: "Workflow unit for a ridge-regression model in Scikit-Learn. Alpha is taken from Scikit-Learn's defaults."
+provider: sklearn
+imports:
+  - sklearn.kernel_ridge
+model_class: sklearn.kernel_ridge.KernelRidge
+default_args:
+  alpha: 1.0
+  kernel: "linear"
