@@ -1,7 +1,12 @@
 # ------------------------------------------------------------ #
-# Workflow unit for a ridge regression model with Scikit-      #
-# Learn. Alpha is taken from Scikit-Learn's default            #
-# parameters.                                                  #
+# Workflow unit to train a simple feedforward neural network   #
+# model on a regression problem using scikit-learn. In this    #
+# template, we use the default values for hidden_layer_sizes,  #
+# activation, solver, and learning rate. Other parameters are  #
+# available (consult the sklearn docs), but in this case, we   #
+# only include those relevant to the Adam optimizer. Sklearn   #
+# Docs: Sklearn docs:http://scikit-learn.org/stable/modules/ge #
+# nerated/sklearn.neural_network.MLPRegressor.html             #
 #                                                              #
 # When then workflow is in Training mode, the model is trained #
 # and then it is saved, along with the RMSE and some           #
@@ -14,7 +19,7 @@
 # ------------------------------------------------------------ #
 
 
-import sklearn.linear_model
+import sklearn.neural_network
 import sklearn.metrics
 import numpy as np
 import settings
@@ -33,13 +38,18 @@ with settings.context as context:
         test_target = test_target.flatten()
 
         # Initialize the Model
-        model = sklearn.linear_model.Ridge(
-            alpha=1.0,
+        model = sklearn.neural_network.MLPRegressor(
+            hidden_layer_sizes=(100,),
+            activation="relu",
+            solver="adam",
+            max_iter=200,
+            early_stopping=False,
+            validation_fraction=0.1,
         )
 
         # Train the model and save
         model.fit(train_descriptors, train_target)
-        context.save(model, "ridge")
+        context.save(model, "multilayer_perceptron")
         train_predictions = model.predict(train_descriptors)
         test_predictions = model.predict(test_descriptors)
 
@@ -70,7 +80,7 @@ with settings.context as context:
         descriptors = context.load("descriptors")
 
         # Restore model
-        model = context.load("ridge")
+        model = context.load("multilayer_perceptron")
 
         # Make some predictions
         predictions = model.predict(descriptors)

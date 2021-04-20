@@ -40,9 +40,9 @@ imports:
   - sklearn.tree
 model_class: sklearn.ensemble.BaggingRegressor
 model_default_args:
-  n_estimators: 10,
-  max_samples: 1.0,
-  max-features: 1.0
+  n_estimators: 10
+  max_samples: 1.0
+  max_features: 1.0
   bootstrap: True
   bootstrap_features: False
   oob_score: False
@@ -110,9 +110,9 @@ model_default_args:
   init: "k-means++"
   n_init: 10
   max_iter: 300
-  tol: 1e-4
+  tol: 1.e-4
   copy_x: True
-  algorithm: "Auto"
+  algorithm: "auto"
   verbose: 0
 
 ---
@@ -185,8 +185,8 @@ model_default_args:
   criterion: "gini"
   max_depth: None
   min_samples_split: 2
-  min_samples_lear: 1
-  min_weight_Fraction_leaf: 0.0
+  min_samples_leaf: 1
+  min_weight_fraction_leaf: 0.0
   max_features: "auto"
   max_leaf_nodes: None
   min_impurity_decrease: 0.0
@@ -204,7 +204,7 @@ category: regression
 provider: sklearn
 ensemble: False
 description: >
-  Workflow for a randomf orest regression model with Scikit-Learn. Parameters are derived from Scikit-Learn's defaults.
+  Workflow for a random forest regression model with Scikit-Learn. Parameters are derived from Scikit-Learn's defaults.
 imports:
   - sklearn.ensemble
 model_class: sklearn.ensemble.RandomForestRegressor
@@ -213,7 +213,7 @@ model_default_args:
   criterion: "mse"
   max_depth: None
   min_samples_split: 2
-  min_samples_lear: 1
+  min_samples_leaf: 1
   min_weight_fraction_leaf: 0.0
   max_features: "auto"
   max_leaf_nodes: None

@@ -62,7 +62,7 @@ unit_shortnames:
   REG_gradBoostTree: "pyml:model:gradboosted_trees_regression:sklearn.pyi"
   REG_kernelRidge: "pyml:model:kernel_ridge_regression:sklearn.pyi"
   REG_lasso: "pyml:model:lasso_regression:sklearn.pyi"
-  REG_mlp: "pyml:model:multilayer_perceptron:sklearn.pyi"
+  REG_mlp: "pyml:model:multilayer_perceptron_regression:sklearn.pyi"
   REG_randomForest: "pyml:model:random_forest_regression:sklearn.pyi"
   REG_RidgeReg: "pyml:model:ridge_regression:sklearn.pyi"
 

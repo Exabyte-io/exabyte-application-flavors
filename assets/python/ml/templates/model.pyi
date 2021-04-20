@@ -1,12 +1,12 @@
 {#- ========== General setup ========== -#}
-{%- if category == clustering -%}
-    {% set result_ending = "label" %}
+{%- if category == "clustering" -%}
+    {% set result_ending = "labels" %}
 {%- else -%}
     {% set result_ending = "predictions" %}
 {%- endif -%}
 
 {#- ========== Comment Block ========== -#}
-# {{ description | safe }}
+{{ description | comment_box(doc_boilerplate=doc_boilerplate[category]) | safe }}
 
 {# ========== Imports Block ========== #}
 {%- for item in  imports -%}
@@ -39,7 +39,7 @@ with settings.context as context:
         # Initialize the Base Estimator
         base_estimator = {{ base_estimator_class }}(
             {%- for var, arg in base_estimator_default_args.items() %}
-            {{ var }}={{ arg | convert_nonetype | quoted_strings | safe }},
+            {{ var }}={{ arg | generate_nonetype | quoted_strings | safe }},
             {%- endfor %}
         )
         {% endif %}
@@ -47,7 +47,7 @@ with settings.context as context:
         # Initialize the Model
         model = {{ model_class }}(
                 {%- for var, arg in model_default_args.items() %}
-                {{ var }}={{ arg | convert_nonetype | quoted_strings | safe }},
+                {{ var }}={{ arg | generate_nonetype | quoted_strings | safe }},
                 {%- endfor %}
                 {%- if ensemble %}
                 base_estimator=base_estimator,

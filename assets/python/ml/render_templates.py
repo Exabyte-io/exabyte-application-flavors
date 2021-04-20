@@ -1,28 +1,83 @@
 from typing import Any
+import textwrap
 
 import jinja2.ext
 import yaml
 import black
 
+MAX_COLUMNS = 120
 
-def quoted_strings(value: Any) -> Any:
+
+def comment_box(value: str, doc_boilerplate: str = "", maxlength: int = int(MAX_COLUMNS // 2)) -> str:
     """
-    Filter to ensure strings are surrounded in quotes in Jinja templating.
+    Creates a comment box around a bunch of lines, up to a max length.
 
     Args:
-        value: The value to be adjusted.
+        value: The actual value to be templated
+        doc_boilerplate: Boilerplate that goes at the bottom of every comment box
+        maxlength: Maximum column width for the text box
 
     Returns:
-        A string wrapped in quotes, if a string was passed in. Otherwise none.
+        A nicely-formatted text box
+        # --------- #
+        # like this #
+        # --------- #
     """
-    if isinstance(value, str):
-        result = f'"{value}"'
-    else:
-        result = value
+    result = ""
+
+    # Format the actual content
+    wrapped_content = textwrap.wrap(value, width=maxlength)
+    content_lines = (f"# {line.ljust(maxlength)} #" for line in wrapped_content)
+
+    # Format the boilerplate
+    if doc_boilerplate:
+        # Convert n-spaced to single space strings
+        single_spaced_boilerplate = " ".join(doc_boilerplate.split())
+        wrapped_boilerplate = textwrap.wrap(single_spaced_boilerplate, width=maxlength)
+        boilerplate_lines = (f"# {line.ljust(maxlength)} #" for line in wrapped_boilerplate)
+
+    # Blank line, offset 2
+    blank_line = f"# {' '.ljust(maxlength)} #"
+
+    # The "#-----#' line
+    comment_bound = bot_line = f"# {'-' * maxlength} #"
+
+    result += comment_bound + "\n"  # Top comment line
+    result += "\n".join(content_lines) + "\n"
+    result += blank_line + "\n"
+    if doc_boilerplate:
+        result += "\n".join(boilerplate_lines) + "\n"
+    result += comment_bound + "\n"  # Bottom comment line
     return result
 
 
-def convert_nonetype(value: Any) -> Any:
+def is_yaml_string_list_dict_or_tuple(value: Any) -> bool:
+    """
+    Checks whether a string in YAML represents a list, dict, or tuple.
+
+    Args:
+        value:
+
+    Returns:
+
+    """
+    enclosing_characters = {
+        "(": ")",
+        "[": "]",
+        "{": "}",
+    }
+    if isinstance(value, str) and value[0] in enclosing_characters.keys():
+        ending = enclosing_characters[value[0]]
+        if value.endswith(ending):
+            result = True
+        else:
+            result = False
+    else:
+        result = False
+    return result
+
+
+def generate_nonetype(value: Any) -> Any:
     """
     Filter for converting the string "None" to the None literal in Jinja templating.
     Note that the string is converted to title-case before being tested, so any variation of casing works too, such as
@@ -41,14 +96,36 @@ def convert_nonetype(value: Any) -> Any:
     return result
 
 
+def quoted_strings(value: Any) -> Any:
+    """
+    Filter to ensure strings are surrounded in quotes in Jinja templating.
+
+    Args:
+        value: The value to be adjusted.
+
+    Returns:
+        A string wrapped in quotes, if a string was passed in. Otherwise none.
+    """
+    if isinstance(value, str) and not is_yaml_string_list_dict_or_tuple(value):
+        result = f'"{value}"'
+    else:
+        result = value
+    return result
+
+
 if __name__ == "__main__":
+    # Load general configuration
+    with open("config.yaml", "r") as inp:
+        config = yaml.safe_load(inp)
+
     # Tell Jinja where our templates are located
     loader = jinja2.FileSystemLoader('templates/')
 
     # Populate the Jinja environment with our defined filters
     env = jinja2.Environment(autoescape=True, loader=loader)
     env.filters['quoted_strings'] = quoted_strings
-    env.filters['convert_nonetype'] = convert_nonetype
+    env.filters['generate_nonetype'] = generate_nonetype
+    env.filters['comment_box'] = comment_box
     env.add_extension(jinja2.ext.do)
 
     # Deal with model templates
@@ -59,16 +136,16 @@ if __name__ == "__main__":
         models = tuple(yaml.safe_load_all(inp))
 
     for model in models:
-        filename = f"pyml:{template_type}:{model['name']}_{model['category']}:{model['provider']}.py"
+        filename = f"pyml:{template_type}:{model['name']}_{model['category']}:{model['provider']}.pyi"
         print(filename)
         with open(filename, "w") as outp:
             outp.write(
                 # Ensure pep8 compliance with Black
-                black.format_str(template.render(**model),
+                black.format_str(template.render(**model, **config),
                                  mode=black.Mode(target_versions={black.TargetVersion.PY36,
                                                                   black.TargetVersion.PY37,
                                                                   black.TargetVersion.PY38},
-                                                 line_length=120,
+                                                 line_length=MAX_COLUMNS,
                                                  string_normalization=False,
                                                  is_pyi=False)
                                  )

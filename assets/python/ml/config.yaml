@@ -1,0 +1,29 @@
+doc_boilerplate:
+  regression: >
+    When then workflow is in Training mode, the model is trained
+    and then it is saved, along with the RMSE and some
+    predictions made using the training data (e.g. for use in a
+    parity plot or calculation of other error metrics).
+
+    When the workflow is run in Predict mode, the model   is
+    loaded, predictions are made, they are un-transformed using
+    the trained scaler from the training run, and they are
+    written to a filed named "predictions.csv"
+
+  classification: >
+    When then workflow is in Training mode, the model is trained
+    and then it is saved, along with the confusion matrix.
+
+    When the workflow is run in Predict mode, the model   is
+    loaded, predictions are made, they are un-transformed using
+    the trained scaler from the training run, and they are
+    written to a filed named "predictions.csv"
+
+  clustering: >
+    In k-means clustering, the labels are not provided ahead of
+    time. Instead, one supplies the number of groups the algorithm
+    should split the dataset into. Here, we set our own default of
+    4 groups (fewer than sklearn's default of 8). Otherwise, the
+    default parameters of the clustering method are the same as
+    in sklearn.
+
