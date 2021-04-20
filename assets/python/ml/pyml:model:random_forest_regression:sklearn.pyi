@@ -9,7 +9,7 @@
 # workflow is run in Predict mode, the model is loaded,        #
 # predictions are made, they are un-transformed using the      #
 # trained scaler from the training run, and they are written   #
-# to a filed named "predictions.csv"                           #
+# to a file named "predictions.csv"                            #
 # ------------------------------------------------------------ #
 
 

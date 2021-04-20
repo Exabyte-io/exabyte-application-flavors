@@ -8,7 +8,7 @@ doc_boilerplate:
     When the workflow is run in Predict mode, the model   is
     loaded, predictions are made, they are un-transformed using
     the trained scaler from the training run, and they are
-    written to a filed named "predictions.csv"
+    written to a file named "predictions.csv"
 
   classification: >
     When then workflow is in Training mode, the model is trained
@@ -17,7 +17,7 @@ doc_boilerplate:
     When the workflow is run in Predict mode, the model   is
     loaded, predictions are made, they are un-transformed using
     the trained scaler from the training run, and they are
-    written to a filed named "predictions.csv"
+    written to a filee named "predictions.csv"
 
   clustering: >
     In k-means clustering, the labels are not provided ahead of
