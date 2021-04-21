@@ -15,7 +15,7 @@ export default () => {
             "executableName": executableName
         },
         {
-            "content": readAssetFile(applicationName, "configure.j2.py"),
+            "content": readAssetFile(applicationName, "configure.pyi"),
             "name": "config.py",
             "contextProviders": [],
             "applicationName": applicationName,
