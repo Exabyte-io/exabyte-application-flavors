@@ -259,7 +259,7 @@ class TestClustering(BasePythonMLTest):
     end in failure.
     """
     category = "clustering"
-    plot_name = "my_clusters.png"
+    plot_name = "train_clusters.png"
     plot_unit = "POS_plotClust"
 
     @parameterized.expand(tests_clustering, testcase_func_name=custom_name_func(names_clustering),
