@@ -1,0 +1,12 @@
+name: "parity_plot"
+provider: "matplotlib"
+
+---
+
+name: "pca_2d_clusters"
+provider: "matplotlib"
+
+---
+
+name: "roc_curve"
+provider: "sklearn"

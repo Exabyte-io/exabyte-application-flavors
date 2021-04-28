@@ -12,8 +12,8 @@ export default () => {
          */
         {% for config in configs %}
             {
-            "content": readAssetFile(applicationName, {{ config.assetFileName | quotedstrings | safe }}),
-            "name": {{ config.name  | quotedstrings | safe }},
+            "content": readAssetFile({{ config.applicationDirname }}, {{ config.sourceFilename | quotedstrings | safe }}),
+            "name": {{ (config.flavorListDisplayName + config.trueExtension)  | quotedstrings | safe }},
             "contextProviders": {{ config.contextProviders  | quotedstrings | safe }},
             "applicationName": applicationName,
             "executableName": executableName,

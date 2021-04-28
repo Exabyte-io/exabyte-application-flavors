@@ -1,0 +1,12 @@
+flavor_list_display_name: "hello_world"
+true_extension: ".py"
+source_filename: "hello_world.pyi"
+extra_inputs: "requirements.txt"
+---
+flavor_list_display_name: "espresso_xml_get_qpt_irr"
+true_extension: ".py"
+source_filename: "espresso_xml_get_qpt_irr.pyi"
+---
+flavor_list_display_name: "requirements"
+true_extension: ".txt"
+source_filename: "requirements.j2.txt"

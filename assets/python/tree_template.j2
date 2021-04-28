@@ -8,12 +8,16 @@ export default {
         "results": [],
         "flavors": {
             {% for config in configs %}
-                {{ longName  | quotedstrings | safe }}: {
+                {{ config.flavorListDisplayName  | quotedstrings | safe }}: {
                     "input": [
-                    {% for input in config.inputs %}
                         {
-                           "name": {{ input.name }},
-                           "templateName": {{ input.templateName }},
+                            "name": {{ (config.flavorListDisplayName + config.trueExtension) | quotedstrings | safe}},
+                            "templateName": {{ config.flavorListTemplateName | quotedstrings | safe}},
+                        },
+                    {% for input in config.additionalInputs %}
+                        {
+                           "name": {{ input.name | quotedstrings | safe }},
+                           "templateName": {{ input.templateName | quotedstrings | safe }},
                         },
                     {% endfor %}
                 ],
