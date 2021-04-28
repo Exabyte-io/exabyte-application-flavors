@@ -20,6 +20,7 @@
 
 import pandas as pd
 import matplotlib.cm
+import matplotlib.lines
 import matplotlib.pyplot as plt
 import sklearn.decomposition
 import settings
@@ -50,24 +51,36 @@ with settings.context as context:
         labels = set(train_labels)
         colors = {}
         for count, label in enumerate(labels):
-            cm = matplotlib.cm.get_cmap('jet', len(labels))
+            cm = matplotlib.cm.get_cmap('Blues', len(labels))
             color = cm(count / len(labels))
             colors[label] = color
 
         train_colors = [colors[label] for label in train_labels]
+        train_marker = "o"
         test_colors = [colors[label] for label in test_labels]
+        test_marker = "s"
 
         # Plot the data
-        plt.scatter(train_descriptors[:, 0], train_descriptors[:, 1], c=train_colors, marker="o",
+        plt.scatter(train_descriptors[:, 0], train_descriptors[:, 1], c=train_colors, marker=train_marker,
+                    edgecolors="black",
                     label="Training Set")
         if settings.is_using_train_test_split:
-            plt.scatter(test_descriptors[:, 0], test_descriptors[:, 1], c=test_colors, marker="s",
+            plt.scatter(test_descriptors[:, 0], test_descriptors[:, 1], c=test_colors, marker=test_marker,
                         alpha=1, edgecolors="black",
                         label="Testing Set")
+        plt.title("Results (Colored by Cluster)")
         plt.xlabel("Principal Component 1")
         plt.ylabel("Principal Component 2")
 
-        plt.legend()
+        # Configure the legend
+        train_legend_symbol = matplotlib.lines.Line2D([], [], color='white', marker=train_marker,
+                                                      markeredgecolor="black",
+                                                      label="Training Set")
+        test_legend_symbol = matplotlib.lines.Line2D([], [], color='white', marker=test_marker,
+                                                     markeredgecolor="black",
+                                                     label="Testing Set")
+
+        plt.legend(handles=[train_legend_symbol, test_legend_symbol])
 
         # Save the figure
         plt.savefig("my_clusters.png", dpi=600)
