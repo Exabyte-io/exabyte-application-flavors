@@ -70,6 +70,7 @@ with settings.context as context:
         plt.legend()
 
         # Save the figure
+        plt.tight_layout()
         plt.savefig("my_clusters.png", dpi=600)
 
 

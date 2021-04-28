@@ -57,6 +57,7 @@ with settings.context as context:
         plt.legend()
 
         # Save the figure
+        plt.tight_layout()
         plt.savefig("my_parity_plot.png", dpi=600)
 
     # Predict
