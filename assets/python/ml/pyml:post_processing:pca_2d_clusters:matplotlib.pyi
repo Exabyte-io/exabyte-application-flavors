@@ -47,43 +47,70 @@ with settings.context as context:
         pca = sklearn.decomposition.PCA(n_components=2)
         train_descriptors = pca.fit_transform(train_descriptors)
         test_descriptors = pca.transform(test_descriptors)
+        xlabel = "Principle Component 1"
+        ylabel = "Principle Component 2"
 
+        # Determine the labels we're going to be using, and generate their colors
         labels = set(train_labels)
         colors = {}
         for count, label in enumerate(labels):
-            cm = matplotlib.cm.get_cmap('Blues', len(labels))
+            cm = matplotlib.cm.get_cmap('jet', len(labels))
             color = cm(count / len(labels))
             colors[label] = color
-
         train_colors = [colors[label] for label in train_labels]
-        train_marker = "o"
         test_colors = [colors[label] for label in test_labels]
-        test_marker = "s"
 
-        # Plot the data
-        plt.scatter(train_descriptors[:, 0], train_descriptors[:, 1], c=train_colors, marker=train_marker,
-                    edgecolors="black",
-                    label="Training Set")
-        if settings.is_using_train_test_split:
-            plt.scatter(test_descriptors[:, 0], test_descriptors[:, 1], c=test_colors, marker=test_marker,
-                        alpha=1, edgecolors="black",
-                        label="Testing Set")
-        plt.title("Results (Colored by Cluster)")
-        plt.xlabel("Principal Component 1")
-        plt.ylabel("Principal Component 2")
+        # Train / Test Split Visualization
+        plt.title("Train Test Split Visualization")
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        plt.scatter(train_descriptors[:, 0], train_descriptors[:, 1], c="#33548c", marker="o", label="Training Set")
+        plt.scatter(test_descriptors[:, 0], test_descriptors[:, 1], c="#F0B332", marker="o", label="Testing Set")
+        xmin, xmax, ymin, ymax = plt.axis()
+        plt.legend()
+        plt.tight_layout()
+        plt.savefig("train_test_split.png", dpi=600)
+        plt.close()
 
-        # Configure the legend
-        train_legend_symbol = matplotlib.lines.Line2D([], [], color='white', marker=train_marker,
-                                                      markeredgecolor="black",
-                                                      label="Training Set")
-        test_legend_symbol = matplotlib.lines.Line2D([], [], color='white', marker=test_marker,
-                                                     markeredgecolor="black",
-                                                     label="Testing Set")
+        def clusters_legend(cluster_colors):
+            """
+            Helper function that creates a legend, given the coloration by clusters.
+            Args:
+                cluster_colors: A dictionary of the form {cluster_number : color_value}
 
-        plt.legend(handles=[train_legend_symbol, test_legend_symbol])
+            Returns:
+                None; just creates the legend and puts it on the plot
+            """
+            legend_symbols = []
+            for group, color in cluster_colors.items():
+                label = f"Cluster {group}"
+                legend_symbols.append(matplotlib.lines.Line2D([], [], color=color, marker="o",
+                                                              linewidth=0, label=label))
+                plt.legend(handles=legend_symbols)
 
-        # Save the figure
-        plt.savefig("my_clusters.png", dpi=600)
+        # Training Set Clusters
+        plt.title("Training Set Clusters")
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        plt.xlim(xmin, xmax)
+        plt.ylim(ymin, ymax)
+        plt.scatter(train_descriptors[:, 0], train_descriptors[:, 1], c=train_colors)
+        clusters_legend(colors)
+        plt.tight_layout()
+        plt.savefig("train_clusters.png", dpi=600)
+        plt.close()
+
+        # Testing Set Clusters
+        plt.title("Testing Set Clusters")
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        plt.xlim(xmin, xmax)
+        plt.ylim(ymin, ymax)
+        plt.scatter(test_descriptors[:, 0], test_descriptors[:, 1], c=test_colors)
+        clusters_legend(colors)
+        plt.tight_layout()
+        plt.savefig("test_clusters.png", dpi=600)
+        plt.close()
 
 
     # Predict
