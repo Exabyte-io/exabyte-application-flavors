@@ -59,58 +59,40 @@ with settings.context as context:
             colors[label] = color
         train_colors = [colors[label] for label in train_labels]
         test_colors = [colors[label] for label in test_labels]
+        legend_symbols = []
+        for group, color in colors.items():
+            label = f"Cluster {group}"
+            legend_symbols.append(matplotlib.lines.Line2D([], [], color=color, marker="o",
+                                                          linewidth=0, label=label))
+
+        fig = plt.figure(figsize=(5,10))
+        gs = fig.add_gridspec(3)
+        ax1, ax2, ax3 = gs.subplots(sharex=True, sharey=True)
 
         # Train / Test Split Visualization
-        plt.title("Train Test Split Visualization")
-        plt.xlabel(xlabel)
-        plt.ylabel(ylabel)
-        plt.scatter(train_descriptors[:, 0], train_descriptors[:, 1], c="#33548c", marker="o", label="Training Set")
-        plt.scatter(test_descriptors[:, 0], test_descriptors[:, 1], c="#F0B332", marker="o", label="Testing Set")
-        xmin, xmax, ymin, ymax = plt.axis()
-        plt.legend()
-        plt.tight_layout()
-        plt.savefig("train_test_split.png", dpi=600)
-        plt.close()
-
-        def clusters_legend(cluster_colors):
-            """
-            Helper function that creates a legend, given the coloration by clusters.
-            Args:
-                cluster_colors: A dictionary of the form {cluster_number : color_value}
-
-            Returns:
-                None; just creates the legend and puts it on the plot
-            """
-            legend_symbols = []
-            for group, color in cluster_colors.items():
-                label = f"Cluster {group}"
-                legend_symbols.append(matplotlib.lines.Line2D([], [], color=color, marker="o",
-                                                              linewidth=0, label=label))
-                plt.legend(handles=legend_symbols)
+        ax1.set_title("Train/Test Split")
+        ax1.scatter(train_descriptors[:, 0], train_descriptors[:, 1], c="#33548c", marker="o", label="Training Set")
+        ax1.scatter(test_descriptors[:, 0], test_descriptors[:, 1], c="#F0B332", marker="o", label="Testing Set")
+        ax1.legend()
 
         # Training Set Clusters
-        plt.title("Training Set Clusters")
-        plt.xlabel(xlabel)
-        plt.ylabel(ylabel)
-        plt.xlim(xmin, xmax)
-        plt.ylim(ymin, ymax)
-        plt.scatter(train_descriptors[:, 0], train_descriptors[:, 1], c=train_colors)
-        clusters_legend(colors)
-        plt.tight_layout()
-        plt.savefig("train_clusters.png", dpi=600)
-        plt.close()
+        ax2.set_title("Training Set Clusters")
+        ax2.scatter(train_descriptors[:, 0], train_descriptors[:, 1], c=train_colors)
+        ax2.legend(handles=legend_symbols)
+
+        #clusters_legend(colors)
 
         # Testing Set Clusters
-        plt.title("Testing Set Clusters")
-        plt.xlabel(xlabel)
-        plt.ylabel(ylabel)
-        plt.xlim(xmin, xmax)
-        plt.ylim(ymin, ymax)
-        plt.scatter(test_descriptors[:, 0], test_descriptors[:, 1], c=test_colors)
-        clusters_legend(colors)
-        plt.tight_layout()
-        plt.savefig("test_clusters.png", dpi=600)
-        plt.close()
+        ax3.set_title("Testing Set Clusters")
+        ax3.scatter(test_descriptors[:, 0], test_descriptors[:, 1], c=test_colors)
+        ax3.legend(handles=legend_symbols)
+
+        #clusters_legend(colors)
+
+        fig.supxlabel(xlabel)
+        fig.supylabel(ylabel)
+        fig.tight_layout()
+        plt.savefig("my_clusters.png", dpi=600)
 
 
     # Predict
