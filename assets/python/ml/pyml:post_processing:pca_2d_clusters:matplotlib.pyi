@@ -89,8 +89,8 @@ with settings.context as context:
 
         #clusters_legend(colors)
 
-        fig.text(0.5, 0.0, xlabel, ha="center", weight="bold")
-        fig.text(0.0, 0.5, ylabel, va="center", rotation="vertical", weight="bold")
+        fig.supxlabel(xlabel)
+        fig.supylabel(ylabel)
         fig.tight_layout()
         plt.savefig("my_clusters.png", dpi=600)
 
