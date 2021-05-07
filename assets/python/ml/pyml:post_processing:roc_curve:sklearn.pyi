@@ -45,10 +45,10 @@ with settings.context as context:
         # Padding to ensure we see the line
         ax.margins(0.01)
 
-        # plt.plot(false_positive_rate, true_positive_rate, c=colors, label=f"ROC2 Cure, AUC={roc_auc}")
         plt.title(f"ROC curve, AUC={roc_auc}")
         plt.xlabel("False Positive Rate")
         plt.ylabel("True Positive Rate")
+        plt.tight_layout()
         plt.savefig("my_roc_curve.png", dpi=600)
 
     # Predict
