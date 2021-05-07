@@ -62,5 +62,5 @@ with settings.context as context:
 
     # Predict
     else:
-        # It might not make as much sense to draw a parity plot when predicting...
+        # It might not make as much sense to draw a plot when predicting...
         pass
