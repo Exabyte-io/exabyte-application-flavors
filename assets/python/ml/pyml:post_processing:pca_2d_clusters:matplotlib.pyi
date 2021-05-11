@@ -3,10 +3,10 @@
 #   Cluster Visualization                                           #
 #                                                                   #
 #   This unit takes an N-dimensional feature space, and uses        #
-#   Principle-component Analysis (PCA) to project into a 2D space   #
+#   Principal-component Analysis (PCA) to project into a 2D space   #
 #   to facilitate plotting on a scatter plot.                       #
 #                                                                   #
-#   The 2D space we project into are the first two principle        #
+#   The 2D space we project into are the first two principal        #
 #   components identified in PCA, which are the two vectors with    #
 #   the highest variance.                                           #
 #                                                                   #
@@ -64,8 +64,8 @@ with settings.context as context:
             plt.scatter(test_descriptors[:, 0], test_descriptors[:, 1], c=test_colors, marker="s",
                         alpha=1, edgecolors="black",
                         label="Testing Set")
-        plt.xlabel("Principle Component 1")
-        plt.ylabel("Principle Component 2")
+        plt.xlabel("Principal Component 1")
+        plt.ylabel("Principal Component 2")
 
         plt.legend()
 
