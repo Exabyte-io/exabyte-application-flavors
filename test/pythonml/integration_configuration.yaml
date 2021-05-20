@@ -68,6 +68,7 @@ unit_shortnames:
 
   # Classifiers
   CLS_randomForest: "pyml:model:random_forest_classification:sklearn.pyi"
+  CLS_gradBoost: "pyml:model:gradboosted_classification:sklearn.pyi"
 
   # Unsupervised Learners
   UNS_kMeans: "pyml:model:k_means_clustering:sklearn.pyi"
