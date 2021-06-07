@@ -55,7 +55,7 @@ with settings.context as context:
 
         # Train the model and save
         model.fit(train_descriptors, train_target)
-        context.save(model, "gradboosted_classification")
+        context.save(model, "gradboosted_trees_classification")
         train_predictions = model.predict(train_descriptors)
         test_predictions = model.predict(test_descriptors)
 
@@ -83,7 +83,7 @@ with settings.context as context:
         descriptors = context.load("descriptors")
 
         # Restore model
-        model = context.load("gradboosted_classification")
+        model = context.load("gradboosted_trees_classification")
 
         # Make some predictions
         predictions = model.predict(descriptors)
