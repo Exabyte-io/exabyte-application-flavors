@@ -155,8 +155,8 @@ export default () => {
             "executableName": executableName
         },
         {
-            "content": readAssetFile("python/ml", "pyml:model:gradboosted_classification:sklearn.pyi"),
-            "name": "model_gradboosted_classification_sklearn.py",
+            "content": readAssetFile("python/ml", "pyml:model:gradboosted_trees_classification:sklearn.pyi"),
+            "name": "model_gradboosted_trees_classification_sklearn.py",
             "contextProviders": [],
             "applicationName": applicationName,
             "executableName": executableName

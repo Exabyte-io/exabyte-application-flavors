@@ -203,11 +203,11 @@ export default {
                 ],
                 "monitors": [monitors.standard_output],
             },
-            "pyml:model:gradboosted_classification:sklearn": {
+            "pyml:model:gradboosted_trees_classification:sklearn": {
                 "input": [
                     {
-                        "name": "model_gradboosted_classification_sklearn.py",
-                        "templateName": "model_gradboosted_classification_sklearn.py"
+                        "name": "model_gradboosted_trees_classification_sklearn.py",
+                        "templateName": "model_gradboosted_trees_classification_sklearn.py"
                     }
                 ],
                 "results": [
