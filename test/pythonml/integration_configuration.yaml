@@ -68,7 +68,7 @@ unit_shortnames:
 
   # Classifiers
   CLS_randomForest: "pyml:model:random_forest_classification:sklearn.pyi"
-  CLS_gradBoost: "pyml:model:gradboosted_classification:sklearn.pyi"
+  CLS_gradBoostTree: "pyml:model:gradboosted_trees_classification:sklearn.pyi"
 
   # Unsupervised Learners
   UNS_kMeans: "pyml:model:k_means_clustering:sklearn.pyi"
@@ -192,12 +192,12 @@ tests:
       - CLS_randomForest
       - POS_plotROC
 
-  Cls_ReadCSV_StandScale_GradientBoostedClassifier_Parity:
+  Cls_ReadCSV_StandScale_GradientBoostedClassifier_ROC:
     category: classification
     units_to_run:
       - IO_readCSV
       - PRE_standScale
-      - CLS_gradBoost
+      - CLS_gradBoostTree
       - POS_plotROC
 
   # Clustering
