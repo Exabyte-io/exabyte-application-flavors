@@ -203,6 +203,18 @@ export default {
                 ],
                 "monitors": [monitors.standard_output],
             },
+            "pyml:model:gradboosted_trees_classification:sklearn": {
+                "input": [
+                    {
+                        "name": "model_gradboosted_trees_classification_sklearn.py",
+                        "templateName": "model_gradboosted_trees_classification_sklearn.py"
+                    }
+                ],
+                "results": [
+                    "workflow:pyml_predict"
+                ],
+                "monitors": [monitors.standard_output],
+            },
             "pyml:model:random_forest_regression:sklearn": {
                 "input": [
                     {
