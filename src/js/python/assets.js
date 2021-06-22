@@ -120,6 +120,13 @@ export default () => {
             "executableName": executableName
         },
         {
+            "content": readAssetFile("python/ml", "pyml:model:extreme_gradboosted_trees_regression:sklearn.pyi"),
+            "name": "model_extreme_gradboosted_trees_regression_sklearn.py",
+            "contextProviders": [],
+            "applicationName": applicationName,
+            "executableName": executableName
+        },
+        {
             "content": readAssetFile("python/ml", "pyml:model:k_means_clustering:sklearn.pyi"),
             "name": "model_k_means_clustering_sklearn.py",
             "contextProviders": [],
@@ -157,6 +164,13 @@ export default () => {
         {
             "content": readAssetFile("python/ml", "pyml:model:gradboosted_trees_classification:sklearn.pyi"),
             "name": "model_gradboosted_trees_classification_sklearn.py",
+            "contextProviders": [],
+            "applicationName": applicationName,
+            "executableName": executableName
+        },
+        {
+            "content": readAssetFile("python/ml", "pyml:model:extreme_gradboosted_trees_classification:sklearn.pyi"),
+            "name": "model_extreme_gradboosted_trees_classification_sklearn.py",
             "contextProviders": [],
             "applicationName": applicationName,
             "executableName": executableName
