@@ -158,3 +158,26 @@ class Context(object):
 context = Context()
 
 is_using_train_test_split = "is_using_train_test_split" in context and (context.load("is_using_train_test_split"))
+
+# Creat a Class for a DummyScaler()
+class DummyScaler():
+    """
+    This class is a 'DummyScaler' which trivially acts on data by returning it unchanged.
+    """
+
+    def __init__(self):
+        pass
+
+    def fit(self, X, y=None, sample_weight=None):
+        return self
+
+    def transform(self, X, copy=None):
+        return X
+
+    def fit_transform(self, X, y=None, **fit_params):
+        return X
+
+    def inverse_transform(self, X, copy=None):
+        return X
+
+context.save(DummyScaler(), 'target_scaler')
