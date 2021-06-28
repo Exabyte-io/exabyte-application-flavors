@@ -141,6 +141,13 @@ tests:
       - REG_gradBoostTree
       - POS_plotParity
 
+  Reg_ReadCSV_GradientBoostedTrees_Parity:
+    category: regression
+    units_to_run:
+      - IO_readCSV
+      - REG_gradBoostTree
+      - POS_plotParity
+
   Reg_ReadCSV_Standardize_ExtremeGradientBoostedTrees_Parity:
     category: regression
     units_to_run:
