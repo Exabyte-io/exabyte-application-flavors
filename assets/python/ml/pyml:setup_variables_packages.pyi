@@ -159,7 +159,7 @@ context = Context()
 
 is_using_train_test_split = "is_using_train_test_split" in context and (context.load("is_using_train_test_split"))
 
-# Creat a Class for a DummyScaler()
+# Create a Class for a DummyScaler()
 class DummyScaler():
     """
     This class is a 'DummyScaler' which trivially acts on data by returning it unchanged.
