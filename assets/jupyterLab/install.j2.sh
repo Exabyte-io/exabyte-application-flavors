@@ -16,17 +16,6 @@ envdir=$(pwd)
 python -m virtualenv -q .env
 source .env/bin/activate
 
-# Clean up virtual environment directory on exit to avoid occupying disk space.
-# The information about the packages installed is saved in the corresponding file.
-function cleanup () {
-    cd $envdir
-    python -m pip freeze > installed_packages_list.txt
-    deactivate
-    rm -rf .env
-    exit
-}
-trap cleanup INT TERM EXIT
-
 # Install Jupyter Lab
 python -m pip install -q jupyterlab=={{ application.version }}
 
