@@ -168,16 +168,16 @@ class DummyScaler():
     def __init__(self):
         pass
 
-    def fit(self, X, y=None, sample_weight=None):
+    def fit(self, X):
         return self
 
-    def transform(self, X, copy=None):
+    def transform(self, X):
         return X
 
-    def fit_transform(self, X, y=None, **fit_params):
+    def fit_transform(self, X):
         return X
 
-    def inverse_transform(self, X, copy=None):
+    def inverse_transform(self, X):
         return X
 
 context.save(DummyScaler(), 'target_scaler')
