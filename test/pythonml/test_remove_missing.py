@@ -60,7 +60,7 @@ class TestRemoveMissing(unittest.TestCase):
         assert(os.path.isfile(os.path.join(self.context._context_dir_pathname, 'train_target.pkl')))
         assert(os.path.isfile(os.path.join(self.context._context_dir_pathname, 'test_descriptors.pkl')))
 
-    def test_duplicates_removed_from_training_set(self):
+    def test_remove_missing(self):
         # load the (hopefully) modified data
         train_target = self.context.load("train_target")
         train_descriptors = self.context.load("train_descriptors")

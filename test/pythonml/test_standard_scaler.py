@@ -76,7 +76,7 @@ class TestStandardScaler(unittest.TestCase):
         assert(os.path.isfile(os.path.join(self.context._context_dir_pathname, 'target_scaler.pkl')))
         assert(os.path.isfile(os.path.join(self.context._context_dir_pathname, 'descriptor_scaler.pkl')))
 
-    def test_duplicates_removed_from_training_set(self):
+    def test_standard_scaler(self):
         # load the (hopefully) modified data
         train_target = self.context.load("train_target")
         train_descriptors = self.context.load("train_descriptors")
