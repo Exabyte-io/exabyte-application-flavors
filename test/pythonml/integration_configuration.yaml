@@ -60,6 +60,7 @@ unit_shortnames:
   REG_adaBoostTree: "pyml:model:adaboosted_trees_regression:sklearn.pyi"
   REG_bagTree: "pyml:model:bagged_trees_regression:sklearn.pyi"
   REG_gradBoostTree: "pyml:model:gradboosted_trees_regression:sklearn.pyi"
+  REG_ExtremegradBoostTree: "pyml:model:extreme_gradboosted_trees_regression:sklearn.pyi"
   REG_kernelRidge: "pyml:model:kernel_ridge_regression:sklearn.pyi"
   REG_lasso: "pyml:model:lasso_regression:sklearn.pyi"
   REG_mlp: "pyml:model:multilayer_perceptron:sklearn.pyi"
@@ -68,6 +69,8 @@ unit_shortnames:
 
   # Classifiers
   CLS_randomForest: "pyml:model:random_forest_classification:sklearn.pyi"
+  CLS_gradBoostTree: "pyml:model:gradboosted_trees_classification:sklearn.pyi"
+  CLS_ExtremegradBoostTree: "pyml:model:extreme_gradboosted_trees_classification:sklearn.pyi"
 
   # Unsupervised Learners
   UNS_kMeans: "pyml:model:k_means_clustering:sklearn.pyi"
@@ -138,6 +141,14 @@ tests:
       - REG_gradBoostTree
       - POS_plotParity
 
+  Reg_ReadCSV_Standardize_ExtremeGradientBoostedTrees_Parity:
+    category: regression
+    units_to_run:
+      - IO_readCSV
+      - PRE_standScale
+      - REG_ExtremegradBoostTree
+      - POS_plotParity
+
   Reg_ReadCSV_TrainTest_MinMax_BaggedTrees_Parity:
     category: regression
     units_to_run:
@@ -189,6 +200,22 @@ tests:
       - IO_readCSV
       - PRE_standScale
       - CLS_randomForest
+      - POS_plotROC
+
+  Cls_ReadCSV_StandScale_GradientBoostedClassifier_ROC:
+    category: classification
+    units_to_run:
+      - IO_readCSV
+      - PRE_standScale
+      - CLS_gradBoostTree
+      - POS_plotROC
+
+  Cls_ReadCSV_StandScale_ExtremeGradientBoostedClassifier_ROC:
+    category: classification
+    units_to_run:
+      - IO_readCSV
+      - PRE_standScale
+      - CLS_ExtremegradBoostTree
       - POS_plotROC
 
   # Clustering

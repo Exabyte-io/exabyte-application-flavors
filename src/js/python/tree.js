@@ -143,6 +143,18 @@ export default {
                 ],
                 "monitors": [monitors.standard_output],
             },
+            "pyml:model:extreme_gradboosted_trees_regression:sklearn": {
+                "input": [
+                    {
+                        "name": "model_extreme_gradboosted_trees_regression_sklearn.py",
+                        "templateName": "model_extreme_gradboosted_trees_regression_sklearn.py"
+                    }
+                ],
+                "results": [
+                    "workflow:pyml_predict"
+                ],
+                "monitors": [monitors.standard_output],
+            },
             "pyml:model:k_means_clustering:sklearn": {
                 "input": [
                     {
@@ -196,6 +208,30 @@ export default {
                     {
                         "name": "model_random_forest_classification_sklearn.py",
                         "templateName": "model_random_forest_classification_sklearn.py"
+                    }
+                ],
+                "results": [
+                    "workflow:pyml_predict"
+                ],
+                "monitors": [monitors.standard_output],
+            },
+            "pyml:model:gradboosted_trees_classification:sklearn": {
+                "input": [
+                    {
+                        "name": "model_gradboosted_trees_classification_sklearn.py",
+                        "templateName": "model_gradboosted_trees_classification_sklearn.py"
+                    }
+                ],
+                "results": [
+                    "workflow:pyml_predict"
+                ],
+                "monitors": [monitors.standard_output],
+            },
+            "pyml:model:extreme_gradboosted_trees_classification:sklearn": {
+                "input": [
+                    {
+                        "name": "model_extreme_gradboosted_trees_classification_sklearn.py",
+                        "templateName": "model_extreme_gradboosted_trees_classification_sklearn.py"
                     }
                 ],
                 "results": [

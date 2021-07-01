@@ -57,9 +57,10 @@ with settings.context as context:
         plt.legend()
 
         # Save the figure
+        plt.tight_layout()
         plt.savefig("my_parity_plot.png", dpi=600)
 
     # Predict
     else:
-        # It might not make as much sense to draw a parity plot when predicting...
+        # It might not make as much sense to draw a plot when predicting...
         pass
