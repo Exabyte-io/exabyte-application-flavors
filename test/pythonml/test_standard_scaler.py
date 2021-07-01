@@ -26,11 +26,11 @@ def setup_settings_regression():
             file.write(line)
 
 
-flavor_file = 'pyml:pre_processing:min_max_scaler:sklearn.pyi'
+flavor_file = 'pyml:pre_processing:standardization:sklearn.pyi'
 settings_file = 'settings.py'
 
 
-class TestMinMaxScaler(unittest.TestCase):
+class TestStandardScaler(unittest.TestCase):
     """
     This test tests the flavor pyml:pre_processing:remove_missing:pandas.pyi
     """
@@ -83,12 +83,15 @@ class TestMinMaxScaler(unittest.TestCase):
         test_target = self.context.load("test_target")
         test_descriptors = self.context.load("test_descriptors")
 
-        # for each (hopefully) modified data, assert that the min max condition is met
-        # min max condition: columns have min of 0 and max of 1
+        # for each (hopefully) modified data, assert that the standard scaler condition is met
+        # standard scaler condition: Columns have mean of 0 and standard_deviation of 1
         for fake_data_set in [train_target, train_descriptors, test_target, test_descriptors]:
-            for col in fake_data_set.T:
-                self.assertAlmostEqual(1.0, np.amax(col))
-                self.assertAlmostEqual(0.0, np.amin(col))
+            column_means = fake_data_set.mean(axis=0)
+            column_standard_deviations = fake_data_set.std(axis=0)
+            for column_mean in column_means:
+                self.assertAlmostEqual(0.0, column_mean)
+            for column_standard_deviation in column_standard_deviations:
+                self.assertAlmostEqual(1.0, column_standard_deviation)
 
 
 if __name__ == '__main__':
