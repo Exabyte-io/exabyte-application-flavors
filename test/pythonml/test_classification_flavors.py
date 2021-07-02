@@ -6,9 +6,9 @@ import os
 import unittest
 
 
-class TestClassification(unittest.TestCase):
+class TestClassificationFlavors(unittest.TestCase):
     """
-    This test tests the flavor pyml:pre_processing:remove_missing:pandas.pyi
+    This class performs unittests for the flavors in the 'classification' category
     """
 
     category = 'classification'
