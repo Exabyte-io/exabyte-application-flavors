@@ -12,7 +12,7 @@
 export PYTHONDONTWRITEBYTECODE=1
 
 # Create and activate a virtual environment, to isolate the installed packages.
-scratchdir="/scratch/$LOGNAME/$PBS_JOBID"
+scratchdir="/scratch/$USER/$PBS_JOBID"
 envdir="$scratchdir/.env"
 python -m virtualenv -q "$envdir"
 source "$envdir/bin/activate"
