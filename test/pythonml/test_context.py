@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
+from fixtures.unittest_utils import setup_settings
 import os
-import sys
 import unittest
+import importlib
 from unittest import mock
-from fixtures.settings import Context
+
 
 settings_file = 'settings.py'
 
@@ -15,11 +16,15 @@ class TestContext(unittest.TestCase):
     """
 
     def setUp(self):
-        self.context = Context()
-        self.context.context_paths.update({self.context._context_file: 'file.pkl'})
+        setup_settings('regression')
+        import settings
+        importlib.reload(settings)
+        self.context = settings.Context()
+        self.context.context_paths.update({self.context._context_file: 'file'})
 
     def tearDown(self):
         os.system('rm -rf .job_context')
+        os.system('rm settings.py')
 
     @mock.patch('builtins.open', new_callable=mock.mock_open)
     @mock.patch('pickle.dump')
@@ -45,7 +50,7 @@ class TestContext(unittest.TestCase):
     @mock.patch('pickle.load')
     def test_load(self, mock_pickle, mock_builtin_open):
         self.context.load(self.context._context_file)
-        builtin_open_calls = [mock.call('file.pkl', "rb")]
+        builtin_open_calls = [mock.call('file', "rb")]
         mock_builtin_open.assert_has_calls(builtin_open_calls)
         mock_pickle_calls = [mock.call(mock_builtin_open())]
         mock_pickle.assert_has_calls(mock_pickle_calls)

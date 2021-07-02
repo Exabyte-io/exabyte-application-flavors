@@ -49,6 +49,9 @@ class TestRegressionFlavors(unittest.TestCase):
         [{'flavor_file': 'pyml:model:ridge_regression:sklearn.pyi',
           'model_pickle_file': 'ridge_regression.pkl'}],
 
+        [{'flavor_file': 'pyml:model:multilayer_perceptron:sklearn.pyi',
+          'model_pickle_file': 'sklearn_mlp.pkl'}],
+
     ])
     def test_flavor(self, params):
         params.update({'settings_file': 'settings.py'})
