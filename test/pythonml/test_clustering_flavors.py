@@ -6,12 +6,12 @@ import os
 import unittest
 
 
-class TestClassificationFlavors(unittest.TestCase):
+class TestClusteringFlavors(unittest.TestCase):
     """
-    This class performs unittests for the flavors in the 'classification' category
+    This class performs unittests for the flavors in the 'clustering' category
     """
 
-    category = 'classification'
+    category = 'clustering'
 
     @staticmethod
     def teardown():
@@ -22,12 +22,10 @@ class TestClassificationFlavors(unittest.TestCase):
         os.system('rm -rf .job_context')
         os.system('rm -rf pyml*')
         os.system('rm settings.py')
-        os.system('rm *.csv')
+        #os.system('rm *.csv')
 
     @parameterized.expand([
-        [{'flavor_file': 'pyml:model:gradboosted_trees_classification:sklearn.pyi'}],
-        [{'flavor_file': 'pyml:model:extreme_gradboosted_trees_classification:sklearn.pyi'}],
-        [{'flavor_file': 'pyml:model:random_forest_classification:sklearn.pyi'}],
+        [{'flavor_file': 'pyml:model:k_means_clustering:sklearn.pyi'}],
     ])
     def test_flavor(self, params):
         params.update({'settings_file': 'settings.py'})
@@ -39,11 +37,9 @@ class TestClassificationFlavors(unittest.TestCase):
                 assert(os.path.isfile('predictions.csv'))
                 self.teardown()
             else:
-                # tests for when training
-                assert (os.path.isfile(os.path.join(self.context._context_dir_pathname, 'test_probabilities.pkl')))
-                assert (os.path.isfile(os.path.join(self.context._context_dir_pathname, 'confusion_matrix.pkl')))
-                assert (os.path.isfile(os.path.join(self.context._context_dir_pathname, 'train_predictions.pkl')))
-                assert (os.path.isfile(os.path.join(self.context._context_dir_pathname, 'test_predictions.pkl')))
+                # Assertions to be made after training
+                assert(os.path.isfile(os.path.join(self.context._context_dir_pathname, 'train_labels.pkl')))
+                assert(os.path.isfile(os.path.join(self.context._context_dir_pathname, 'test_labels.pkl')))
 
 
 if __name__ == '__main__':

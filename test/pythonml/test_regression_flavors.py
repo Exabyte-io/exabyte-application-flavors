@@ -25,38 +25,19 @@ class TestRegressionFlavors(unittest.TestCase):
         os.system('rm *.csv')
 
     @parameterized.expand([
-        [{'flavor_file': 'pyml:model:gradboosted_trees_regression:sklearn.pyi',
-          'model_pickle_file': 'gradboosted_tree_regression.pkl'}],
-
-        [{'flavor_file': 'pyml:model:extreme_gradboosted_trees_regression:sklearn.pyi',
-          'model_pickle_file': 'extreme_gradboosted_tree_regression.pkl'}],
-
-        [{'flavor_file': 'pyml:model:bagged_trees_regression:sklearn.pyi',
-          'model_pickle_file': 'bagged_trees_regression.pkl'}],
-
-        [{'flavor_file': 'pyml:model:adaboosted_trees_regression:sklearn.pyi',
-          'model_pickle_file': 'adaboosted_tree_regression.pkl'}],
-
-        [{'flavor_file': 'pyml:model:kernel_ridge_regression:sklearn.pyi',
-          'model_pickle_file': 'kernel_ridge_regression.pkl'}],
-
-        [{'flavor_file': 'pyml:model:lasso_regression:sklearn.pyi',
-          'model_pickle_file': 'lasso_regression.pkl'}],
-
-        [{'flavor_file': 'pyml:model:random_forest_regression:sklearn.pyi',
-          'model_pickle_file': 'random_forest_regression.pkl'}],
-
-        [{'flavor_file': 'pyml:model:ridge_regression:sklearn.pyi',
-          'model_pickle_file': 'ridge_regression.pkl'}],
-
-        [{'flavor_file': 'pyml:model:multilayer_perceptron:sklearn.pyi',
-          'model_pickle_file': 'sklearn_mlp.pkl'}],
-
+        [{'flavor_file': 'pyml:model:gradboosted_trees_regression:sklearn.pyi'}],
+        [{'flavor_file': 'pyml:model:extreme_gradboosted_trees_regression:sklearn.pyi'}],
+        [{'flavor_file': 'pyml:model:bagged_trees_regression:sklearn.pyi'}],
+        [{'flavor_file': 'pyml:model:adaboosted_trees_regression:sklearn.pyi'}],
+        [{'flavor_file': 'pyml:model:kernel_ridge_regression:sklearn.pyi'}],
+        [{'flavor_file': 'pyml:model:lasso_regression:sklearn.pyi'}],
+        [{'flavor_file': 'pyml:model:random_forest_regression:sklearn.pyi'}],
+        [{'flavor_file': 'pyml:model:ridge_regression:sklearn.pyi'}],
+        [{'flavor_file': 'pyml:model:multilayer_perceptron:sklearn.pyi'}],
     ])
     def test_flavor(self, params):
         params.update({'settings_file': 'settings.py'})
-        # False should come before true because we are to train before predict. The True / False in
-        # parameterize refer to whether or not we shall predict
+        # False should come before true because we are to train before predict
         for do_predict in [False, True]:
             setup_model_flavor(self, self.category, do_predict, params)
             if do_predict:
@@ -65,7 +46,6 @@ class TestRegressionFlavors(unittest.TestCase):
                 self.teardown()
             else:
                 # Assertions to be made after training
-                assert(os.path.isfile(os.path.join(self.context._context_dir_pathname, params['model_pickle_file'])))
                 assert(os.path.isfile(os.path.join(self.context._context_dir_pathname, 'RMSE.pkl')))
                 assert(os.path.isfile(os.path.join(self.context._context_dir_pathname, 'train_target.pkl')))
                 assert(os.path.isfile(os.path.join(self.context._context_dir_pathname, 'target_scaler.pkl')))
