@@ -2,12 +2,10 @@
 
 from fixtures.unittest_utils import setup_settings
 import os
+import re
 import unittest
 import importlib
 from unittest import mock
-
-
-settings_file = 'settings.py'
 
 
 class TestContext(unittest.TestCase):
@@ -16,9 +14,13 @@ class TestContext(unittest.TestCase):
     """
 
     def setUp(self):
-        setup_settings('regression')
+        with open('fixtures/settings.py', 'r') as file:
+            unmodified_settings_file = file.readlines()
+        with open('settings.py', 'w') as file:
+            for line in unmodified_settings_file:
+                line = re.sub("PROBLEM_CATEGORY_HERE", 'regression', line)
+                file.write(line)
         import settings
-        importlib.reload(settings)
         self.context = settings.Context()
         self.context.context_paths.update({self.context._context_file: 'file'})
 
