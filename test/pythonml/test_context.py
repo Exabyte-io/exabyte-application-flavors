@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 
-from fixtures.unittest_utils import setup_settings
 import os
 import re
 import unittest
-import importlib
 from unittest import mock
 
 

@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 import importlib
-import unittest
-import os, shutil, sys
-import re
-import subprocess
-import functools
-import yaml
-from parameterized import parameterized, param
-from typing import Dict, List, Any, Tuple, Callable
 import os
+import re
+import sys
+import shutil
 import unittest
+import functools
+import subprocess
+import yaml
+from parameterized import parameterized
+from typing import Dict, Tuple
 import pandas
 import numpy as np
 
@@ -45,7 +45,6 @@ def get_dataset_filenames(config: Dict[str, str]) -> Tuple[str, str]:
     predict_set_name = config["predict_set_name"]
     return training_set_name, predict_set_name
 
-
 regression_training_file, regression_predict_file = get_dataset_filenames(
     configuration["fixtures"]["regression"])
 classification_training_file, classification_predict_file = get_dataset_filenames(
@@ -59,32 +58,27 @@ files_to_remove = configuration["files_to_remove"]
 extensions_to_remove = configuration["extensions_to_remove"]
 
 # Extract the list of tests
-def get_test_names_configs(configuration: List[Dict[str, Any]]) -> Tuple[List[List[str]], List[str]]:
-    names = [i[0] for i in configuration]
-    tests = [i[1]["units_to_run"] for i in configuration]
-    return tests, names
+def get_test_for_category(category):
+    configurations = [i for i in all_tests.items() if i[1]["category"] == category]
+    tests_in_category = [i[1]["units_to_run"] for i in configurations][0]
+    tests_for_run = [[test] for test in tests_in_category]
+    return tests_for_run
 
 all_tests = configuration["tests"]
 
-regression_configs = [i for i in all_tests.items() if i[1]["category"] == "regression"]
-tests_regression, names_regression = get_test_names_configs(regression_configs)
-tests_regression = [[test] for test in tests_regression[0]]
+tests_io_read_csv_regression = get_test_for_category('io_read_csv_regression')
+tests_io_read_csv_classification = get_test_for_category('io_read_csv_classification')
+tests_io_read_csv_clustering = get_test_for_category('io_read_csv_clustering')
 
-classification_configs = [i for i in all_tests.items() if i[1]["category"] == "classification"]
-tests_classification, names_classification = get_test_names_configs(classification_configs)
-tests_classification = [[test] for test in tests_classification[0]]
+tests_pre_processing_regression = get_test_for_category('pre_processing_regression')
 
-clustering_configs = [i for i in all_tests.items() if i[1]["category"] == "clustering"]
-tests_clustering, names_clustering = get_test_names_configs(clustering_configs)
-tests_claustering = [[test] for test in tests_clustering[0]]
+tests_model_regression = get_test_for_category('model_regression')
+tests_model_classification = get_test_for_category('model_classification')
+tests_model_clustering = get_test_for_category('model_clustering')
 
-pre_processing_configs = [i for i in all_tests.items() if i[1]["category"] == "pre_processing"]
-tests_pre_processing, names_regression = get_test_names_configs(pre_processing_configs)
-tests_pre_processing = [[test] for test in tests_pre_processing[0]]
-
-post_processing_configs = [i for i in all_tests.items() if i[1]["category"] == "post_processing"]
-tests_post_processing, names_regression = get_test_names_configs(post_processing_configs)
-tests_post_processing = [[test] for test in tests_post_processing[0]]
+tests_post_processing_regression = get_test_for_category('post_processing_regression')
+tests_post_processing_classification = get_test_for_category('post_processing_classification')
+tests_post_processing_clustering = get_test_for_category('post_processing_clustering')
 
 
 class Base(unittest.TestCase):
@@ -92,10 +86,6 @@ class Base(unittest.TestCase):
     category = ''
 
     def setUp(self) -> None:
-
-        # default category
-        if 'processing' in self.category:
-            self.category = 'regression'
 
         with open(os.path.join(fixtures_path, settings_filename), "r") as inp, open(settings_filename, "w") as outp:
             for line in inp:
@@ -121,10 +111,13 @@ class Base(unittest.TestCase):
         shutil.copy(os.path.join(fixtures_path, training_file), "data_to_train_with.csv")
         shutil.copy(os.path.join(fixtures_path, predict_file), "data_to_predict_with.csv")
 
-        import settings; importlib.reload(settings)
-
-        # Here, we have imported settings
         # if using the pickle method, set the paths to them
+        # we need to reload because after the first tearDown, subsequent import to settings will not reinitialize
+        # the context object and therefore will not remake the 'tearedDown' .job_context directory
+        # In a way, each time we reload settings, we re-initialize the context object, which rakes the tearedDown
+        # .job_context directory - setting the unittest fresh each time.
+        import settings
+        importlib.reload(settings)
         with settings.context as context:
             context.context_paths.update({'train_descriptors': 'fixtures/'+self.category+'_pkls/train_descriptors.pkl',
                                           'test_descriptors': 'fixtures/'+self.category+'_pkls/test_descriptors.pkl',
@@ -132,9 +125,6 @@ class Base(unittest.TestCase):
                                           'test_target': 'fixtures/'+self.category+'_pkls/test_target.pkl',
                                           'descriptors': 'fixtures/'+self.category+'_pkls/descriptors.pkl',
                                           })
-        # else, if using the generation methods, make the pickles - we can so this in the
-        # flavor tests below or here
-
 
     def set_to_predict_phase(self):
         """
@@ -153,8 +143,7 @@ class Base(unittest.TestCase):
             for line in edited_lines:
                 outp.write(line)
 
-    @staticmethod
-    def teardown():
+    def tearDown(self):
         """
         A custom tear down class to be called after each time we test a flavor
         using 'prediction' instead of 'training'.
@@ -166,50 +155,149 @@ class Base(unittest.TestCase):
         os.system('rm *.png')
 
 
-class TestPreProcessingFlavors(Base):
+class TestIOReadCSVRegression(Base):
     """
-    This class performs unittests for the pre processing flavors
+    This class performs unittests for the io ead csv flavors that utilize regression data.
+    The first test to see if correct pickles are generated, is only need to be done for the
+    regression data because the pickle generation is in different to the data category
+    """
+    category = 'regression'
+    @parameterized.expand(tests_io_read_csv_regression)
+    def test_if_correct_pickles_generated(self, flavor):
+        for do_predict in [False, True]:
+            # Copy flavor from assets
+            shutil.copy(asset_path + unit_shortnames[flavor], unit_shortnames[flavor])
+            if do_predict:
+                self.set_to_predict_phase()
+                os.system('python '+unit_shortnames[flavor])
+                assert (os.path.isfile(os.path.join('.job_context', 'descriptors.pkl')))
+            else:
+                os.system('python '+unit_shortnames[flavor])
+                assert(os.path.isfile(os.path.join('.job_context', 'train_target.pkl')))
+                assert(os.path.isfile(os.path.join('.job_context', 'test_descriptors.pkl')))
+                assert(os.path.isfile(os.path.join('.job_context', 'train_target.pkl')))
+                assert(os.path.isfile(os.path.join('.job_context', 'test_descriptors.pkl')))
+
+    @parameterized.expand(tests_io_read_csv_regression)
+    def test_correct_data_is_stored(self, flavor):
+        import settings
+        shutil.copy(asset_path + unit_shortnames[flavor], unit_shortnames[flavor])
+        data = pandas.read_csv(settings.datafile)
+        for do_predict in [False, True]:
+            if do_predict:
+                self.set_to_predict_phase()
+                os.system('python ' + unit_shortnames[flavor])
+                importlib.reload(settings)
+                descriptors_from_pkl = settings.context.load('descriptors')
+                descriptors = data.to_numpy()
+                self.assertIsNone(np.testing.assert_array_equal(descriptors_from_pkl, descriptors))
+            else:
+                os.system('python ' + unit_shortnames[flavor])
+                importlib.reload(settings)
+                target_from_pkl = settings.context.load('train_target')
+                target = data.pop(settings.target_column_name).to_numpy()
+                target = target.reshape(-1, 1)
+                self.assertIsNone(np.testing.assert_array_equal(target_from_pkl, target))
+
+
+class TestIOReadCSVClassification(Base):
+    """
+    This class performs unittests for the pre processing flavors that utilize regression data
+    """
+    category = 'classification'
+    @parameterized.expand(tests_io_read_csv_classification)
+    def test_correct_data_is_stored(self, flavor):
+        import settings
+        shutil.copy(asset_path + unit_shortnames[flavor], unit_shortnames[flavor])
+        data = pandas.read_csv(settings.datafile)
+        for do_predict in [False, True]:
+            if do_predict:
+                self.set_to_predict_phase()
+                os.system('python ' + unit_shortnames[flavor])
+                importlib.reload(settings)
+                descriptors_from_pkl = settings.context.load('descriptors')
+                descriptors = data.to_numpy()
+                self.assertIsNone(np.testing.assert_array_equal(descriptors_from_pkl, descriptors))
+            else:
+                os.system('python ' + unit_shortnames[flavor])
+                importlib.reload(settings)
+                target_from_pkl = settings.context.load('train_target')
+                target = data.pop(settings.target_column_name).to_numpy()
+                target = target.reshape(-1, 1)
+                self.assertIsNone(np.testing.assert_array_equal(target_from_pkl, target))
+
+
+class TestIOReadCSVClaustering(Base):
+    """
+    This class performs unittests for the pre processing flavors that utilize regression data
+    """
+    category = 'clustering'
+    @parameterized.expand(tests_io_read_csv_clustering)
+    def test_correct_data_is_stored(self, flavor):
+        import settings
+        shutil.copy(asset_path + unit_shortnames[flavor], unit_shortnames[flavor])
+        data = pandas.read_csv(settings.datafile)
+        for do_predict in [False, True]:
+            if do_predict:
+                self.set_to_predict_phase()
+                os.system('python ' + unit_shortnames[flavor])
+                importlib.reload(settings)
+                descriptors_from_pkl = settings.context.load('descriptors')
+                descriptors = data.to_numpy()
+                self.assertIsNone(np.testing.assert_array_equal(descriptors_from_pkl, descriptors))
+            else:
+                os.system('python ' + unit_shortnames[flavor])
+                importlib.reload(settings)
+                target_from_pkl = settings.context.load('train_target')
+                target = data.to_numpy()[:, 0]
+                target = target.reshape(-1, 1)
+                self.assertIsNone(np.testing.assert_array_equal(target_from_pkl, target))
+
+
+class TestPreProcessingRegression(Base):
+    """
+    This class performs unittests for the pre processing flavors that utilize regression data
     """
 
-    category = 'pre_processing'
+    category = 'regression'
 
-    @parameterized.expand(tests_pre_processing)
+    @parameterized.expand(tests_pre_processing_regression)
     def test_flavor(self, flavor):
 
-        # copy flavor
+        # We first have to import settings
+        import settings
+
+        # Copy flavor from assets
         shutil.copy(asset_path + unit_shortnames[flavor], unit_shortnames[flavor])
 
-        # we have to import settings and load a context object
-        import settings
-        context = settings.Context()
-
-        # Here, this method does not use pickles, it is generative
-        # Make a pandas data frame with data
+        # This test does not use pickles; it generates the needed pickles files
+        # Make a pandas data frame with data formed during setUp in base class
         data = pandas.read_csv('data_to_train_with.csv')
 
-        # get target and descriptors after custom manipulation of the data
+        # Get target and descriptors after custom manipulation of the data
         target = data.pop(settings.target_column_name).to_numpy()
         target = target.reshape(-1, 1)  # Reshape array from a row vector into a column vector
         descriptors = data.to_numpy()
 
-        # save data as a pickle in .job_context using context
-        # this updates keywords such as 'test_target' in the 'context_paths' dictionary
-        # that may or may not have been established in the setUp in the Base class
+        # Save data as a pickle in .job_context using context object
+
+        # Save target and descriptors in the 'context_paths' dictionary
+        context = settings.Context()
         context.save(target, 'train_target')
         context.save(descriptors, 'train_descriptors')
         context.save(target, 'test_target')
         context.save(descriptors, 'test_descriptors')
 
-        # run flavor - this write the (now) 'pre processed' data to .job_content
+        # Run flavor - this write the (now) 'pre processed' data to .job_content
         os.system('python '+ unit_shortnames[flavor])
 
-        # load the (hopefully) modified data in .job_context
+        # Load the (hopefully) modified data in .job_context
         train_target = context.load("train_target")
         train_descriptors = context.load("train_descriptors")
         test_target = context.load("test_target")
         test_descriptors = context.load("test_descriptors")
 
-        # Check the pass conditions
+        # Check the pass conditions for each data loaded
         for data in [train_target, train_descriptors, test_target, test_descriptors]:
 
             if 'min_max' in unit_shortnames[flavor]:
@@ -253,14 +341,14 @@ class TestPreProcessingFlavors(Base):
                     self.assertFalse(test_descriptors_df.isnull().values.any())
 
 
-class TestRegressionFlavors(Base):
+class TestModelRegression(Base):
     """
-    This class performs unittests for the flavors in the 'regression' category
+    This class performs unittests for the model flavors in the 'regression' category
     """
 
     category = 'regression'
 
-    @parameterized.expand(tests_regression)
+    @parameterized.expand(tests_model_regression)
     def test_flavor(self, flavor):
         # copy flavor
         shutil.copy(asset_path + unit_shortnames[flavor], unit_shortnames[flavor])
@@ -272,7 +360,6 @@ class TestRegressionFlavors(Base):
                 os.system('python '+ unit_shortnames[flavor])
                 # Assertions to be made after predicting
                 assert(os.path.isfile('predictions.csv'))
-                self.teardown()
             else:
                 # Assertions to be made after training
                 os.system('python '+ unit_shortnames[flavor])
@@ -281,14 +368,14 @@ class TestRegressionFlavors(Base):
                 assert(os.path.isfile(os.path.join('.job_context', 'test_predictions.pkl')))
 
 
-class TestClassificationFlavors(Base):
+class TestModelClassification(Base):
     """
-    This class performs unittests for the flavors in the 'classification' category
+    This class performs unittests for the model flavors in the 'classification' category
     """
 
     category = 'classification'
 
-    @parameterized.expand(tests_classification)
+    @parameterized.expand(tests_model_classification)
     def test_flavor(self, flavor):
         # copy flavor
         shutil.copy(asset_path + unit_shortnames[flavor], unit_shortnames[flavor])
@@ -300,7 +387,6 @@ class TestClassificationFlavors(Base):
                 os.system('python '+ unit_shortnames[flavor])
                 # Assertions to be made after predicting
                 assert(os.path.isfile('predictions.csv'))
-                self.teardown()
             else:
                 # Assertions to be made after training
                 os.system('python '+ unit_shortnames[flavor])
@@ -310,14 +396,14 @@ class TestClassificationFlavors(Base):
                 assert (os.path.isfile(os.path.join('.job_context', 'test_predictions.pkl')))
 
 
-class TestClusteringFlavors(Base):
+class TestModelClustering(Base):
     """
-    This class performs unittests for the flavors in the 'classification' category
+    This class performs unittests for the model flavors in the 'clustering' category
     """
 
     category = 'clustering'
 
-    @parameterized.expand(tests_clustering)
+    @parameterized.expand(tests_model_clustering)
     def test_flavor(self, flavor):
         # copy flavor
         shutil.copy(asset_path + unit_shortnames[flavor], unit_shortnames[flavor])
@@ -329,7 +415,6 @@ class TestClusteringFlavors(Base):
                 os.system('python '+ unit_shortnames[flavor])
                 # Assertions to be made after predicting
                 assert(os.path.isfile('predictions.csv'))
-                self.teardown()
             else:
                 # Assertions to be made after training
                 os.system('python '+ unit_shortnames[flavor])
@@ -337,50 +422,65 @@ class TestClusteringFlavors(Base):
                 assert(os.path.isfile(os.path.join('.job_context', 'test_labels.pkl')))
 
 
-class TestPostProcessingFlavors(Base):
+class TestPostProcessingRegression(Base):
     """
     This class performs unittests for the flavors in the 'post processing' category
     """
 
-    category = 'post processing'
+    category = 'regression'
 
-    @parameterized.expand(tests_post_processing)
+    @parameterized.expand(tests_post_processing_regression)
     def test_flavor(self, flavor):
         # copy flavor
         shutil.copy(asset_path + unit_shortnames[flavor], unit_shortnames[flavor])
-
         import settings
+        with settings.context as context:
+            context.context_paths.update({'train_predictions': 'fixtures/regression_pkls/train_predictions.pkl',
+                                            'test_predictions': 'fixtures/regression_pkls/test_predictions.pkl',})
+        os.system('python ' + unit_shortnames[flavor])
+        assert(os.path.isfile('my_parity_plot.png'))
 
-        if 'parity_plot' in unit_shortnames[flavor]:
 
-            # the update to context_paths seems to take effect only after manager closes
-            with settings.context as context:
-                context.context_paths.update({'train_predictions': 'fixtures/regression_pkls/train_predictions.pkl',
-                                              'test_predictions': 'fixtures/regression_pkls/test_predictions.pkl',})
-            os.system('python ' + unit_shortnames[flavor])
-            assert(os.path.isfile('my_parity_plot.png'))
+class TestPostProcessingClassification(Base):
+    """
+    This class performs unittests for the flavors in the 'post processing' category
+    """
 
-        elif 'roc_curve' in unit_shortnames[flavor]:
+    category = 'classification'
 
-            # the update to context_paths seems to take effect only after manager closes
-            with settings.context as context:
-                context.context_paths.update({'test_target': 'fixtures/classification_pkls/test_target.pkl',
-                                              'test_probabilities': 'fixtures/classification_pkls/test_probabilities.pkl',})
-            os.system('python ' + unit_shortnames[flavor])
-            assert(os.path.isfile('my_roc_curve.png'))
+    @parameterized.expand(tests_post_processing_classification)
+    def test_flavor(self, flavor):
+        # copy flavor
+        shutil.copy(asset_path + unit_shortnames[flavor], unit_shortnames[flavor])
+        import settings
+        with settings.context as context:
+            context.context_paths.update({'test_target': 'fixtures/classification_pkls/test_target.pkl',
+                                          'test_probabilities': 'fixtures/classification_pkls/test_probabilities.pkl', })
+        os.system('python ' + unit_shortnames[flavor])
+        assert (os.path.isfile('my_roc_curve.png'))
 
-        elif 'pca' in unit_shortnames[flavor]:
 
-            with settings.context as context:
-                context.context_paths.update({'train_labels': 'fixtures/clustering_pkls/train_labels.pkl',
-                                              'test_labels': 'fixtures/clustering_pkls/test_labels.pkl',
-                                              'train_descriptors': 'fixtures/clustering_pkls/train_descriptors.pkl',
-                                              'test_descriptors': 'fixtures/clustering_pkls/test_descriptors.pkl',
-                                              'descriptor_scaler': 'fixtures/clustering_pkls/descriptor_scaler.pkl', })
+class TestPostProcessingClustering(Base):
+    """
+    This class performs unittests for the flavors in the 'post processing' category
+    """
 
-            os.system('python ' + unit_shortnames[flavor])
-            assert(os.path.isfile('train_test_split.png'))
-            assert(os.path.isfile('test_clusters.png'))
+    category = 'clustering'
+
+    @parameterized.expand(tests_post_processing_clustering)
+    def test_flavor(self, flavor):
+        # copy flavor
+        shutil.copy(asset_path + unit_shortnames[flavor], unit_shortnames[flavor])
+        import settings
+        with settings.context as context:
+            context.context_paths.update({'train_labels': 'fixtures/clustering_pkls/train_labels.pkl',
+                                          'test_labels': 'fixtures/clustering_pkls/test_labels.pkl',
+                                          'train_descriptors': 'fixtures/clustering_pkls/train_descriptors.pkl',
+                                          'test_descriptors': 'fixtures/clustering_pkls/test_descriptors.pkl',
+                                          'descriptor_scaler': 'fixtures/clustering_pkls/descriptor_scaler.pkl', })
+        os.system('python ' + unit_shortnames[flavor])
+        assert (os.path.isfile('train_test_split.png'))
+        assert (os.path.isfile('test_clusters.png'))
 
 
 if __name__ == '__main__':

@@ -45,7 +45,9 @@ extensions_to_remove:
 # minMaxScale = min_max_scaler
 # kernelRidge = kernelized_ridge_regression
 # gradBoostTree = gradboosted_trees_regression
+
 unit_shortnames:
+
   # I/O Units
   IO_readCSV: "pyml:data_input:read_csv:pandas.pyi"
   IO_ttSplit: "pyml:data_input:train_test_split:sklearn.pyi"
@@ -88,19 +90,45 @@ unit_shortnames:
 
 tests:
 
-  # Pre Processing flavors - keep as a single category
-  Pre:
-    category: pre_processing
+  # IO flavors - the two IO flavors are quite distinct, so placeing them into 2 categories
+  # 1. io_read_csv - can be split into 3 categories based on data category related conditions within the flavor
+  #     1a. io_read_csv_regression
+  #     1b. io_read_csv_classification
+  #     1c. io_read_csv_clustering
+  # 2. io_train_test_split - can stay one category and use regression data as default
+  IO_Read_Reg:
+    category: io_read_csv_regression
+    units_to_run:
+      - IO_readCSV
+
+  IO_Read_Cls:
+    category: io_read_csv_classification
+    units_to_run:
+      - IO_readCSV
+
+  IO_Read_Uns:
+    category: io_read_csv_clustering
+    units_to_run:
+      - IO_readCSV
+
+  IO_Split_Reg:
+    category: io_train_test_split_regression
+    units_to_run:
+      - IO_ttSplit
+
+  # Pre Processing flavors - only need to test on one type of data, use regression
+  Pre_Reg:
+    category: pre_processing_regression
     units_to_run:
       - PRE_minMaxScale
       - PRE_standScale
       - PRE_dropDupes
       - PRE_dropMissing
 
-  # Model flavors - split into three categories: 'regression', 'classification', and 'clustering'
+  # Model flavors - split into three categories: 'model_regression', 'model_classification', and 'model_clustering'
   # Regression
-  Reg:
-    category: regression
+  Mod_Reg:
+    category: model_regression
     units_to_run:
       - REG_adaBoostTree
       - REG_bagTree
@@ -113,24 +141,32 @@ tests:
       - REG_RidgeReg
 
   # Classification
-  Cls:
-    category: classification
+  Mod_Cls:
+    category: model_classification
     units_to_run:
       - CLS_randomForest
       - CLS_gradBoostTree
       - CLS_ExtremegradBoostTree
 
   # Clustering
-  Uns:
-    category: clustering
+  Mod_Uns:
+    category: model_clustering
     units_to_run:
       - UNS_kMeans
 
-  # Post Processing
-  Post:
-    category: post_processing
+  # Post Processing - we have 3 distinct types of post_processors, and they fit the categries of the model flavors
+  # That is: 'post_processing_regression', 'post_processing_classification', and 'post_processing_clustering'
+  Post_Reg:
+    category: post_processing_regression
     units_to_run:
       - POS_plotParity
-      - POS_plotROC
-      - POS_plotClusters
 
+  Post_Cls:
+    category: post_processing_classification
+    units_to_run:
+      - POS_plotROC
+
+  Post_Uns:
+    category: post_processing_clustering
+    units_to_run:
+      - POS_plotClusters
