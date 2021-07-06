@@ -6,9 +6,10 @@ import shutil
 import unittest
 import functools
 import yaml
-from parameterized import parameterized
+from parameterized import parameterized, param
 import pandas
 import numpy as np
+from typing import Dict, List, Any, Tuple, Callable
 
 
 class TestHelper:
@@ -24,6 +25,7 @@ class TestHelper:
         self.unit_shortnames = self.configuration["unit_shortnames"]
         self.files_to_remove = self.configuration["files_to_remove"]
         self.extensions_to_remove = self.configuration["extensions_to_remove"]
+        self.category = ''
 
     @staticmethod
     def get_yaml_configs(yaml_configuration_file):
@@ -67,12 +69,16 @@ unittest_helper = TestHelper('unittest_configuration.yaml')
 
 class Base(unittest.TestCase):
 
-    category = ''
     asset_path = unittest_helper.asset_path
     fixtures_path = unittest_helper.fixtures_path
     settings_filename = unittest_helper.settings_filename
 
-    def setUp(self):
+    def setup(self, category):
+        '''
+        custom setup
+        '''
+        self.category = category
+        #print('in setup - self.category = ', self.category)
         with open(os.path.join(self.fixtures_path, self.settings_filename), "r") as inp, open(self.settings_filename, "w") as outp:
             for line in inp:
                 # Users can select the type of problem category in the settings.py file. Normally, it is set to
@@ -114,14 +120,11 @@ class Base(unittest.TestCase):
                 outp.write(line)
 
     def tearDown(self):
-        for file in os.listdir():
-            if (file in unittest_helper.files_to_remove) or any([file.endswith(ext) for ext in unittest_helper.extensions_to_remove]):
-                try:
-                    os.remove(file)
-                except (IsADirectoryError, PermissionError):
-                    shutil.rmtree(file)
-                except FileNotFoundError:
-                    pass
+        os.system('rm -rf .job_context')
+        os.system('rm -rf settings.py')
+        os.system('rm -rf *.csv')
+        os.system('rm -rf *.pyi')
+        os.system('rm -rf *.png')
 
 
 class PassConditions(unittest.TestCase):
@@ -188,33 +191,55 @@ class PassConditions(unittest.TestCase):
             assert (os.path.isfile('predictions.csv'))
         else:
             if category == 'clustering':
-                assert (os.path.isfile(os.path.join('.job_context', 'train_labels.pkl')))
-                assert (os.path.isfile(os.path.join('.job_context', 'test_labels.pkl')))
+                assert(os.path.isfile(os.path.join('.job_context', 'train_labels.pkl')))
+                assert(os.path.isfile(os.path.join('.job_context', 'test_labels.pkl')))
             else:
-                assert (os.path.isfile(os.path.join('.job_context', 'train_predictions.pkl')))
-                assert (os.path.isfile(os.path.join('.job_context', 'test_predictions.pkl')))
+                assert(os.path.isfile(os.path.join('.job_context', 'train_predictions.pkl')))
+                assert(os.path.isfile(os.path.join('.job_context', 'test_predictions.pkl')))
                 if category == 'regression':
-                    assert (os.path.isfile(os.path.join('.job_context', 'RMSE.pkl')))
+                    assert(os.path.isfile(os.path.join('.job_context', 'RMSE.pkl')))
                 elif category == 'classification':
-                    assert (os.path.isfile(os.path.join('.job_context', 'test_probabilities.pkl')))
-                    assert (os.path.isfile(os.path.join('.job_context', 'confusion_matrix.pkl')))
+                    assert(os.path.isfile(os.path.join('.job_context', 'test_probabilities.pkl')))
+                    assert(os.path.isfile(os.path.join('.job_context', 'confusion_matrix.pkl')))
 
+    def check_post_processing_pass_conditions(self, category='regression'):
+        if category == 'regression':
+            self.assertTrue(os.path.exists('my_parity_plot.png'))
+        elif category == 'classification':
+            self.assertTrue(os.path.exists('my_roc_curve.png'))
+        elif category == 'clustering':
+            self.assertTrue(os.path.exists('train_test_split.png'))
+            self.assertTrue(os.path.exists('test_clusters.png'))
 
 
 pass_conditions = PassConditions()
 
-class TestIOReadCSVRegression(Base):
+
+# define some tests that we can use in the unittests to avoid lots of repeating code
+def read_csv_correct_data_stored(self, flavor):
+    flavor_file = unittest_helper.unit_shortnames[flavor]
+    shutil.copy(self.asset_path + flavor_file, flavor_file)
+    for do_predict in [False, True]:
+        if do_predict:
+            self.set_to_predict_phase()
+            os.system('python ' + flavor_file)
+            pass_conditions.check_read_csv_correct_data_stored(do_predict, self.category)
+        else:
+            os.system('python ' + flavor_file)
+            pass_conditions.check_read_csv_correct_data_stored(do_predict, self.category)
+
+
+class TestIOReadCSVFlavor(Base):
     """
-    This class performs unittests for the io read csv flavors that utilize regression data.
-    The first test is to see if correct pickles are generated and is only need to be done for the
-    regression data because the pickle generation is in different to the data category
+    This class performs unittests for the io read csv flavor.
+    The first test is to see if the correct pickles are generated and is only need to be done for the
+    regression data because the pickle generation is indifferent to the data category
     """
 
-    category = 'regression'
     flavors_to_be_tested = unittest_helper.get_test_info('io_read_csv_regression', 'units_to_run')
-
     @parameterized.expand(flavors_to_be_tested)
     def test_correct_pickles_generated(self, flavor):
+        self.setup('regression')
         flavor_file = unittest_helper.unit_shortnames[flavor]
         shutil.copy(self.asset_path + flavor_file, flavor_file)
         for do_predict in [False, True]:
@@ -227,61 +252,22 @@ class TestIOReadCSVRegression(Base):
                 pass_conditions.check_read_csv_correct_pickles_generated(do_predict)
 
     @parameterized.expand(flavors_to_be_tested)
-    def test_correct_data_stored(self, flavor):
-        flavor_file = unittest_helper.unit_shortnames[flavor]
-        shutil.copy(self.asset_path + flavor_file, flavor_file)
-        for do_predict in [False, True]:
-            if do_predict:
-                self.set_to_predict_phase()
-                os.system('python ' + flavor_file)
-                pass_conditions.check_read_csv_correct_data_stored(do_predict, self.category)
-            else:
-                os.system('python ' + flavor_file)
-                pass_conditions.check_read_csv_correct_data_stored(do_predict, self.category)
+    def test_correct_data_stored_regression(self, flavor):
+        self.setup('regression')
+        read_csv_correct_data_stored(self, flavor)
 
-
-class TestIOReadCSVClassification(Base):
-    """
-    This class performs unittests for the pre processing flavors that utilize regression data
-    """
-
-    category = 'classification'
     flavors_to_be_tested = unittest_helper.get_test_info('io_read_csv_classification', 'units_to_run')
-
     @parameterized.expand(flavors_to_be_tested)
-    def test_correct_data_is_stored(self, flavor):
-        flavor_file = unittest_helper.unit_shortnames[flavor]
-        shutil.copy(self.asset_path + flavor_file, flavor_file)
-        for do_predict in [False, True]:
-            if do_predict:
-                self.set_to_predict_phase()
-                os.system('python ' + flavor_file)
-                pass_conditions.check_read_csv_correct_data_stored(do_predict, self.category)
-            else:
-                os.system('python ' + flavor_file)
-                pass_conditions.check_read_csv_correct_data_stored(do_predict, self.category)
+    def test_correct_data_stored_classification(self, flavor):
+        self.setup('classification')
+        read_csv_correct_data_stored(self, flavor)
 
-
-class TestIOReadCSVClustering(Base):
-    """
-    This class performs unittests for the pre processing flavors that utilize regression data
-    """
-
-    category = 'clustering'
     flavors_to_be_tested = unittest_helper.get_test_info('io_read_csv_clustering', 'units_to_run')
-
     @parameterized.expand(flavors_to_be_tested)
-    def test_correct_data_is_stored(self, flavor):
-        flavor_file = unittest_helper.unit_shortnames[flavor]
-        shutil.copy(self.asset_path + flavor_file, flavor_file)
-        for do_predict in [False, True]:
-            if do_predict:
-                self.set_to_predict_phase()
-                os.system('python ' + flavor_file)
-                pass_conditions.check_read_csv_correct_data_stored(do_predict, self.category)
-            else:
-                os.system('python ' + flavor_file)
-                pass_conditions.check_read_csv_correct_data_stored(do_predict, self.category)
+    def test_correct_data_stored_clustering(self, flavor):
+        self.setup('clustering')
+        read_csv_correct_data_stored(self, flavor)
+
 
 
 class TestPreProcessingScalersRegression(Base):
@@ -289,11 +275,11 @@ class TestPreProcessingScalersRegression(Base):
     This class performs unittests for the pre processing sclaer flavors that utilize regression data
     """
 
-    category = 'regression'
     pre_requisites_flavors = unittest_helper.get_test_info('pre_processing_scalers_regression', 'pre_requisites')
     flavors_to_be_tested = unittest_helper.get_test_info('pre_processing_scalers_regression', 'units_to_run')
     @parameterized.expand(flavors_to_be_tested)
     def test_flavor(self, flavor):
+        self.setup('regression')
         # 1. Copy pre_reqs and flavor file, then run the pre_reqs, followed by the flavor
         unittest_helper.copy_units(self.pre_requisites_flavors + [[flavor]])
         if ['IO_ttSplit'] in self.pre_requisites_flavors:
@@ -311,11 +297,11 @@ class TestPreProcessingDroppersRegression(Base):
     """
     This class performs unittests for the pre processing dropper flavors that utilize regression data
     """
-    category = 'regression'
     pre_requisites_flavors = unittest_helper.get_test_info('pre_processing_droppers_regression', 'pre_requisites')
     flavors_to_be_tested = unittest_helper.get_test_info('pre_processing_droppers_regression', 'units_to_run')
     @parameterized.expand(flavors_to_be_tested)
     def test_flavor(self, flavor):
+        self.setup('regression')
         unittest_helper.copy_units(self.pre_requisites_flavors + [[flavor]])
         if ['IO_ttSplit'] in self.pre_requisites_flavors:
             unittest_helper.set_test_split_in_train_test_spit_file('pyml:data_input:train_test_split:sklearn.pyi', test_split=0.2)
@@ -339,141 +325,100 @@ class TestPreProcessingDroppersRegression(Base):
             pass_conditions.check_dropper_pass_conditions(data, flavor)
 
 
-class TestModelRegression(Base):
+def run_model_check_correct_output(self, flavor):
+
+    # 1. Copy pre_reqs and flavor file, then run the pre_reqs, followed by the flavor
+    unittest_helper.copy_units(self.pre_requisites_flavors + [[flavor]])
+    if ['IO_ttSplit'] in self.pre_requisites_flavors:
+        unittest_helper.set_test_split_in_train_test_spit_file('pyml:data_input:train_test_split:sklearn.pyi',
+                                                               test_split=0.2)
+    # False should come before true because we are to train before predict
+    for do_predict in [False, True]:
+        if do_predict:
+            self.set_to_predict_phase()
+            unittest_helper.run_units(self.pre_requisites_flavors)
+            unittest_helper.run_units([[flavor]])
+            pass_conditions.check_model_pass_conditions(do_predict, self.category)
+        else:
+            unittest_helper.run_units(self.pre_requisites_flavors)
+            unittest_helper.run_units([[flavor]])
+            pass_conditions.check_model_pass_conditions(do_predict, self.category)
+
+
+class TestModelFlavors(Base):
     """
     This class performs unittests for the model flavors in the 'regression' category
     """
-    category = 'regression'
-    flavors_to_be_tested = unittest_helper.get_test_info('model_regression', 'units_to_run')
-    pre_requisites_flavors = unittest_helper.get_test_info('model_regression', 'pre_requisites')
-    @parameterized.expand(flavors_to_be_tested)
+
+    pre_requisites_flavors_regression = unittest_helper.get_test_info('model_regression', 'pre_requisites')
+    flavors_to_be_tested_regression = unittest_helper.get_test_info('model_regression', 'units_to_run')
+    @parameterized.expand(flavors_to_be_tested_regression )
     def test_flavor(self, flavor):
-        # 1. Copy pre_reqs and flavor file, then run the pre_reqs, followed by the flavor
-        unittest_helper.copy_units(self.pre_requisites_flavors + [[flavor]])
-        if ['IO_ttSplit'] in self.pre_requisites_flavors:
-            unittest_helper.set_test_split_in_train_test_spit_file('pyml:data_input:train_test_split:sklearn.pyi', test_split=0.2)
-        # False should come before true because we are to train before predict
-        for do_predict in [False, True]:
-            if do_predict:
-                self.set_to_predict_phase()
-                unittest_helper.run_units(self.pre_requisites_flavors)
-                unittest_helper.run_units([[flavor]])
-                pass_conditions.check_model_pass_conditions(do_predict, self.category)
-            else:
-                unittest_helper.run_units(self.pre_requisites_flavors)
-                unittest_helper.run_units([[flavor]])
-                pass_conditions.check_model_pass_conditions(do_predict, self.category)
+        self.setup('regression')
+        self.pre_requisites_flavors = self.pre_requisites_flavors_regression
+        run_model_check_correct_output(self, flavor)
 
-
-class TestModelClassification(Base):
-    """
-    This class performs unittests for the model flavors in the 'classification' category
-    """
-    category = 'classification'
-    flavors_to_be_tested = unittest_helper.get_test_info('model_classification', 'units_to_run')
-    pre_requisites_flavors = unittest_helper.get_test_info('model_classification', 'pre_requisites')
-    @parameterized.expand(flavors_to_be_tested)
+    pre_requisites_flavors_classification = unittest_helper.get_test_info('model_classification', 'pre_requisites')
+    flavors_to_be_tested_classification = unittest_helper.get_test_info('model_classification', 'units_to_run')
+    @parameterized.expand(flavors_to_be_tested_classification)
     def test_flavor(self, flavor):
-        # 1. Copy pre_reqs and flavor file, then run the pre_reqs, followed by the flavor
-        unittest_helper.copy_units(self.pre_requisites_flavors + [[flavor]])
-        if ['IO_ttSplit'] in self.pre_requisites_flavors:
-            unittest_helper.set_test_split_in_train_test_spit_file('pyml:data_input:train_test_split:sklearn.pyi', test_split=0.2)
-        # False should come before true because we are to train before predict
-        for do_predict in [False, True]:
-            if do_predict:
-                self.set_to_predict_phase()
-                unittest_helper.run_units(self.pre_requisites_flavors)
-                unittest_helper.run_units([[flavor]])
-                pass_conditions.check_model_pass_conditions(do_predict, self.category)
-            else:
-                unittest_helper.run_units(self.pre_requisites_flavors)
-                unittest_helper.run_units([[flavor]])
-                pass_conditions.check_model_pass_conditions(do_predict, self.category)
+        self.setup('classification')
+        self.pre_requisites_flavors = self.pre_requisites_flavors_classification
+        run_model_check_correct_output(self, flavor)
 
-
-class TestModelClustering(Base):
-    """
-    This class performs unittests for the model flavors in the 'clustering' category
-    """
-    category = 'clustering'
-    flavors_to_be_tested = unittest_helper.get_test_info('model_clustering', 'units_to_run')
-    pre_requisites_flavors = unittest_helper.get_test_info('model_clustering', 'pre_requisites')
-    @parameterized.expand(flavors_to_be_tested)
+    pre_requisites_flavors_clustering  = unittest_helper.get_test_info('model_clustering', 'pre_requisites')
+    flavors_to_be_tested_clustering = unittest_helper.get_test_info('model_clustering', 'units_to_run')
+    @parameterized.expand(flavors_to_be_tested_clustering)
     def test_flavor(self, flavor):
-        # 1. Copy pre_reqs and flavor file, then run the pre_reqs, followed by the flavor
-        unittest_helper.copy_units(self.pre_requisites_flavors + [[flavor]])
-        if ['IO_ttSplit'] in self.pre_requisites_flavors:
-            unittest_helper.set_test_split_in_train_test_spit_file('pyml:data_input:train_test_split:sklearn.pyi', test_split=0.2)
-        # False should come before true because we are to train before predict
-        for do_predict in [False, True]:
-            if do_predict:
-                self.set_to_predict_phase()
-                unittest_helper.run_units(self.pre_requisites_flavors)
-                unittest_helper.run_units([[flavor]])
-                pass_conditions.check_model_pass_conditions(do_predict, self.category)
-            else:
-                unittest_helper.run_units(self.pre_requisites_flavors)
-                unittest_helper.run_units([[flavor]])
-                pass_conditions.check_model_pass_conditions(do_predict, self.category)
+        self.setup('clustering')
+        self.pre_requisites_flavors = self.pre_requisites_flavors_clustering
+        run_model_check_correct_output(self, flavor)
 
 
-class TestPostProcessingRegression(Base):
+
+
+def run_post_processing_and_check_output(self, flavor):
+    # copy the pre_reqs and then the flavor to be tested
+    unittest_helper.copy_units(self.pre_requisites_flavors + [[flavor]])
+    if ['IO_ttSplit'] in self.pre_requisites_flavors:
+        unittest_helper.set_test_split_in_train_test_spit_file('pyml:data_input:train_test_split:sklearn.pyi', test_split=0.2)
+    # run flavor and assert its output
+    unittest_helper.run_units(self.pre_requisites_flavors)
+    unittest_helper.run_units([[flavor]])
+
+
+class TestPostProcessing(Base):
     """
     This class performs unittests for the flavors in the 'post processing' category
     """
-    category = 'regression'
-    flavors_to_be_tested = unittest_helper.get_test_info('post_processing_regression', 'units_to_run')
-    pre_requisites_flavors = unittest_helper.get_test_info('post_processing_regression', 'pre_requisites')
-    @parameterized.expand(flavors_to_be_tested)
+
+    flavors_to_be_tested_regression = unittest_helper.get_test_info('post_processing_regression', 'units_to_run')
+    pre_requisites_flavors_regression = unittest_helper.get_test_info('post_processing_regression', 'pre_requisites')
+    @parameterized.expand(flavors_to_be_tested_regression)
     def test_flavor(self, flavor):
-        # copy the pre_reqs and then the flavor to be tested
-        unittest_helper.copy_units(self.pre_requisites_flavors + [[flavor]])
-        if ['IO_ttSplit'] in self.pre_requisites_flavors:
-            unittest_helper.set_test_split_in_train_test_spit_file('pyml:data_input:train_test_split:sklearn.pyi', test_split=0.2)
-        # run flavor and assert its output
-        unittest_helper.run_units(self.pre_requisites_flavors)
-        unittest_helper.run_units([[flavor]])
-        assert(os.path.isfile('my_parity_plot.png'))
+        self.category = 'regression'
+        self.setup(self.category)
+        self.pre_requisites_flavors = self.pre_requisites_flavors_regression
+        run_post_processing_and_check_output(self, flavor)
 
-
-class TestPostProcessingClassification(Base):
-    """
-    This class performs unittests for the flavors in the 'post processing' category
-    """
-    category = 'classification'
-    flavors_to_be_tested = unittest_helper.get_test_info('post_processing_classification', 'units_to_run')
-    pre_requisites_flavors = unittest_helper.get_test_info('post_processing_classification', 'pre_requisites')
-    @parameterized.expand(flavors_to_be_tested)
+    flavors_to_be_tested_classification = unittest_helper.get_test_info('post_processing_classification', 'units_to_run')
+    pre_requisites_flavors_classification = unittest_helper.get_test_info('post_processing_classification', 'pre_requisites')
+    @parameterized.expand(flavors_to_be_tested_classification)
     def test_flavor(self, flavor):
-        # copy the pre_reqs and then the flavor to be tested
-        unittest_helper.copy_units(self.pre_requisites_flavors + [[flavor]])
-        if ['IO_ttSplit'] in self.pre_requisites_flavors:
-            unittest_helper.set_test_split_in_train_test_spit_file('pyml:data_input:train_test_split:sklearn.pyi', test_split=0.2)
+        self.category = 'classification'
+        self.setup(self.category)
+        self.pre_requisites_flavors = self.pre_requisites_flavors_classification
+        run_post_processing_and_check_output(self, flavor)
 
-        # run flavor and assert its output
-        unittest_helper.run_units(self.pre_requisites_flavors)
-        unittest_helper.run_units([[flavor]])
-        assert(os.path.isfile('my_roc_curve.png'))
-
-
-class TestPostProcessingClustering(Base):
-    """
-    This class performs unittests for the flavors in the 'post processing' category
-    """
-    category = 'clustering'
-    flavors_to_be_tested = unittest_helper.get_test_info('post_processing_clustering', 'units_to_run')
-    pre_requisites_flavors = unittest_helper.get_test_info('post_processing_clustering', 'pre_requisites')
-    @parameterized.expand(flavors_to_be_tested)
+    flavors_to_be_tested_clustering = unittest_helper.get_test_info('post_processing_clustering', 'units_to_run')
+    pre_requisites_flavors_clustering = unittest_helper.get_test_info('post_processing_clustering', 'pre_requisites')
+    @parameterized.expand(flavors_to_be_tested_clustering)
     def test_flavor(self, flavor):
-        # copy the pre_reqs and then the flavor to be tested
-        unittest_helper.copy_units(self.pre_requisites_flavors + [[flavor]])
-        if ['IO_ttSplit'] in self.pre_requisites_flavors:
-            unittest_helper.set_test_split_in_train_test_spit_file('pyml:data_input:train_test_split:sklearn.pyi', test_split=0.2)
-        # run flavor and assert its output
-        unittest_helper.run_units(self.pre_requisites_flavors)
-        unittest_helper.run_units([[flavor]])
-        assert (os.path.isfile('train_test_split.png'))
-        assert (os.path.isfile('test_clusters.png'))
+        self.category = 'clustering'
+        self.setup(self.category)
+        self.pre_requisites_flavors = self.pre_requisites_flavors_clustering
+        run_post_processing_and_check_output(self, flavor)
+
 
 if __name__ == '__main__':
     unittest.main()
