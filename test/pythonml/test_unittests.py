@@ -161,13 +161,11 @@ class PassConditions(unittest.TestCase):
             self.assertIsNone(np.testing.assert_array_equal(target_from_pkl, target))
 
     def check_scaler_pass_conditions(self, data, flavor):
-
         if 'minMax' in flavor:
             # min max condition: columns have min of 0 and max of 1
             for col in data.T:
                 self.assertAlmostEqual(1.0, np.amax(col))
                 self.assertAlmostEqual(0.0, np.amin(col))
-
         elif 'standScale' in flavor:
             # standard scaler condition: Columns have mean of 0 and standard_deviation of 1
             column_means = data.mean(axis=0)
@@ -248,7 +246,7 @@ class TestIOReadCSVClassification(Base):
     """
 
     category = 'classification'
-    flavors_to_be_tested = unittest_helper.flavors_to_be_tested = unittest_helper.get_test_info('io_read_csv_classification', 'units_to_run')
+    flavors_to_be_tested = unittest_helper.get_test_info('io_read_csv_classification', 'units_to_run')
 
     @parameterized.expand(flavors_to_be_tested)
     def test_correct_data_is_stored(self, flavor):
