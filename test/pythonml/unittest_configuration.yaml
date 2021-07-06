@@ -96,6 +96,7 @@ tests:
     category: model_regression
     pre_requisites:
       - IO_readCSV
+      - IO_ttSplit
       - PRE_standScale
     units_to_run:
       - REG_adaBoostTree
@@ -113,6 +114,7 @@ tests:
     category: model_classification
     pre_requisites:
       - IO_readCSV
+      - IO_ttSplit
       - PRE_standScale
     units_to_run:
       - CLS_randomForest
@@ -124,6 +126,7 @@ tests:
     category: model_clustering
     pre_requisites:
       - IO_readCSV
+      - IO_ttSplit
       - PRE_standScale
     units_to_run:
       - UNS_kMeans
@@ -160,6 +163,7 @@ tests:
     category: pre_processing_scalers_regression
     pre_requisites:
       - IO_readCSV
+      - IO_ttSplit
     units_to_run:
       - PRE_standScale
       - PRE_minMaxScale
@@ -168,6 +172,7 @@ tests:
     category: pre_processing_droppers_regression
     pre_requisites:
       - IO_readCSV
+      - IO_ttSplit
     units_to_run:
       - PRE_dropDupes
       - PRE_dropMissing
@@ -178,6 +183,7 @@ tests:
     category: post_processing_regression
     pre_requisites:
       - IO_readCSV
+      - IO_ttSplit
       - PRE_standScale
       - REG_randomForest
     units_to_run:
@@ -187,6 +193,7 @@ tests:
     category: post_processing_classification
     pre_requisites:
       - IO_readCSV
+      - IO_ttSplit
       - PRE_standScale
       - CLS_randomForest
     units_to_run:
@@ -196,6 +203,7 @@ tests:
     category: post_processing_clustering
     pre_requisites:
       - IO_readCSV
+      - IO_ttSplit
       - PRE_standScale
       - UNS_kMeans
     units_to_run:
