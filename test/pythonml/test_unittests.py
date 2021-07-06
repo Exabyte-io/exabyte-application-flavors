@@ -256,13 +256,11 @@ class TestIOReadCSVFlavor(Base):
         self.setup('regression')
         read_csv_correct_data_stored(self, flavor)
 
-    flavors_to_be_tested = unittest_helper.get_test_info('io_read_csv_classification', 'units_to_run')
     @parameterized.expand(flavors_to_be_tested)
     def test_correct_data_stored_classification(self, flavor):
         self.setup('classification')
         read_csv_correct_data_stored(self, flavor)
 
-    flavors_to_be_tested = unittest_helper.get_test_info('io_read_csv_clustering', 'units_to_run')
     @parameterized.expand(flavors_to_be_tested)
     def test_correct_data_stored_clustering(self, flavor):
         self.setup('clustering')
