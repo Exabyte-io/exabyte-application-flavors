@@ -143,7 +143,12 @@ class BasePythonMLTest(unittest.TestCase):
 
             sys.stdout.write(stdout.decode())
 
-            self.assertFalse(stderr, f"\nSTDERR:\n{stderr.decode()}")
+            # Sometimes, Matplotlib will write to stderr to state that it's building the font cache.
+            # We can ignore that, safely. See https://github.com/ocropus/ocropy/issues/204
+            matplotlib_err_string = "Matplotlib is building the font cache; this may take a moment."
+            stderr_decoded = stderr.decode().replace(matplotlib_err_string, "").strip()
+
+            self.assertFalse(stderr_decoded, f"\nSTDERR:\n{stderr_decoded}")
 
     def set_to_predict_phase(self):
         """
