@@ -177,5 +177,5 @@ class DummyScaler:
     def inverse_transform(self, X):
         return X
 
-if 'target_scaler' not in context.context_paths.keys():
+if 'target_scaler' not in context:
     context.save(DummyScaler(), 'target_scaler')
