@@ -270,11 +270,14 @@ class BaseUnitTest(unittest.TestCase):
                 context.context_paths.update({pickle_file_name: path_to_pickle_file})
 
     def tearDown(self):
-        os.system('rm -rf .job_context')
-        os.system('rm -rf settings.py')
-        os.system('rm -rf *.csv')
-        os.system('rm -rf *.pyi')
-        os.system('rm -rf *.png')
+        for file in os.listdir():
+            if (file in self.test_configs.files_to_remove) or any([file.endswith(ext) for ext in self.test_configs.extensions_to_remove]):
+                try:
+                    os.remove(file)
+                except (IsADirectoryError, PermissionError):
+                    shutil.rmtree(file)
+                except FileNotFoundError:
+                    pass
 
 
 class TestIOReadCSVRegression(BaseUnitTest):
