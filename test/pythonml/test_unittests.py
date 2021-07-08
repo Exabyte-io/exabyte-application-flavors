@@ -58,6 +58,13 @@ class PassConditions(unittest.TestCase):
         self.assertTrue(os.path.exists(os.path.join('.job_context', 'descriptors.pkl')))
 
     def assert_read_csv_makes_correct_train_target(self, category='regression'):
+        """
+        We check that the operations to the train target in read csv really happen.
+        We perform the same operations to the raw data and check that the data is
+        the same in the end
+        """
+
+        # we have to import and reload settings here to update anything related to settings
         import settings
         importlib.reload(settings)
         data = pandas.read_csv(settings.datafile)
@@ -70,6 +77,13 @@ class PassConditions(unittest.TestCase):
         self.assertIsNone(np.testing.assert_array_equal(target_from_pkl, target))
 
     def assert_read_csv_makes_correct_descriptors(self):
+        """
+        We check that the operations to the descriptors in read csv really happen.
+        We perform the same operations to the raw data and check that the data is
+        the same in the end
+        """
+
+        # we have to import and reload settings here to update anything related to settings
         import settings
         importlib.reload(settings)
         data = pandas.read_csv(settings.datafile)
@@ -78,6 +92,10 @@ class PassConditions(unittest.TestCase):
         self.assertIsNone(np.testing.assert_array_equal(descriptors_from_pkl, descriptors))
 
     def pass_condition_standard_scaler(self, data):
+        """
+        check that 'data' meets the standard scaler pass condition:
+        """
+
         column_means = data.mean(axis=0)
         column_standard_deviations = data.std(axis=0)
         for column_mean in column_means:
@@ -86,31 +104,47 @@ class PassConditions(unittest.TestCase):
             self.assertAlmostEqual(1.0, column_standard_deviation)
 
     def pass_condition_minmax_scaler(self, data):
+        """
+        check that 'data' meets the min max pass condition:
+        """
+
         for col in data.T:
             self.assertAlmostEqual(1.0, np.amax(col))
             self.assertAlmostEqual(0.0, np.amin(col))
 
     def pass_condition_remove_missing(self, data):
+        """
+        check that 'data' does not contain any np.nan values
+        """
+
         data = pandas.DataFrame(data)
         self.assertFalse(data.isnull().values.any())
 
     def pass_condition_remove_duplicates(self, data):
+        """
+        check that 'data' does not contain any duplicate rows
+        """
+
         data = pandas.DataFrame(data)
         self.assertFalse(data.duplicated().any())
 
 
 class BaseUnitTest(unittest.TestCase):
+    """
+    Base class for the unittests. Each unittest in this file will inherit this class. This class
+    'sets up' each unit test and tears it down.
+    It sets up the unit test by getting settings.py from fixtures and editing for the test to be done.
+    It also gives access to the TestConfigs and PassConditions class objects as attributes
+    """
 
     category = ''
     test_configs = TestConfigs('unittest_configuration.yaml')
     pass_conditions = PassConditions()
 
     def setUp(self):
-
         self.asset_path = self.test_configs.asset_path
         self.fixtures_path = self.test_configs.fixtures_path
         self.settings_filename = self.test_configs.settings_filename
-
         with open(os.path.join(self.fixtures_path, self.settings_filename), "r") as inp, \
                 open(self.settings_filename, "w") as outp:
             for line in inp:
@@ -139,20 +173,13 @@ class BaseUnitTest(unittest.TestCase):
         unit_to_run = self.test_configs.unit_shortnames[unit_shortname]
         os.system('python ' + unit_to_run)
 
-    def copy_units(self, unit_shortnames):
-        for unit_shortname in unit_shortnames:
-            self.copy_unit(unit_shortname)
-
-    def run_units(self, unit_shortnames):
-        for unit_shortname in unit_shortnames:
-            self.run_unit(unit_shortname)
-
     @staticmethod
     def set_to_predict_phase():
         """
         Adjusts settings.py to convert it from training mode to predict mode. In practice, this operation is
         performed by Express when the predict workflow is generated.
         """
+
         with open("settings.py", "r") as inp:
             lines = inp.readlines()
             # is_workflow_running_to_predct controls whether the workflow is running in "Train" or "Predict" mode,
@@ -165,7 +192,10 @@ class BaseUnitTest(unittest.TestCase):
 
     @staticmethod
     def load_test_train_targets_and_descriptors():
-        assert (os.path.isfile('settings.py'))
+        """
+        Loads a set of commonly used pickle files from an updated location in the context object
+        """
+
         import settings
         importlib.reload(settings)
         train_target = settings.context.load("train_target")
@@ -176,6 +206,13 @@ class BaseUnitTest(unittest.TestCase):
 
     @staticmethod
     def set_test_split_in_train_test_spit_file(train_test_split_file, test_split=0.2):
+        """
+        Updates the train test split unit with the test split ration
+        Args:
+            train_test_split_file (str): filename of the train test split flavor
+            test_split (float): the ratio at which the data will be split for testing
+        """
+
         with open(train_test_split_file, 'r') as input_file:
             input_filelines = input_file.readlines()
         with open(train_test_split_file, 'w') as output_file:
@@ -185,6 +222,19 @@ class BaseUnitTest(unittest.TestCase):
 
     @staticmethod
     def get_needed_pickle_file_names(category, data_type):
+        """
+        This function returns a list of names that are the 'names' of the pickle objects one
+        needs to get based on their test conditions
+
+        Args:
+            category (str): which category of data is being used. (regression, classification, etc)
+            data_type (str): the folder within fixtures/category that is to be used
+                ex) unscaled, scaled, or model.
+                    - use 'unscaled' if you are testing the min_max scaler
+                    - use 'scaled' if testing a model flavor
+                    - use 'model' if testing a post processor
+        """
+
         if data_type == 'model' and category == 'regression':
             pickle_file_names = ['train_predictions', 'test_predictions', 'train_target', 'test_target',
                                  'target_scaler']
@@ -195,11 +245,21 @@ class BaseUnitTest(unittest.TestCase):
                                  'descriptor_scaler']
         else:
             pickle_file_names = ['train_descriptors', 'test_descriptors', 'train_target', 'test_target', 'descriptors']
+
         return pickle_file_names
 
     def set_pickle_fixtures_path_in_context_object(self, category, data_type):
-        # import settings and reload it - this makes the context paths dicitonary in
-        # the context object
+        """
+        This function updated the paths in the context object with  the 'names' of
+        the pickle objects one needs to get based on their test conditions
+
+        Args:
+            category (str): which category of data is being used. (regression, classification, etc)
+            data_type (str): the folder within fixtures/category that is to be used
+            See the funciton 'get_needed_pickle_file_names' for more details
+        """
+
+        # import settings and reload it - this makes the context paths dicitonary in the context object
         assert (os.path.isfile('settings.py'))
         import settings
         importlib.reload(settings)
