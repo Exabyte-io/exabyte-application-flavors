@@ -218,6 +218,9 @@ class BaseUnitTest(unittest.TestCase):
 
 
 class TestIOReadCSVRegression(BaseUnitTest):
+    """
+    Unit tests for the read_csv flavor. This test considers reading regression data in fixtures
+    """
 
     category = 'regression'
     flavors_to_be_tested = BaseUnitTest.test_configs.get_test_info('io_read_csv_'+category, 'units_to_run')
@@ -250,6 +253,9 @@ class TestIOReadCSVRegression(BaseUnitTest):
 
 
 class TestIOReadCSVClassification(BaseUnitTest):
+    """
+    Unit tests for the read_csv flavor. This test considers reading classification data in fixtures
+    """
 
     category = 'classification'
     flavors_to_be_tested = BaseUnitTest.test_configs.get_test_info('io_read_csv_'+category, 'units_to_run')
@@ -269,6 +275,9 @@ class TestIOReadCSVClassification(BaseUnitTest):
 
 
 class TestIOReadCSVClustering(BaseUnitTest):
+    """
+    Unit tests for the read_csv flavor. This test considers reading clustering data in fixtures
+    """
 
     category = 'clustering'
     flavors_to_be_tested = BaseUnitTest.test_configs.get_test_info('io_read_csv_'+category, 'units_to_run')
@@ -289,8 +298,8 @@ class TestIOReadCSVClustering(BaseUnitTest):
 
 class TestPreProcessingScalers(BaseUnitTest):
     """
-    This class performs unittests for the pre processing sclaer flavors.
-    We can only check regression data here, and assume it would work for another data category.
+    This class performs unittests for the pre_processing sclaer flavors.
+    We may only check regression data here, and assume it would work for the other data categories.
     """
 
     category = 'regression'
@@ -320,8 +329,8 @@ class TestPreProcessingScalers(BaseUnitTest):
 
 class TestPreProcessingDroppers(BaseUnitTest):
     """
-    This class performs unittests for the pre processing dropper flavors.
-    We can only check regression data here, and assume it would work for another data class.
+    This class performs unittests for the pre_processing sclaer flavors.
+    We may only check regression data here, and assume it would work for the other data categories.
     """
 
     category = 'regression'
@@ -352,7 +361,7 @@ class TestPreProcessingDroppers(BaseUnitTest):
 
 class TestModelFlavorsRegression(BaseUnitTest):
     """
-    This class performs unittests for the model flavors in the 'regression' category
+    This class performs unit tests for the model flavors in the 'regression' category
     """
 
     category = 'regression'
@@ -381,7 +390,7 @@ class TestModelFlavorsRegression(BaseUnitTest):
 
 class TestModelFlavorsClassification(BaseUnitTest):
     """
-    This class performs unittests for the model flavors in the 'regression' category
+    This class performs unit tests for the model flavors in the 'classification' category
     """
 
     category = 'classification'
@@ -411,7 +420,7 @@ class TestModelFlavorsClassification(BaseUnitTest):
 
 class TestModelFlavorsClustering(BaseUnitTest):
     """
-    This class performs unittests for the model flavors in the 'regression' category
+    This class performs unit tests for the model flavors in the 'clustering' category
     """
     
     category = 'clustering'
@@ -435,7 +444,7 @@ class TestModelFlavorsClustering(BaseUnitTest):
 
 class TestPostProcessingRegression(BaseUnitTest):
     """
-    This class performs unittests for the flavors in the 'post processing' regression category
+    This class performs unittests for post processing flavor that considers regression data
     """
 
     category = 'regression'
@@ -455,7 +464,7 @@ class TestPostProcessingRegression(BaseUnitTest):
 
 class TestPostProcessingClassification(BaseUnitTest):
     """
-    This class performs unittests for the flavors in the 'post processing' classification category
+    This class performs unittests for post processing flavor that considers classification data
     """
 
     category = 'classification'
@@ -475,7 +484,7 @@ class TestPostProcessingClassification(BaseUnitTest):
 
 class TestPostProcessingClustering(BaseUnitTest):
     """
-    This class performs unittests for the flavors in the 'post processing' clustering category
+    This class performs unittests for post processing flavor that considers clustering data
     """
 
     category = 'clustering'
