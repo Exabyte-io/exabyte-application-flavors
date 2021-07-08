@@ -37,12 +37,12 @@ class TestConfigs:
         predict_set_name = self.configuration["fixtures"][category]["predict_set_name"]
         return training_set_name, predict_set_name
 
-    def get_test_info(self, category, info_needed):
+    def get_units_from_flavor_category(self, flavor_category):
         all_tests = self.configuration["tests"]
-        configurations = [i for i in all_tests.items() if i[1]["category"] == category]
-        info_in_category = [i[1][info_needed] for i in configurations][0]
-        info_for_run = [[info] for info in info_in_category]
-        return info_for_run
+        configurations = [i for i in all_tests.items() if i[1]["category"] == flavor_category]
+        units_in_category = [i[1]['units_to_run'] for i in configurations][0]
+        units_for_run = [[unit] for unit in units_in_category]
+        return units_for_run
 
 
 class PassConditions(unittest.TestCase):
@@ -137,7 +137,7 @@ class BaseUnitTest(unittest.TestCase):
     It also gives access to the TestConfigs and PassConditions class objects as attributes
     """
 
-    category = ''
+    problem_category = ''
     test_configs = TestConfigs('unittest_configuration.yaml')
     pass_conditions = PassConditions()
 
@@ -151,10 +151,10 @@ class BaseUnitTest(unittest.TestCase):
                 # Users can select the type of problem category in the settings.py file. Normally, it is set to
                 # "regression" by default, but to make the regex more convenient, the settings.py file in fixtures
                 # has this value set to "PROBLEM_CATEGORY_HERE"
-                line = re.sub("PROBLEM_CATEGORY_HERE", self.category, line)
+                line = re.sub("PROBLEM_CATEGORY_HERE", self.problem_category, line)
                 outp.write(line)
 
-        training_file, predict_file = self.test_configs.get_train_predict_set_names(self.category)
+        training_file, predict_file = self.test_configs.get_train_predict_set_names(self.problem_category)
         shutil.copy(os.path.join(self.fixtures_path, training_file), "data_to_train_with.csv")
         shutil.copy(os.path.join(self.fixtures_path, predict_file), "data_to_predict_with.csv")
         # Each time we reload settings, we re-initialize the context object, which takes the .job_context
@@ -221,29 +221,29 @@ class BaseUnitTest(unittest.TestCase):
                 output_file.write(line)
 
     @staticmethod
-    def get_needed_pickle_file_names(category, data_type):
+    def get_needed_pickle_file_names(problem_category, data_type):
         """
         This function returns a list of names that are the 'names' of the pickle objects one
         needs to get based on their test conditions
 
         Args:
-            category (str): which category of data is being used. (regression, classification, etc)
-            data_type (str): the folder within fixtures/category that is to be used
+            problem_category (str): which problem_category of data is being used. (regression, classification, etc)
+            data_type (str): the folder within fixtures/problem_category that is to be used
                 ex) unscaled, scaled, or model.
                     - use 'unscaled' if you are testing the min_max scaler
                     - use 'scaled' if testing a model flavor
                     - use 'model' if testing a post processor
         """
 
-        if data_type == 'model' and category == 'regression':
+        if data_type == 'model' and problem_category == 'regression':
             pickle_file_names = ['train_predictions', 'test_predictions', 'train_target', 'test_target',
                                  'target_scaler']
-        elif data_type == 'model' and category == 'classification':
+        elif data_type == 'model' and problem_category == 'classification':
             pickle_file_names = ['test_target', 'test_probabilities']
-        elif data_type == 'model' and category == 'clustering':
+        elif data_type == 'model' and problem_category == 'clustering':
             pickle_file_names = ['train_descriptors', 'test_descriptors', 'train_labels', 'test_labels',
                                  'descriptor_scaler']
-        elif data_type == 'scaled' and category == 'regression':
+        elif data_type == 'scaled' and problem_category == 'regression':
             pickle_file_names = ['train_descriptors', 'test_descriptors', 'train_target', 'test_target', 'descriptors',
                                  'target_scaler', 'descriptor_scaler']
         else:
@@ -251,14 +251,14 @@ class BaseUnitTest(unittest.TestCase):
 
         return pickle_file_names
 
-    def set_pickle_fixtures_path_in_context_object(self, category, data_type):
+    def set_pickle_fixtures_path_in_context_object(self, problem_category, data_type):
         """
         This function updated the paths in the context object with  the 'names' of
         the pickle objects one needs to get based on their test conditions
 
         Args:
-            category (str): which category of data is being used. (regression, classification, etc)
-            data_type (str): the folder within fixtures/category that is to be used
+            problem_category (str): which problem_category of data is being used. (regression, classification, etc)
+            data_type (str): the folder within fixtures/problem_category that is to be used
             See the funciton 'get_needed_pickle_file_names' for more details
         """
 
@@ -267,9 +267,9 @@ class BaseUnitTest(unittest.TestCase):
         import settings
         importlib.reload(settings)
         with settings.context as context:
-            pickle_file_names = self.get_needed_pickle_file_names(category, data_type)
+            pickle_file_names = self.get_needed_pickle_file_names(problem_category, data_type)
             for pickle_file_name in pickle_file_names:
-                path_to_pickle_file = 'fixtures/{}_pkls/{}_data/{}.pkl'.format(category, data_type, pickle_file_name)
+                path_to_pickle_file = 'fixtures/{}_pkls/{}_data/{}.pkl'.format(problem_category, data_type, pickle_file_name)
                 context.context_paths.update({pickle_file_name: path_to_pickle_file})
 
     def tearDown(self):
@@ -288,8 +288,9 @@ class TestIOReadCSVRegression(BaseUnitTest):
     Unit tests for the read_csv flavor. This test considers reading regression data in fixtures
     """
 
-    category = 'regression'
-    flavors_to_be_tested = BaseUnitTest.test_configs.get_test_info('io_read_csv_'+category, 'units_to_run')
+    problem_category = 'regression'
+    flavor_category = 'io_read_csv_'+problem_category
+    flavors_to_be_tested = BaseUnitTest.test_configs.get_units_from_flavor_category(flavor_category)
 
     @parameterized.expand(flavors_to_be_tested)
     def test_correct_pickles_made(self, flavor):
@@ -315,7 +316,7 @@ class TestIOReadCSVRegression(BaseUnitTest):
                 self.pass_conditions.assert_read_csv_makes_correct_descriptors()
             else:
                 os.system('python ' + flavor_file)
-                self.pass_conditions.assert_read_csv_makes_correct_train_target(self.category)
+                self.pass_conditions.assert_read_csv_makes_correct_train_target(self.problem_category)
 
 
 class TestIOReadCSVClassification(BaseUnitTest):
@@ -323,8 +324,9 @@ class TestIOReadCSVClassification(BaseUnitTest):
     Unit tests for the read_csv flavor. This test considers reading classification data in fixtures
     """
 
-    category = 'classification'
-    flavors_to_be_tested = BaseUnitTest.test_configs.get_test_info('io_read_csv_'+category, 'units_to_run')
+    problem_category = 'classification'
+    flavor_category = 'io_read_csv_'+problem_category
+    flavors_to_be_tested = BaseUnitTest.test_configs.get_units_from_flavor_category(flavor_category )
 
     @parameterized.expand(flavors_to_be_tested)
     def test_correct_data_stored_classification(self, flavor):
@@ -337,7 +339,7 @@ class TestIOReadCSVClassification(BaseUnitTest):
                 self.pass_conditions.assert_read_csv_makes_correct_descriptors()
             else:
                 os.system('python ' + flavor_file)
-                self.pass_conditions.assert_read_csv_makes_correct_train_target(self.category)
+                self.pass_conditions.assert_read_csv_makes_correct_train_target(self.problem_category)
 
 
 class TestIOReadCSVClustering(BaseUnitTest):
@@ -345,8 +347,9 @@ class TestIOReadCSVClustering(BaseUnitTest):
     Unit tests for the read_csv flavor. This test considers reading clustering data in fixtures
     """
 
-    category = 'clustering'
-    flavors_to_be_tested = BaseUnitTest.test_configs.get_test_info('io_read_csv_'+category, 'units_to_run')
+    problem_category = 'clustering'
+    flavor_category = 'io_read_csv_'+problem_category
+    flavors_to_be_tested = BaseUnitTest.test_configs.get_units_from_flavor_category(flavor_category )
 
     @parameterized.expand(flavors_to_be_tested)
     def test_correct_data_stored_clustering(self, flavor):
@@ -359,7 +362,7 @@ class TestIOReadCSVClustering(BaseUnitTest):
                 self.pass_conditions.assert_read_csv_makes_correct_descriptors()
             else:
                 os.system('python ' + flavor_file)
-                self.pass_conditions.assert_read_csv_makes_correct_train_target(self.category)
+                self.pass_conditions.assert_read_csv_makes_correct_train_target(self.problem_category)
 
 
 class TestPreProcessingScalers(BaseUnitTest):
@@ -368,12 +371,13 @@ class TestPreProcessingScalers(BaseUnitTest):
     We may only check regression data here, and assume it would work for the other data categories.
     """
 
-    category = 'regression'
-    flavors_to_be_tested = BaseUnitTest.test_configs.get_test_info('pre_processing_scalers', 'units_to_run')
+    problem_category = 'regression'
+    flavor_category = 'pre_processing_scalers'
+    flavors_to_be_tested = BaseUnitTest.test_configs.get_units_from_flavor_category(flavor_category)
 
     @parameterized.expand(flavors_to_be_tested)
     def test_flavor(self, flavor):
-        self.set_pickle_fixtures_path_in_context_object(self.category, 'unscaled')
+        self.set_pickle_fixtures_path_in_context_object(self.problem_category, 'unscaled')
 
         # 1. Copy pre_reqs and flavor file, then run the pre_reqs, followed by the flavor
         self.copy_unit(flavor)
@@ -399,13 +403,14 @@ class TestPreProcessingDroppers(BaseUnitTest):
     We may only check regression data here, and assume it would work for the other data categories.
     """
 
-    category = 'regression'
-    flavors_to_be_tested = BaseUnitTest.test_configs.get_test_info('pre_processing_droppers', 'units_to_run')
+    problem_category = 'regression'
+    flavor_category = 'pre_processing_droppers'
+    flavors_to_be_tested = BaseUnitTest.test_configs.get_units_from_flavor_category(flavor_category)
 
     @parameterized.expand(flavors_to_be_tested)
     def test_flavor(self, flavor):
 
-        self.set_pickle_fixtures_path_in_context_object(self.category, 'unscaled')
+        self.set_pickle_fixtures_path_in_context_object(self.problem_category, 'unscaled')
 
         # 1. Copy pre_reqs and flavor file, then run the pre_reqs, followed by the flavor
         self.copy_unit(flavor)
@@ -430,13 +435,14 @@ class TestModelFlavorsRegression(BaseUnitTest):
     This class performs unit tests for the model flavors in the 'regression' category
     """
 
-    category = 'regression'
-    flavors_to_be_tested = BaseUnitTest.test_configs.get_test_info('model_regression', 'units_to_run')
+    problem_category = 'regression'
+    flavor_category = 'model_'+problem_category
+    flavors_to_be_tested = BaseUnitTest.test_configs.get_units_from_flavor_category(flavor_category)
 
     @parameterized.expand(flavors_to_be_tested)
     def test_flavor(self, flavor):
 
-        self.set_pickle_fixtures_path_in_context_object(self.category, 'scaled')
+        self.set_pickle_fixtures_path_in_context_object(self.problem_category, 'scaled')
         # copy pre_reqs and flavor file, then run the pre_reqs, followed by the flavor
         self.copy_unit(flavor)
 
@@ -459,13 +465,14 @@ class TestModelFlavorsClassification(BaseUnitTest):
     This class performs unit tests for the model flavors in the 'classification' category
     """
 
-    category = 'classification'
-    flavors_to_be_tested = BaseUnitTest.test_configs.get_test_info('model_classification', 'units_to_run')
+    problem_category = 'classification'
+    flavor_category = 'model_'+problem_category
+    flavors_to_be_tested = BaseUnitTest.test_configs.get_units_from_flavor_category(flavor_category)
 
     @parameterized.expand(flavors_to_be_tested)
     def test_flavor(self, flavor):
 
-        self.set_pickle_fixtures_path_in_context_object(self.category, 'scaled')
+        self.set_pickle_fixtures_path_in_context_object(self.problem_category, 'scaled')
         # copy pre_reqs and flavor file, then run the pre_reqs, followed by the flavor
         self.copy_unit(flavor)
 
@@ -489,13 +496,14 @@ class TestModelFlavorsClustering(BaseUnitTest):
     This class performs unit tests for the model flavors in the 'clustering' category
     """
     
-    category = 'clustering'
-    flavors_to_be_tested = BaseUnitTest.test_configs.get_test_info('model_clustering', 'units_to_run')
+    problem_category = 'clustering'
+    flavor_category = 'model_'+problem_category
+    flavors_to_be_tested = BaseUnitTest.test_configs.get_units_from_flavor_category(flavor_category)
 
     @parameterized.expand(flavors_to_be_tested)
     def test_flavor(self, flavor):
 
-        self.set_pickle_fixtures_path_in_context_object(self.category, 'scaled')
+        self.set_pickle_fixtures_path_in_context_object(self.problem_category, 'scaled')
         # copy pre_reqs and flavor file, then run the pre_reqs, followed by the flavor
         self.copy_unit(flavor)
 
@@ -513,13 +521,14 @@ class TestPostProcessingRegression(BaseUnitTest):
     This class performs unittests for post processing flavor that considers regression data
     """
 
-    category = 'regression'
-    flavors_to_be_tested_regression = BaseUnitTest.test_configs.get_test_info('post_processing_regression', 'units_to_run')
+    problem_category = 'regression'
+    flavor_category = 'post_processing_'+problem_category
+    flavors_to_be_tested_regression = BaseUnitTest.test_configs.get_units_from_flavor_category(flavor_category)
 
     @parameterized.expand(flavors_to_be_tested_regression)
     def test_flavor(self, flavor):
         # set the paths to the pickle files in context_paths dictionary in conext object
-        self.set_pickle_fixtures_path_in_context_object(self.category, 'model')
+        self.set_pickle_fixtures_path_in_context_object(self.problem_category, 'model')
         # copy pre_reqs and flavor file, then run the pre_reqs, followed by the flavor
         self.copy_unit(flavor)
         # run unit
@@ -533,13 +542,14 @@ class TestPostProcessingClassification(BaseUnitTest):
     This class performs unittests for post processing flavor that considers classification data
     """
 
-    category = 'classification'
-    flavors_to_be_tested_regression = BaseUnitTest.test_configs.get_test_info('post_processing_classification', 'units_to_run')
+    problem_category = 'classification'
+    flavor_category = 'post_processing_'+problem_category
+    flavors_to_be_tested_regression = BaseUnitTest.test_configs.get_units_from_flavor_category(flavor_category)
 
     @parameterized.expand(flavors_to_be_tested_regression)
     def test_flavor(self, flavor):
         # set the paths to the pickle files in context_paths dictionary in conext object
-        self.set_pickle_fixtures_path_in_context_object(self.category, 'model')
+        self.set_pickle_fixtures_path_in_context_object(self.problem_category, 'model')
         # copy pre_reqs and flavor file, then run the pre_reqs, followed by the flavor
         self.copy_unit(flavor)
         # run unit
@@ -553,13 +563,14 @@ class TestPostProcessingClustering(BaseUnitTest):
     This class performs unittests for post processing flavor that considers clustering data
     """
 
-    category = 'clustering'
-    flavors_to_be_tested_regression = BaseUnitTest.test_configs.get_test_info('post_processing_clustering', 'units_to_run')
+    problem_category = 'clustering'
+    flavor_category = 'post_processing_'+problem_category
+    flavors_to_be_tested_regression = BaseUnitTest.test_configs.get_units_from_flavor_category(flavor_category)
 
     @parameterized.expand(flavors_to_be_tested_regression)
     def test_flavor(self, flavor):
         # set the paths to the pickle files in context_paths dictionary in conext object
-        self.set_pickle_fixtures_path_in_context_object(self.category, 'model')
+        self.set_pickle_fixtures_path_in_context_object(self.problem_category, 'model')
         # copy pre_reqs and flavor file, then run the pre_reqs, followed by the flavor
         self.copy_unit(flavor)
         # run unit
