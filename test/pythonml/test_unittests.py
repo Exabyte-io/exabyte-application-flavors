@@ -243,6 +243,9 @@ class BaseUnitTest(unittest.TestCase):
         elif data_type == 'model' and category == 'clustering':
             pickle_file_names = ['train_descriptors', 'test_descriptors', 'train_labels', 'test_labels',
                                  'descriptor_scaler']
+        elif data_type == 'scaled' and category == 'regression':
+            pickle_file_names = ['train_descriptors', 'test_descriptors', 'train_target', 'test_target', 'descriptors',
+                                 'target_scaler', 'descriptor_scaler']
         else:
             pickle_file_names = ['train_descriptors', 'test_descriptors', 'train_target', 'test_target', 'descriptors']
 
@@ -443,7 +446,7 @@ class TestModelFlavorsRegression(BaseUnitTest):
         importlib.reload(settings)
         with settings.context as context:
             rmse = context.load('RMSE')
-        assert(rmse <= 2*0.1)
+        assert(rmse <= 2 * 10)
 
         # predict
         self.set_to_predict_phase()
