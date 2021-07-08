@@ -57,6 +57,7 @@ class BaseUnitTest(unittest.TestCase):
         Adjusts settings.py to convert it from training mode to predict mode. In practice, this operation is
         performed by Express when the predict workflow is generated.
         """
+
         with open("settings.py", "r") as inp:
             lines = inp.readlines()
             # is_workflow_running_to_predct controls whether the workflow is running in "Train" or "Predict" mode,
@@ -83,27 +84,19 @@ class BaseUnitTest(unittest.TestCase):
         """
 
         names = ['']
-
         if data_type == 'model_data':
-
             if category == 'regression':
                 names = ['train_predictions', 'test_predictions', 'train_target', 'test_target', 'target_scaler']
-
             elif category == 'classification':
                 names = ['test_target', 'test_probabilities']
-
             elif category == 'clustering':
                 names = ['train_descriptors', 'test_descriptors', 'train_labels', 'test_labels', 'descriptor_scaler']
-
         elif data_type == 'scaled_data' and category == 'regression':
             names = ['train_descriptors', 'test_descriptors', 'train_target', 'test_target', 'descriptors',
                      'target_scaler', 'descriptor_scaler']
-
         else:
             names = ['train_descriptors', 'test_descriptors', 'train_target', 'test_target', 'descriptors']
-
         return names
-
 
     def set_pickle_fixtures_path_in_context_object(self, category, data_type):
         """
@@ -130,7 +123,6 @@ class BaseUnitTest(unittest.TestCase):
         os.system('rm -rf .job*')
         os.system('rm settings.py')
         os.system('rm *.pyi')
-        os.system('rm *.csv')
 
     @staticmethod
     def load_test_train_targets_and_descriptors():

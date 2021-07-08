@@ -5,18 +5,13 @@ import re
 import shutil
 import unittest
 import functools
-import yaml
 from parameterized import parameterized
-import pandas
-import numpy as np
 
 
 class BaseUnitTest(unittest.TestCase):
     """
-    Base class for the unittests. Each unittest in this file will inherit this class. This class
-    'sets up' each unit test and tears it down.
+    Base class for the unit tests.
     It sets up the unit test by getting settings.py from fixtures and editing for the test to be done.
-    It also gives access to the TestConfigs and PassConditions class objects as attributes
     """
 
     asset_path = '../../assets/python/ml'
@@ -87,25 +82,18 @@ class BaseUnitTest(unittest.TestCase):
         """
 
         names = ['']
-
         if data_type == 'model_data':
-
             if category == 'regression':
                 names = ['train_predictions', 'test_predictions', 'train_target', 'test_target', 'target_scaler']
-
             elif category == 'classification':
                 names = ['test_target', 'test_probabilities']
-
             elif category == 'clustering':
                 names = ['train_descriptors', 'test_descriptors', 'train_labels', 'test_labels', 'descriptor_scaler']
-
         elif data_type == 'scaled_data' and category == 'regression':
             names = ['train_descriptors', 'test_descriptors', 'train_target', 'test_target', 'descriptors',
                      'target_scaler', 'descriptor_scaler']
-
         else:
             names = ['train_descriptors', 'test_descriptors', 'train_target', 'test_target', 'descriptors']
-
         return names
 
     def set_pickle_fixtures_path_in_context_object(self, category, data_type):
