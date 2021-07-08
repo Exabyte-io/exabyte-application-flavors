@@ -94,16 +94,12 @@ tests:
   # Regression
   Mod_Reg:
     category: model_regression
-    pre_requisites:
-      - IO_readCSV
-      - IO_ttSplit
-      - PRE_standScale
     units_to_run:
+      - REG_kernelRidge
       - REG_adaBoostTree
       - REG_bagTree
       - REG_gradBoostTree
       - REG_ExtremegradBoostTree
-      - REG_kernelRidge
       - REG_lasso
       - REG_mlp
       - REG_randomForest
@@ -112,10 +108,6 @@ tests:
   # Classification
   Mod_Cls:
     category: model_classification
-    pre_requisites:
-      - IO_readCSV
-      - IO_ttSplit
-      - PRE_standScale
     units_to_run:
       - CLS_randomForest
       - CLS_gradBoostTree
@@ -124,10 +116,6 @@ tests:
   # Clustering
   Mod_Uns:
     category: model_clustering
-    pre_requisites:
-      - IO_readCSV
-      - IO_ttSplit
-      - PRE_standScale
     units_to_run:
       - UNS_kMeans
 
@@ -153,26 +141,20 @@ tests:
       - IO_readCSV
 
   IO_Split_Reg:
-    category: io_train_test_split_regression
+    category: io_train_test_split
     units_to_run:
       - IO_ttSplit
 
   # Pre Processing flavors - divided into scalers and droppers
   # only need to test on one type of data - use regression
   Pre_Scaler_Reg:
-    category: pre_processing_scalers_regression
-    pre_requisites:
-      - IO_readCSV
-      - IO_ttSplit
+    category: pre_processing_scalers
     units_to_run:
       - PRE_standScale
       - PRE_minMaxScale
 
   Pre_Drop_Reg:
-    category: pre_processing_droppers_regression
-    pre_requisites:
-      - IO_readCSV
-      - IO_ttSplit
+    category: pre_processing_droppers
     units_to_run:
       - PRE_dropDupes
       - PRE_dropMissing
@@ -181,30 +163,15 @@ tests:
   # That is: 'post_processing_regression', 'post_processing_classification', and 'post_processing_clustering'
   Post_Reg:
     category: post_processing_regression
-    pre_requisites:
-      - IO_readCSV
-      - IO_ttSplit
-      - PRE_standScale
-      - REG_randomForest
     units_to_run:
       - POS_plotParity
 
   Post_Cls:
     category: post_processing_classification
-    pre_requisites:
-      - IO_readCSV
-      - IO_ttSplit
-      - PRE_standScale
-      - CLS_randomForest
     units_to_run:
       - POS_plotROC
 
   Post_Uns:
     category: post_processing_clustering
-    pre_requisites:
-      - IO_readCSV
-      - IO_ttSplit
-      - PRE_standScale
-      - UNS_kMeans
     units_to_run:
       - POS_plotClusters
