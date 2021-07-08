@@ -144,7 +144,7 @@ class BasePythonMLTest(unittest.TestCase):
             sys.stdout.write(stdout.decode())
 
             # Sometimes, Matplotlib will write to stderr to state that it's building the font cache.
-            # We can ignore that, safely.
+            # We can ignore that, safely. See https://github.com/ocropus/ocropy/issues/204
             matplotlib_err_string = "Matplotlib is building the font cache; this may take a moment."
             stderr_decoded = stderr.decode().replace(matplotlib_err_string, "").strip()
 
