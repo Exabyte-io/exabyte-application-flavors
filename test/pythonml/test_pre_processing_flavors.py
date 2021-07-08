@@ -82,21 +82,28 @@ class BaseUnitTest(unittest.TestCase):
                     - use 'model' if testing a post processor
         """
 
-        if data_type == 'model' and category == 'regression':
-            pickle_file_names = ['train_predictions', 'test_predictions', 'train_target', 'test_target',
-                                 'target_scaler']
-        elif data_type == 'model' and category == 'classification':
-            pickle_file_names = ['test_target', 'test_probabilities']
-        elif data_type == 'model' and category == 'clustering':
-            pickle_file_names = ['train_descriptors', 'test_descriptors', 'train_labels', 'test_labels',
-                                 'descriptor_scaler']
-        elif data_type == 'scaled' and category == 'regression':
-            pickle_file_names = ['train_descriptors', 'test_descriptors', 'train_target', 'test_target', 'descriptors',
-                                 'target_scaler', 'descriptor_scaler']
-        else:
-            pickle_file_names = ['train_descriptors', 'test_descriptors', 'train_target', 'test_target', 'descriptors']
+        names = ['']
 
-        return pickle_file_names
+        if data_type == 'model_data':
+
+            if category == 'regression':
+                names = ['train_predictions', 'test_predictions', 'train_target', 'test_target', 'target_scaler']
+
+            elif category == 'classification':
+                names = ['test_target', 'test_probabilities']
+
+            elif category == 'clustering':
+                names = ['train_descriptors', 'test_descriptors', 'train_labels', 'test_labels', 'descriptor_scaler']
+
+        elif data_type == 'scaled_data' and category == 'regression':
+            names = ['train_descriptors', 'test_descriptors', 'train_target', 'test_target', 'descriptors',
+                     'target_scaler', 'descriptor_scaler']
+
+        else:
+            names = ['train_descriptors', 'test_descriptors', 'train_target', 'test_target', 'descriptors']
+
+        return names
+
 
     def set_pickle_fixtures_path_in_context_object(self, category, data_type):
         """
@@ -116,7 +123,7 @@ class BaseUnitTest(unittest.TestCase):
         with settings.context as context:
             pickle_file_names = self.get_needed_pickle_file_names(category, data_type)
             for pickle_file_name in pickle_file_names:
-                path_to_pickle_file = 'fixtures/{}_pkls/{}_data/{}.pkl'.format(category, data_type, pickle_file_name)
+                path_to_pickle_file = 'fixtures/{}_pkls/{}/{}.pkl'.format(category, data_type, pickle_file_name)
                 context.context_paths.update({pickle_file_name: path_to_pickle_file})
 
     def tearDown(self):
@@ -168,7 +175,7 @@ class BaseUnitTest(unittest.TestCase):
             self.remove_duplicates_pass_condition(data)
 
     def run_scaler_flavor_test(self, category, flavor):
-        self.set_pickle_fixtures_path_in_context_object(category, 'unscaled')
+        self.set_pickle_fixtures_path_in_context_object(category, 'unscaled_data')
         shutil.copy(os.path.join(self.asset_path, flavor), flavor)
         os.system('python ' + flavor)
         train_target, train_descriptors, test_target, test_descriptors = self.load_test_train_targets_and_descriptors()
@@ -182,7 +189,7 @@ class BaseUnitTest(unittest.TestCase):
 
 class TestPreProcessingScalerFlavors(BaseUnitTest):
     """
-    This class performs unittests for the pre_processing sclaer flavors.
+    This class performs unittests for the pre_processing scaler flavors.
     We may only check regression data here, and assume it would work for the other data categories.
     """
 
@@ -198,7 +205,7 @@ class TestPreProcessingScalerFlavors(BaseUnitTest):
 
 class TestPreProcessingDroppers(BaseUnitTest):
     """
-    This class performs unittests for the pre_processing sclaer flavors.
+    This class performs unittests for the pre_processing dropper flavors.
     """
 
     params = [
