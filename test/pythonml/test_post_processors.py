@@ -25,8 +25,13 @@ class BaseUnitTest(unittest.TestCase):
 
     def custom_setup(self, category):
         """
-        this is a custom setup function
+        This is a custom setup function
+
+        Args:
+            category (str): the category of data we are to use:
+                Ex) 'regression', 'classification', 'clustering'
         """
+
         with open(os.path.join(self.fixtures_path, self.settings_filename), "r") as inp, \
                 open(self.settings_filename, "w") as outp:
             for line in inp:
@@ -36,23 +41,18 @@ class BaseUnitTest(unittest.TestCase):
                 line = re.sub("PROBLEM_CATEGORY_HERE", category, line)
                 outp.write(line)
 
-        training_file, predict_file = self.get_train_predict_set_names(category)
-        shutil.copy(os.path.join(self.fixtures_path, training_file), "data_to_train_with.csv")
-        shutil.copy(os.path.join(self.fixtures_path, predict_file), "data_to_predict_with.csv")
-        # Each time we reload settings, we re-initialize the context object, which takes the .job_context
-        # directory that may have just gotten 'tearedDown' - setting the unittest fresh each time.
-        import settings
-        importlib.reload(settings)
-
-    @staticmethod
-    def get_train_predict_set_names(category):
-        if category == 'regression' or category == 'classificaiton':
+        if category == 'regression' or category == 'classification':
             training_file = '{}_training_data.csv'.format(category)
             predict_file = '{}_predict_data.csv'.format(category)
+        elif category == 'clustering':
+            training_file = predict_file = 'clustering_blobs.csv'
         else:
-            training_file = 'clustering_blobs.csv'
-            predict_file = 'clustering_blobs.csv'
-        return training_file, predict_file
+            training_file = predict_file = -1
+        shutil.copy(os.path.join(self.fixtures_path, training_file), "data_to_train_with.csv")
+        shutil.copy(os.path.join(self.fixtures_path, predict_file), "data_to_predict_with.csv")
+
+        import settings
+        importlib.reload(settings)
 
     @staticmethod
     def set_to_predict_phase():

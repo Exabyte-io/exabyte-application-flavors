@@ -12,10 +12,8 @@ import numpy as np
 
 class BaseUnitTest(unittest.TestCase):
     """
-    Base class for the unittests. Each unittest in this file will inherit this class. This class
-    'sets up' each unit test and tears it down.
+    Base class for the unit tests.
     It sets up the unit test by getting settings.py from fixtures and editing for the test to be done.
-    It also gives access to the TestConfigs and PassConditions class objects as attributes
     """
 
     asset_path = '../../assets/python/ml'
@@ -24,8 +22,13 @@ class BaseUnitTest(unittest.TestCase):
 
     def custom_setup(self, category):
         """
-        this is a custom setup function
+        This is a custom setup function
+
+        Args:
+            category (str): the category of data we are to use:
+                Ex) 'regression', 'classification', 'clustering'
         """
+
         with open(os.path.join(self.fixtures_path, self.settings_filename), "r") as inp, \
                 open(self.settings_filename, "w") as outp:
             for line in inp:
@@ -35,23 +38,18 @@ class BaseUnitTest(unittest.TestCase):
                 line = re.sub("PROBLEM_CATEGORY_HERE", category, line)
                 outp.write(line)
 
-        training_file, predict_file = self.get_train_predict_set_names(category)
-        shutil.copy(os.path.join(self.fixtures_path, training_file), "data_to_train_with.csv")
-        shutil.copy(os.path.join(self.fixtures_path, predict_file), "data_to_predict_with.csv")
-        # Each time we reload settings, we re-initialize the context object, which takes the .job_context
-        # directory that may have just gotten 'tearedDown' - setting the unittest fresh each time.
-        import settings
-        importlib.reload(settings)
-
-    @staticmethod
-    def get_train_predict_set_names(category):
-        if category == 'regression' or category == 'classificaiton':
+        if category == 'regression' or category == 'classification':
             training_file = '{}_training_data.csv'.format(category)
             predict_file = '{}_predict_data.csv'.format(category)
+        elif category == 'clustering':
+            training_file = predict_file = 'clustering_blobs.csv'
         else:
-            training_file = 'clustering_blobs.csv'
-            predict_file = 'clustering_blobs.csv'
-        return training_file, predict_file
+            training_file = predict_file = -1
+        shutil.copy(os.path.join(self.fixtures_path, training_file), "data_to_train_with.csv")
+        shutil.copy(os.path.join(self.fixtures_path, predict_file), "data_to_predict_with.csv")
+
+        import settings
+        importlib.reload(settings)
 
     @staticmethod
     def set_to_predict_phase():
@@ -59,7 +57,6 @@ class BaseUnitTest(unittest.TestCase):
         Adjusts settings.py to convert it from training mode to predict mode. In practice, this operation is
         performed by Express when the predict workflow is generated.
         """
-
         with open("settings.py", "r") as inp:
             lines = inp.readlines()
             # is_workflow_running_to_predct controls whether the workflow is running in "Train" or "Predict" mode,
