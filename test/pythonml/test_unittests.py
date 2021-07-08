@@ -2,15 +2,13 @@
 import importlib
 import os
 import re
-import sys
 import shutil
 import unittest
 import functools
 import yaml
-from parameterized import parameterized, param
+from parameterized import parameterized
 import pandas
 import numpy as np
-from typing import Dict, List, Any, Tuple, Callable
 
 
 class TestConfigs:
@@ -53,10 +51,8 @@ class PassConditions(unittest.TestCase):
     """
 
     def assert_correct_pickles_made(self):
-        self.assertTrue(os.path.exists(os.path.join('.job_context', 'train_target.pkl')))
-        self.assertTrue(os.path.exists(os.path.join('.job_context', 'test_descriptors.pkl')))
-        self.assertTrue(os.path.exists(os.path.join('.job_context', 'train_target.pkl')))
-        self.assertTrue(os.path.exists(os.path.join('.job_context', 'test_descriptors.pkl')))
+        for pickle in ['train_target.pkl', 'test_descriptors.pkl', 'train_target.pkl', 'test_descriptors.pkl']:
+            self.assertTrue(os.path.exists(os.path.join('.job_context', pickle)))
 
     def assert_descriptors_pickle_made(self):
         self.assertTrue(os.path.exists(os.path.join('.job_context', 'descriptors.pkl')))
@@ -103,7 +99,6 @@ class PassConditions(unittest.TestCase):
         self.assertFalse(data.duplicated().any())
 
 
-
 class BaseUnitTest(unittest.TestCase):
 
     category = ''
@@ -116,7 +111,8 @@ class BaseUnitTest(unittest.TestCase):
         self.fixtures_path = self.test_configs.fixtures_path
         self.settings_filename = self.test_configs.settings_filename
 
-        with open(os.path.join(self.fixtures_path, self.settings_filename), "r") as inp, open(self.settings_filename, "w") as outp:
+        with open(os.path.join(self.fixtures_path, self.settings_filename), "r") as inp, \
+                open(self.settings_filename, "w") as outp:
             for line in inp:
                 # Users can select the type of problem category in the settings.py file. Normally, it is set to
                 # "regression" by default, but to make the regex more convenient, the settings.py file in fixtures
@@ -129,7 +125,8 @@ class BaseUnitTest(unittest.TestCase):
         shutil.copy(os.path.join(self.fixtures_path, predict_file), "data_to_predict_with.csv")
         # Each time we reload settings, we re-initialize the context object, which takes the .job_context
         # directory that may have just gotten 'tearedDown' - setting the unittest fresh each time.
-        import settings; importlib.reload(settings)
+        import settings
+        importlib.reload(settings)
 
     def get_flavor_file(self, unit_shortname):
         return self.test_configs.unit_shortnames[unit_shortname]
@@ -140,7 +137,7 @@ class BaseUnitTest(unittest.TestCase):
 
     def run_unit(self, unit_shortname):
         unit_to_run = self.test_configs.unit_shortnames[unit_shortname]
-        os.system('python '+ unit_to_run)
+        os.system('python ' + unit_to_run)
 
     def copy_units(self, unit_shortnames):
         for unit_shortname in unit_shortnames:
@@ -150,7 +147,8 @@ class BaseUnitTest(unittest.TestCase):
         for unit_shortname in unit_shortnames:
             self.run_unit(unit_shortname)
 
-    def set_to_predict_phase(self):
+    @staticmethod
+    def set_to_predict_phase():
         """
         Adjusts settings.py to convert it from training mode to predict mode. In practice, this operation is
         performed by Express when the predict workflow is generated.
@@ -168,7 +166,7 @@ class BaseUnitTest(unittest.TestCase):
     @staticmethod
     def load_test_train_targets_and_descriptors():
         assert (os.path.isfile('settings.py'))
-        import settings;
+        import settings
         importlib.reload(settings)
         train_target = settings.context.load("train_target")
         train_descriptors = settings.context.load("train_descriptors")
@@ -211,15 +209,12 @@ class BaseUnitTest(unittest.TestCase):
                 path_to_pickle_file = 'fixtures/{}_pkls/{}_data/{}.pkl'.format(category, data_type, pickle_file_name)
                 context.context_paths.update({pickle_file_name: path_to_pickle_file})
 
-
     def tearDown(self):
         os.system('rm -rf .job_context')
         os.system('rm -rf settings.py')
         os.system('rm -rf *.csv')
         os.system('rm -rf *.pyi')
         os.system('rm -rf *.png')
-
-
 
 
 class TestIOReadCSVRegression(BaseUnitTest):
@@ -311,7 +306,8 @@ class TestPreProcessingScalers(BaseUnitTest):
 
         # Load the (hopefully) modified data in .job_context. We need to reload settings to see whats in .job_context
         # after running the model, here
-        import settings; importlib.reload(settings)
+        import settings
+        importlib.reload(settings)
         train_target, train_descriptors, test_target, test_descriptors = self.load_test_train_targets_and_descriptors()
 
         # Check the pass conditions for each data loaded
@@ -342,7 +338,8 @@ class TestPreProcessingDroppers(BaseUnitTest):
 
         # Load the (hopefully) modified data in .job_context. We need to reload settings to see whats in .job_context
         # after running the model, here
-        import settings; importlib.reload(settings)
+        import settings
+        importlib.reload(settings)
         train_target, train_descriptors, test_target, test_descriptors = self.load_test_train_targets_and_descriptors()
 
         # Check the pass conditions for each data loaded
@@ -370,7 +367,8 @@ class TestModelFlavorsRegression(BaseUnitTest):
 
         # train
         self.run_unit(flavor)
-        import settings; importlib.reload(settings)
+        import settings
+        importlib.reload(settings)
         with settings.context as context:
             rmse = context.load('RMSE')
         assert(rmse <= 2*0.1)
@@ -398,7 +396,8 @@ class TestModelFlavorsClassification(BaseUnitTest):
 
         # train
         self.run_unit(flavor)
-        import settings; importlib.reload(settings)
+        import settings
+        importlib.reload(settings)
         with settings.context as context:
             confusion_matrix = context.load('confusion_matrix')
         accuracy = confusion_matrix.diagonal()/confusion_matrix.sum(axis=0)
