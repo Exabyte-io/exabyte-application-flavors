@@ -10,7 +10,7 @@ from fixtures.unittest_baseclass import BaseUnitTest
 
 class TestModelFlavors(BaseUnitTest):
     """
-    This class performs unit tests for the model flavors in the 'regression' category
+    This class performs unit tests for the model flavors
     """
 
     def check_pass_conditions_training(self, category):
