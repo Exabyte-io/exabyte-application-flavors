@@ -4,7 +4,7 @@ import os
 import shutil
 import unittest
 from parameterized import parameterized
-from fixtures.unittest_baseclass import BaseUnitTest
+from unittest_baseclass import BaseUnitTest
 
 
 
@@ -19,19 +19,22 @@ class TestModelFlavors(BaseUnitTest):
         with settings.context as context:
             if category == 'regression':
                 rmse = context.load('RMSE')
-                assert(rmse <= 2 * 10)
+                rmse_cutoff = 20
+                assert rmse <= rmse_cutoff
             elif category == 'classification':
                 confusion_matrix = context.load('confusion_matrix')
                 accuracy = confusion_matrix.diagonal() / confusion_matrix.sum(axis=0)
-                assert (accuracy.all() >= 0.6)
+                accuracy_cutoff = 0.6
+                assert accuracy.all() >= accuracy_cutoff
 
-    def check_pass_conditions_predicting(self):
-        assert (os.path.isfile('predictions.csv'))
+    @staticmethod
+    def check_pass_conditions_predicting():
+        assert os.path.isfile('predictions.csv')
 
-    def run_flavor_test(self, category, flavor, do_predict):
+    def run_flavor_test(self, category, flavor, is_predicting):
         self.set_pickle_fixtures_path_in_context_object(category, 'scaled_data')
         shutil.copy(os.path.join(self.asset_path, flavor), flavor)
-        if do_predict:
+        if is_predicting:
             self.set_to_predict_phase()
             os.system('python ' + flavor)
             self.check_pass_conditions_predicting()
@@ -57,8 +60,8 @@ class TestModelFlavors(BaseUnitTest):
     @parameterized.expand(params)
     def test_flavor(self, category, flavor):
         self.custom_setup(category)
-        self.run_flavor_test(category, flavor, do_predict=False)
-        self.run_flavor_test(category, flavor, do_predict=True)
+        self.run_flavor_test(category, flavor, is_predicting=False)
+        self.run_flavor_test(category, flavor, is_predicting=True)
 
 if __name__ == '__main__':
     unittest.main()
