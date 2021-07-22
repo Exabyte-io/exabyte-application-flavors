@@ -52,10 +52,8 @@ class TestContext(unittest.TestCase):
         where the object will be pickled. We assert that pickle dump pickles our object, obj,
         to the correct path by asserting it pickles obj with the mock open object
         """
-        print(self.context.context_paths)
         obj = object()
         self.context.save(obj, 'fake_obj')
-        print(self.context.context_paths)
         builtin_open_calls = [mock.call(os.path.join(self.context._context_dir_pathname, f"fake_obj.pkl"), "wb")]
         mock_builtin_open.assert_has_calls(builtin_open_calls)
         mock_pickle_calls = [mock.call(obj, mock_builtin_open())]

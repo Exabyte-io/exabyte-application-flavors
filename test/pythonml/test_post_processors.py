@@ -3,7 +3,7 @@ import os
 import shutil
 import unittest
 from parameterized import parameterized
-from fixtures.unittest_baseclass import BaseUnitTest
+from unittest_baseclass import BaseUnitTest
 
 
 class TestPostProcessingFlavors(BaseUnitTest):
@@ -16,7 +16,7 @@ class TestPostProcessingFlavors(BaseUnitTest):
         shutil.copy(os.path.join(self.asset_path, flavor), flavor)
         os.system('python ' + flavor)
         for plot in plots:
-            assert(os.path.isfile(plot))
+            assert os.path.isfile(plot)
 
     params = [
         ['regression', 'pyml:post_processing:parity_plot:matplotlib.pyi', ['my_parity_plot.png']],

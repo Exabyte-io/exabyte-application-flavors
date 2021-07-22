@@ -46,6 +46,8 @@ class BaseUnitTest(unittest.TestCase):
         shutil.copy(os.path.join(self.fixtures_path, training_file), "data_to_train_with.csv")
         shutil.copy(os.path.join(self.fixtures_path, predict_file), "data_to_predict_with.csv")
 
+        # We import and reload settings because we delete previous settings files on tearDown.
+        # When we reload settings, we make a new context object
         import settings
         importlib.reload(settings)
 

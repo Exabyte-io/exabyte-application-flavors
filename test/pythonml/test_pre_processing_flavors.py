@@ -6,7 +6,7 @@ import unittest
 from parameterized import parameterized
 import pandas
 import numpy as np
-from fixtures.unittest_baseclass import BaseUnitTest
+from unittest_baseclass import BaseUnitTest
 
 
 def load_test_train_targets_and_descriptors():
@@ -29,12 +29,12 @@ class TestPreProcessingScalerFlavors(BaseUnitTest):
     We may only check regression data here, and assume it would work for the other data categories.
     """
 
-    def min_max_pass_condition(self, data):
+    def assert_min_max_pass_condition(self, data):
         for col in data.T:
             self.assertAlmostEqual(1.0, np.amax(col))
             self.assertAlmostEqual(0.0, np.amin(col))
 
-    def standard_scaler_pass_condition(self, data):
+    def assert_standard_scaler_pass_condition(self, data):
         column_means = data.mean(axis=0)
         column_standard_deviations = data.std(axis=0)
         for column_mean in column_means:
@@ -50,9 +50,9 @@ class TestPreProcessingScalerFlavors(BaseUnitTest):
         # Check the pass conditions for each data loaded
         for data in [train_target, train_descriptors]:
             if 'min_max_scaler' in flavor:
-                self.min_max_pass_condition(data)
+                self.assert_min_max_pass_condition(data)
             elif 'standardization' in flavor:
-                self.standard_scaler_pass_condition(data)
+                self.assert_standard_scaler_pass_condition(data)
 
     params = [
         ['regression', "pyml:pre_processing:min_max_scaler:sklearn.pyi"],
@@ -64,24 +64,24 @@ class TestPreProcessingScalerFlavors(BaseUnitTest):
         self.run_scaler_flavor_test(category, flavor)
 
 
-class TestPreProcessingDroppers(BaseUnitTest):
+class TestPreProcessingRemoveData(BaseUnitTest):
     """
     This class performs unittests for the pre_processing dropper flavors.
     """
 
-    def remove_duplicates_pass_condition(self, data):
+    def assert_remove_duplicates_pass_condition(self, data):
         data = pandas.DataFrame(data)
         self.assertFalse(data.duplicated().any())
 
-    def remove_missing_pass_condition(self, data):
+    def assert_remove_missing_pass_condition(self, data):
         data = pandas.DataFrame(data)
         self.assertFalse(data.isnull().values.any())
 
-    def droppers_pass_conditions(self, data, flavor):
+    def assert_droppers_pass_conditions(self, data, flavor):
         if 'remove_missing' in flavor:
-            self.remove_missing_pass_condition(data)
+            self.assert_remove_missing_pass_condition(data)
         elif 'remove_duplicates' in flavor:
-            self.remove_duplicates_pass_condition(data)
+            self.assert_remove_duplicates_pass_condition(data)
 
     params = [
         ['regression', "pyml:pre_processing:remove_duplicates:pandas.pyi"],
@@ -108,7 +108,6 @@ class TestPreProcessingDroppers(BaseUnitTest):
         data_target = data.iloc[:, -1]
         data_descriptors = data.iloc[:, :-1]
 
-        import settings
         with settings.context as context:
             # save fake_data as a pickle in .job_context using context
             context.save(data_target, 'train_target')
@@ -126,7 +125,7 @@ class TestPreProcessingDroppers(BaseUnitTest):
 
         # Check the pass conditions for each data loaded
         for data in [train_target, train_descriptors, test_target, test_descriptors]:
-            self.droppers_pass_conditions(data, flavor)
+            self.assert_droppers_pass_conditions(data, flavor)
 
 
 if __name__ == '__main__':

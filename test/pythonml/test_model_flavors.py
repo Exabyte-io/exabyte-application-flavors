@@ -13,7 +13,7 @@ class TestModelFlavors(BaseUnitTest):
     This class performs unit tests for the model flavors
     """
 
-    def check_pass_conditions_training(self, category):
+    def assert_pass_conditions_training(self, category):
         import settings
         importlib.reload(settings)
         with settings.context as context:
@@ -28,7 +28,7 @@ class TestModelFlavors(BaseUnitTest):
                 assert accuracy.all() >= accuracy_cutoff
 
     @staticmethod
-    def check_pass_conditions_predicting():
+    def assert_pass_conditions_predicting():
         assert os.path.isfile('predictions.csv')
 
     def run_flavor_test(self, category, flavor, is_predicting):
@@ -37,10 +37,10 @@ class TestModelFlavors(BaseUnitTest):
         if is_predicting:
             self.set_to_predict_phase()
             os.system('python ' + flavor)
-            self.check_pass_conditions_predicting()
+            self.assert_pass_conditions_predicting()
         else:
             os.system('python ' + flavor)
-            self.check_pass_conditions_training(category)
+            self.assert_pass_conditions_training(category)
 
     params = [
         ['regression', 'pyml:model:adaboosted_trees_regression:sklearn.pyi'],
