@@ -15,7 +15,7 @@ class BaseUnitTest(unittest.TestCase):
 
     asset_path = '../../assets/python/ml'
     fixtures_path = 'fixtures'
-    settings_filename = 'fixtures/settings.py'
+    settings_filename = 'settings.py'
 
     def custom_setup(self, category):
         """
@@ -26,7 +26,8 @@ class BaseUnitTest(unittest.TestCase):
                 Ex) 'regression', 'classification', 'clustering'
         """
 
-        with open(os.path.join(self.fixtures_path, self.settings_filename), "r") as inp, \
+        path_to_settings = os.path.join(self.fixtures_path, self.settings_filename)
+        with open(path_to_settings, "r") as inp, \
                 open(self.settings_filename, "w") as outp:
             for line in inp:
                 # Users can select the type of problem category in the settings.py file. Normally, it is set to
@@ -39,7 +40,7 @@ class BaseUnitTest(unittest.TestCase):
             training_file = '{}_training_data.csv'.format(category)
             predict_file = '{}_predict_data.csv'.format(category)
         elif category == 'clustering':
-            training_file = predict_file = 'fixtures/clustering_blobs.csv'
+            training_file = predict_file = 'clustering_blobs.csv'
         else:
             training_file = predict_file = -1
         shutil.copy(os.path.join(self.fixtures_path, training_file), "data_to_train_with.csv")
@@ -55,13 +56,13 @@ class BaseUnitTest(unittest.TestCase):
         performed by Express when the predict workflow is generated.
         """
 
-        with open("fixtures/settings.py", "r") as inp:
+        with open("settings.py", "r") as inp:
             lines = inp.readlines()
             # is_workflow_running_to_predct controls whether the workflow is running in "Train" or "Predict" mode,
             # so we change it to "True" to set the workflow to predict mode.
             sub_partial = functools.partial(re.sub, "(?<=is_workflow_running_to_predict\s=\s)False", "True")
             edited_lines = "".join(map(sub_partial, lines))
-        with open("fixtures/settings.py", "w") as outp:
+        with open("settings.py", "w") as outp:
             for line in edited_lines:
                 outp.write(line)
 
@@ -107,7 +108,7 @@ class BaseUnitTest(unittest.TestCase):
         """
 
         # import settings and reload it - this makes the context paths dicitonary in the context object
-        assert (os.path.isfile('fixtures/settings.py'))
+        assert os.path.isfile('settings.py')
         import settings
         importlib.reload(settings)
         with settings.context as context:
