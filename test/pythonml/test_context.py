@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-
 import os
 import re
 import unittest
+import subprocess
 from unittest import mock
 
 
@@ -22,9 +22,8 @@ class TestContext(unittest.TestCase):
         self.context = settings.Context()
 
     def tearDown(self):
-        os.system('rm -rf .job_context')
-        os.system('rm settings.py')
-
+        for data in ['.job_context', 'settings.py']:
+            subprocess.call('rm -rf '+data, shell=True)
 
     @mock.patch('builtins.open', new_callable=mock.mock_open)
     @mock.patch('pickle.dump')
@@ -59,7 +58,6 @@ class TestContext(unittest.TestCase):
         mock_pickle_calls = [mock.call(obj, mock_builtin_open())]
         mock_pickle.assert_has_calls(mock_pickle_calls)
         self.context.context_paths.pop('fake_obj', None)
-
 
     @mock.patch('builtins.open', new_callable=mock.mock_open)
     @mock.patch('pickle.load')

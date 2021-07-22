@@ -2,6 +2,7 @@
 import os
 import shutil
 import unittest
+import subprocess
 from parameterized import parameterized
 from unittest_baseclass import BaseUnitTest
 
@@ -12,9 +13,19 @@ class TestPostProcessingFlavors(BaseUnitTest):
     """
 
     def run_flavor_test(self, category, flavor, plots):
+        """
+        This function runs each flavor test whether in training or predict mode.
+
+        Args:
+            category (str): the problem category
+                Ex) 'regression', 'classification', 'clustering'
+            flavor (str): name of the python model flavor file in assets
+            plots (str): name of the plot that is made by the flavor, and it is for
+                this plot we check
+        """
         self.set_pickle_fixtures_path_in_context_object(category, 'model_data')
         shutil.copy(os.path.join(self.asset_path, flavor), flavor)
-        os.system('python ' + flavor)
+        subprocess.call(['python', flavor])
         for plot in plots:
             assert os.path.isfile(plot)
 
@@ -25,6 +36,7 @@ class TestPostProcessingFlavors(BaseUnitTest):
                                                                                'train_clusters.png',
                                                                                'test_clusters.png']],
     ]
+
     @parameterized.expand(params)
     def test_post_processing_flavors(self, category, flavor, plots):
         self.custom_setup(category)

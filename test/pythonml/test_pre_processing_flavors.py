@@ -3,6 +3,7 @@ import importlib
 import os
 import shutil
 import unittest
+import subprocess
 from parameterized import parameterized
 import pandas
 import numpy as np
@@ -13,7 +14,7 @@ def load_test_train_targets_and_descriptors():
     """
     Loads a set of commonly used pickle files from an updated location in the context object
     """
-    # import and roload settings to update the context object's path dir
+    # import and reload settings to update the context object's path dir
     import settings
     importlib.reload(settings)
     train_target = settings.context.load("train_target")
@@ -30,11 +31,25 @@ class TestPreProcessingScalerFlavors(BaseUnitTest):
     """
 
     def assert_min_max_pass_condition(self, data):
+        """
+        This function checks whether or not the pass condition for the min max scaler
+        has been met.
+        Args:
+            data (np.array): A NxN numpy array that contains the data to be evaluated by the
+                pass condition
+        """
         for col in data.T:
             self.assertAlmostEqual(1.0, np.amax(col))
             self.assertAlmostEqual(0.0, np.amin(col))
 
     def assert_standard_scaler_pass_condition(self, data):
+        """
+        This function checks whether or not the pass condition for the standard scaler
+        has been met.
+        Args:
+            data (np.array): A NxN numpy array that contains the data to be evaluated by the
+                pass condition
+        """
         column_means = data.mean(axis=0)
         column_standard_deviations = data.std(axis=0)
         for column_mean in column_means:
@@ -43,9 +58,16 @@ class TestPreProcessingScalerFlavors(BaseUnitTest):
             self.assertAlmostEqual(1.0, column_standard_deviation)
 
     def run_scaler_flavor_test(self, category, flavor):
+        """
+        This function runs the test for the scaler flavors
+        Args:
+            category (str): the problem category
+                Ex) 'min_max_scaler', 'standardization'
+            flavor (str): name of the python model flavor file in assets
+        """
         self.set_pickle_fixtures_path_in_context_object(category, 'unscaled_data')
         shutil.copy(os.path.join(self.asset_path, flavor), flavor)
-        os.system('python ' + flavor)
+        subprocess.call(['python', flavor])
         train_target, train_descriptors, test_target, test_descriptors = load_test_train_targets_and_descriptors()
         # Check the pass conditions for each data loaded
         for data in [train_target, train_descriptors]:
@@ -58,6 +80,7 @@ class TestPreProcessingScalerFlavors(BaseUnitTest):
         ['regression', "pyml:pre_processing:min_max_scaler:sklearn.pyi"],
         ['regression', "pyml:pre_processing:standardization:sklearn.pyi"],
     ]
+
     @parameterized.expand(params)
     def test_flavor(self, category, flavor):
         self.custom_setup(category)
@@ -70,14 +93,35 @@ class TestPreProcessingRemoveData(BaseUnitTest):
     """
 
     def assert_remove_duplicates_pass_condition(self, data):
+        """
+        This function checks whether or not the pass condition for the drop_duplicates
+        method in pandas has been met
+        Args:
+            data (np.array): A NxN numpy array that contains the data to be evaluated by the
+                pass condition
+        """
         data = pandas.DataFrame(data)
         self.assertFalse(data.duplicated().any())
 
     def assert_remove_missing_pass_condition(self, data):
+        """
+        This function checks whether or not the pass condition for the dropna
+        method in pandas has been met
+        Args:
+            data (np.array): A NxN numpy array that contains the data to be evaluated by the
+                pass condition
+        """
         data = pandas.DataFrame(data)
         self.assertFalse(data.isnull().values.any())
 
-    def assert_droppers_pass_conditions(self, data, flavor):
+    def assert_remove_data_pass_conditions(self, data, flavor):
+        """
+        A wrapper function to assert a certain pass condition based on the flavor
+        Args:
+            data (np.array): A NxN numpy array that contains the data to be evaluated by the
+                pass condition
+            flavor (str): name of the python model flavor file in assets
+        """
         if 'remove_missing' in flavor:
             self.assert_remove_missing_pass_condition(data)
         elif 'remove_duplicates' in flavor:
@@ -87,6 +131,7 @@ class TestPreProcessingRemoveData(BaseUnitTest):
         ['regression', "pyml:pre_processing:remove_duplicates:pandas.pyi"],
         ['regression', "pyml:pre_processing:remove_missing:pandas.pyi"]
     ]
+
     @parameterized.expand(params)
     def test_flavor(self, category, flavor):
 
@@ -117,7 +162,7 @@ class TestPreProcessingRemoveData(BaseUnitTest):
 
         # copy flavor file then run it for training
         shutil.copy(os.path.join(self.asset_path, flavor), flavor)
-        os.system('python ' + flavor)
+        subprocess.call(['python', flavor])
 
         # Load the (hopefully) modified data in .job_context. We need to reload settings to see whats in .job_context
         # after running the model, here
@@ -125,7 +170,7 @@ class TestPreProcessingRemoveData(BaseUnitTest):
 
         # Check the pass conditions for each data loaded
         for data in [train_target, train_descriptors, test_target, test_descriptors]:
-            self.assert_droppers_pass_conditions(data, flavor)
+            self.assert_remove_data_pass_conditions(data, flavor)
 
 
 if __name__ == '__main__':

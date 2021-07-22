@@ -5,6 +5,7 @@ import re
 import shutil
 import unittest
 import functools
+import subprocess
 
 
 class BaseUnitTest(unittest.TestCase):
@@ -120,8 +121,5 @@ class BaseUnitTest(unittest.TestCase):
                 context.context_paths.update({pickle_file_name: path_to_pickle_file})
 
     def tearDown(self):
-        os.system('rm -rf .job*')
-        os.system('rm settings.py')
-        os.system('rm *.pyi')
-        os.system('rm *.png')
-        os.system('rm *.csv')
+        for data in ['.job_context', 'settings.py', '*.png', '*.pyi', '*.csv']:
+            subprocess.call('rm -rf '+data, shell=True)
