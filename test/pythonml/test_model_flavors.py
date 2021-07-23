@@ -15,6 +15,14 @@ class TestModelFlavors(BaseUnitTest):
 
     @staticmethod
     def assert_pass_conditions_training(category):
+        """
+        This function asserts pass condition for the model flavors during the training phase
+
+        Args:
+            category (str): the problem category
+                Ex) 'regression', 'classification', etc
+        """
+        # import settings and reload it - this makes the context paths dicitonary in the context object
         import settings
         importlib.reload(settings)
         with settings.context as context:
