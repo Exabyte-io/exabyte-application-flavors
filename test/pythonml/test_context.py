@@ -79,7 +79,7 @@ class TestContext(unittest.TestCase):
         mock_builtin_open.assert_has_calls(builtin_open_calls)
         mock_pickle_calls = [mock.call(mock_builtin_open())]
         mock_pickle.assert_has_calls(mock_pickle_calls)
-        assert(mock_pickle() == obj)
+        assert mock_pickle() == obj
 
 
 if __name__ == '__main__':
