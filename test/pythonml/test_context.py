@@ -13,9 +13,9 @@ class TestContext(unittest.TestCase):
 
     def setUp(self):
         with open('fixtures/settings.py', 'r') as file:
-            unmodified_settings_file = file.readlines()
+            settings_template = file.readlines()
         with open('settings.py', 'w') as file:
-            for line in unmodified_settings_file:
+            for line in settings_template:
                 line = re.sub("PROBLEM_CATEGORY_HERE", 'regression', line)
                 file.write(line)
         import settings
