@@ -121,5 +121,15 @@ class BaseUnitTest(unittest.TestCase):
                 context.context_paths.update({pickle_file_name: path_to_pickle_file})
 
     def tearDown(self):
-        for data in ['.job_context', 'settings.py', '*.png', '*.pyi', '*.csv']:
-            subprocess.call('rm -rf '+data, shell=True)
+
+        files_to_delete = ['.job_context', 'settings.py']
+        files_in_dir = os.listdir()
+
+        file_extensions_to_delete = [".csv", ".pyi", ".png"]
+        for file_extension_to_delete in file_extensions_to_delete:
+            files = [file for file in files_in_dir if file.endswith(file_extension_to_delete)]
+            for file in files:
+                files_to_delete.append(file)
+
+        for file in files_to_delete:
+            subprocess.call(['rm', '-rf', file])
