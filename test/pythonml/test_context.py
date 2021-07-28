@@ -23,7 +23,7 @@ class TestContext(unittest.TestCase):
 
     def tearDown(self):
         for data in ['.job_context', 'settings.py']:
-            subprocess.call('rm -rf '+data, shell=True)
+            subprocess.call(['rm', '-rf', data])
 
     @mock.patch('builtins.open', new_callable=mock.mock_open)
     @mock.patch('pickle.dump')
