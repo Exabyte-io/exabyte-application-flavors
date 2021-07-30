@@ -240,6 +240,17 @@ export default () => {
         },
 
         /*
+         *  AVERAGE.X
+         */
+        {
+            "content": readAssetFile(applicationName, "average.j2.in"),
+            "name": "average.in",
+            "contextProviders": [],
+            "applicationName": applicationName,
+            "executableName": "average.x"
+        },
+
+        /*
          *  NEB.X
          */
         {

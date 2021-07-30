@@ -371,6 +371,25 @@ export default {
             }
         }
     },
+    "average.x": {
+        "monitors": [
+            monitors.standard_output,
+        ],
+        "results": [],
+        "flavors": {
+            "average": {
+                "input": [
+                    {
+                        "name": "average.in",
+                    }
+                ],
+                "results": [],
+                "monitors": [
+                    monitors.standard_output
+                ],
+            }
+        }
+    },
     "q2r.x": {
         "monitors": [
             monitors.standard_output,
