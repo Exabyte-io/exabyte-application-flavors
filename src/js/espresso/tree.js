@@ -368,19 +368,11 @@ export default {
                 "monitors": [
                     monitors.standard_output
                 ],
-            }
-        }
-    },
-    "average.x": {
-        "monitors": [
-            monitors.standard_output,
-        ],
-        "results": [],
-        "flavors": {
-            "average": {
+            },
+            "pp_electrostatic_potential": {
                 "input": [
                     {
-                        "name": "average.in",
+                        "name": "pp_electrostatic_potential.in",
                     }
                 ],
                 "results": [],
@@ -533,5 +525,23 @@ export default {
             }
         },
     },
-
+    "average.x": {
+        "monitors": [
+            monitors.standard_output,
+        ],
+        "results": [],
+        "flavors": {
+            "average": {
+                "input": [
+                    {
+                        "name": "average.in",
+                    }
+                ],
+                "results": [],
+                "monitors": [
+                    monitors.standard_output
+                ],
+            }
+        }
+    },
 }

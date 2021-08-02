@@ -238,16 +238,12 @@ export default () => {
             "applicationName": applicationName,
             "executableName": "pp.x"
         },
-
-        /*
-         *  AVERAGE.X
-         */
         {
-            "content": readAssetFile(applicationName, "average.j2.in"),
-            "name": "average.in",
+            "content": readAssetFile(applicationName, "pp_electrostatic_potential.j2.in"),
+            "name": "pp_electrostatic_potential.in",
             "contextProviders": [],
             "applicationName": applicationName,
-            "executableName": "average.x"
+            "executableName": "pp.x"
         },
 
         /*
@@ -291,6 +287,17 @@ export default () => {
             "applicationName": applicationName,
             "executableName": "gw.x"
         },
+
+        /*
+         *  AVERAGE.X
+         */
+        {
+            "content": readAssetFile(applicationName, "average.j2.in"),
+            "name": "average.in",
+            "contextProviders": [],
+            "applicationName": applicationName,
+            "executableName": "average.x"
+        }
 
     ];
 
