@@ -37,7 +37,7 @@ with settings.context as context:
         model = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=(100,),
                                                     activation="relu",
                                                     solver="adam",
-                                                    max_iter=200,
+                                                    max_iter=300,
                                                     early_stopping=False,
                                                     validation_fraction=0.1)
 
