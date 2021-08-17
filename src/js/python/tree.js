@@ -5,7 +5,7 @@ export default {
         "monitors": [
             monitors.standard_output
         ],
-        "results": [],
+        "results": ['file_content', 'workflow:pyml_predict'],
         "flavors": {
             "hello_world": {
                 "input": [
@@ -270,6 +270,9 @@ export default {
                         "templateName": "post_processing_parity_plot_matplotlib.py"
                     }
                 ],
+                "results": [
+                    "file_content"
+                ],
                 "monitors": [monitors.standard_output],
             },
             "pyml:post_processing:pca_2d_clusters:matplotlib": {
@@ -279,6 +282,9 @@ export default {
                         "templateName": "post_processing_pca_2d_clusters_matplotlib.py"
                     }
                 ],
+                "results": [
+                    "file_content"
+                ],
                 "monitors": [monitors.standard_output],
             },
             "pyml:post_processing:roc_curve:sklearn": {
@@ -287,6 +293,9 @@ export default {
                         "name": "post_processing_roc_curve_sklearn.py",
                         "templateName": "post_processing_roc_curve_sklearn.py"
                     }
+                ],
+                "results": [
+                    "file_content"
                 ],
                 "monitors": [monitors.standard_output],
             },

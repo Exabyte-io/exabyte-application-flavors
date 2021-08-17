@@ -1,0 +1,6 @@
+&INPUTPP
+    outdir = {% raw %}'{{ JOB_WORK_DIR }}/outdir'{% endraw %}
+    prefix = '__prefix__'
+    filplot = 'pp.dat'
+    plot_num = 11
+/
