@@ -5,10 +5,10 @@ import jinja2.ext
 import yaml
 import black
 
-MAX_COLUMNS = 120
+MAX_CHARACTERS = 120
 
 
-def comment_box(value: str, doc_boilerplate: str = "", maxlength: int = int(MAX_COLUMNS // 2)) -> str:
+def comment_box(value: str, doc_boilerplate: str = "", maxlength: int = int(MAX_CHARACTERS // 2)) -> str:
     """
     Creates a comment box around a bunch of lines, up to a max length.
 
@@ -145,7 +145,7 @@ if __name__ == "__main__":
                                  mode=black.Mode(target_versions={black.TargetVersion.PY36,
                                                                   black.TargetVersion.PY37,
                                                                   black.TargetVersion.PY38},
-                                                 line_length=MAX_COLUMNS,
+                                                 line_length=MAX_CHARACTERS,
                                                  string_normalization=False,
                                                  is_pyi=False)
                                  )
