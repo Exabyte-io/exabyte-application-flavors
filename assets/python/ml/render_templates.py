@@ -8,13 +8,13 @@ import black
 MAX_CHARACTERS = 120
 
 
-def comment_box(value: str, doc_boilerplate: str = "", maxlength: int = int(MAX_CHARACTERS // 2)) -> str:
+def comment_box(value: str, documentation_box_common_text: str = "", maxlength: int = int(MAX_CHARACTERS // 2)) -> str:
     """
     Creates a comment box around a bunch of lines, up to a max length.
 
     Args:
         value: The actual value to be templated
-        doc_boilerplate: Boilerplate that goes at the bottom of every comment box
+        documentation_box_common_text: Boilerplate that goes at the bottom of every comment box
         maxlength: Maximum column width for the text box
 
     Returns:
@@ -30,9 +30,9 @@ def comment_box(value: str, doc_boilerplate: str = "", maxlength: int = int(MAX_
     content_lines = (f"# {line.ljust(maxlength)} #" for line in wrapped_content)
 
     # Format the boilerplate
-    if doc_boilerplate:
+    if documentation_box_common_text:
         # Convert n-spaced to single space strings
-        single_spaced_boilerplate = " ".join(doc_boilerplate.split())
+        single_spaced_boilerplate = " ".join(documentation_box_common_text.split())
         wrapped_boilerplate = textwrap.wrap(single_spaced_boilerplate, width=maxlength)
         boilerplate_lines = (f"# {line.ljust(maxlength)} #" for line in wrapped_boilerplate)
 
@@ -45,7 +45,7 @@ def comment_box(value: str, doc_boilerplate: str = "", maxlength: int = int(MAX_
     result += comment_bound + "\n"  # Top comment line
     result += "\n".join(content_lines) + "\n"
     result += blank_line + "\n"
-    if doc_boilerplate:
+    if documentation_box_common_text:
         result += "\n".join(boilerplate_lines) + "\n"
     result += comment_bound + "\n"  # Bottom comment line
     return result

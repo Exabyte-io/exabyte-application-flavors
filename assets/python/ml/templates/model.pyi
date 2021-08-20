@@ -6,7 +6,7 @@
 {%- endif -%}
 
 {#- ========== Comment Block ========== -#}
-{{ description | comment_box(doc_boilerplate=doc_boilerplate[category]) | safe }}
+{{ description | comment_box(documentation_box_common_text=documentation_box_common_text[category]) | safe }}
 
 {# ========== Imports Block ========== #}
 {%- for item in  imports -%}
