@@ -50,8 +50,8 @@ The possible settings are enumerated below.
 #### Project-Level Settings
 - `documentation_box_common_text` - contains boilerplate that goes into the documentation box for different models.
     Current options include:
-  - `regression` - The boilerplate documentation text used for all regression models
-  - `classification` - The boilerplate documentation text used for all classification models
+  - `regression` - The boilerplate documentation text used for all regression models.
+  - `classification` - The boilerplate documentation text used for all classification models.
   - `clustering` - The boilerplate documentation text used for all clustering models.
 
 ### model.yaml
