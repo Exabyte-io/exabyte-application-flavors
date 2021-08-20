@@ -63,6 +63,7 @@ Each model is stored as a separate YAML document within this file (separated by 
 Several common settings are found in the case of all models, enumerated below:
 
 #### Model-Specific Settings
+
 - `name` - A string containing the name of the model
 - `category` - Problem category the model addresses. Can be `regression`, `classification`, or `clustering`
 - `provider` - Name of the Python package that provides this functionality (such as pandas or sklearn)
@@ -81,6 +82,7 @@ In the case of ensemble models (or any other approach which takes in a model), a
 specified. For example, sklearn implements a BaggingRegressor that can take in other estimators as its base estimator.
 We have set a Decision Tree Regressor as its base estimator, but the user can change this if needed. In the case of
 ensemble models that require the definition of a base estimator, the following additional options can be specified:
+
 - `base_estimator_class` - Similar to `model_class` above, this is an import path from the base package providing
                             the estimator to its implementation. For example, Sklearn implements its Decision Tree
                             Regressor in `sklearn.tree.DecisionTreeRegressor`.
