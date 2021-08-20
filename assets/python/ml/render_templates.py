@@ -1,3 +1,13 @@
+'''
+This file automatically renders out any jinja templates that have been created to store a PythonML application flavor.
+
+The current version is first go at the problem, to get the project off the ground. It focuses exclusively on the
+generation of application flavors in the category of "models" (things such as adaboosted trees, LASSO, etc).
+
+This is the main script that carries out the rendering of templates, which produces various `.pyi` files. It begins
+by reading the `model.yaml` file, and for every model outlined in that file, it will generate one of the `.pyi` files
+based upon the configuration specified in this yaml file.
+'''
 from typing import Any
 import textwrap
 
@@ -135,6 +145,7 @@ if __name__ == "__main__":
     with open(f"{template_type}.yaml", "r") as inp:
         models = tuple(yaml.safe_load_all(inp))
 
+    # Perform the rendering
     for model in models:
         filename = f"pyml:{template_type}:{model['name']}_{model['category']}:{model['provider']}.pyi"
         print(filename)
