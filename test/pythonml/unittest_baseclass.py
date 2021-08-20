@@ -96,7 +96,7 @@ class BaseUnitTest(unittest.TestCase):
             names = ['train_descriptors', 'test_descriptors', 'train_target', 'test_target', 'descriptors',
                      'target_scaler', 'descriptor_scaler']
         else:
-            names = ['train_descriptors', 'test_descriptors', 'train_target', 'test_target', 'descriptors']
+            names = ['train_descriptors', 'test_descriptors', 'train_target', 'test_target', 'descriptors', 'label_encoder']
         return names
 
     def set_pickle_fixtures_path_in_context_object(self, category, data_type):
