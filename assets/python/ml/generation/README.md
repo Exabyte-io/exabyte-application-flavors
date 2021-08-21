@@ -42,12 +42,12 @@ This file is the main driver of the templating approach, reading in the various 
 calculations necessary for the rendering to occur.
 
 ### config.yaml
-This file contains project-level settings, that affect all models. Currently, it is only used for the boilerplate text
-at the top of every flavor comment box, but it will likely grow in the future to include other global settings.
+This file contains project-level settings, that affect all models.
 
 The possible settings are enumerated below.
 
 #### Project-Level Settings
+- `pyml_render_output_directory` - Path where the asset files will be output into when rendered.
 - `documentation_box_common_text` - contains boilerplate that goes into the documentation box for different models.
     Current options include:
   - `regression` - The boilerplate documentation text used for all regression models.

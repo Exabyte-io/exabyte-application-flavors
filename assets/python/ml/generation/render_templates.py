@@ -8,6 +8,7 @@ This is the main script that carries out the rendering of templates, which produ
 by reading the `model.yaml` file, and for every model outlined in that file, it will generate one of the `.pyi` files
 based upon the configuration specified in this yaml file.
 """
+import os
 from typing import Any
 import textwrap
 
@@ -148,7 +149,8 @@ if __name__ == "__main__":
 
     # Perform the rendering
     for model in models:
-        filename = f"pyml:{template_type}:{model['name']}_{model['category']}:{model['provider']}.pyi"
+        filename = os.path.join(config['pyml_render_output_directory'],
+                                f"pyml:{template_type}:{model['name']}_{model['category']}:{model['provider']}.pyi")
         print(filename)
         with open(filename, "w") as outp:
             outp.write(
