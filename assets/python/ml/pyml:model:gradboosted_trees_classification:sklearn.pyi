@@ -88,5 +88,9 @@ with settings.context as context:
         # Make some predictions
         predictions = model.predict(descriptors)
 
+        # Transform predictions back to their original labels
+        label_encoder: sklearn.preprocessing.LabelEncoder = context.load("label_encoder")
+        predictions = label_encoder.inverse_transform(predictions)
+
         # Save the predictions to file
         np.savetxt("predictions.csv", predictions, header="prediction", comments="", fmt="%s")

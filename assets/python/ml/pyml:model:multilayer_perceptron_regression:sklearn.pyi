@@ -1,6 +1,12 @@
 # ------------------------------------------------------------ #
-# Workflow for a random forest regression model with Scikit-   #
-# Learn. Parameters are derived from Scikit-Learn's defaults.  #
+# Workflow unit to train a simple feedforward neural network   #
+# model on a regression problem using scikit-learn. In this    #
+# template, we use the default values for hidden_layer_sizes,  #
+# activation, solver, and learning rate. Other parameters are  #
+# available (consult the sklearn docs), but in this case, we   #
+# only include those relevant to the Adam optimizer. Sklearn   #
+# Docs: Sklearn docs:http://scikit-learn.org/stable/modules/ge #
+# nerated/sklearn.neural_network.MLPRegressor.html             #
 #                                                              #
 # When then workflow is in Training mode, the model is trained #
 # and then it is saved, along with the RMSE and some           #
@@ -13,7 +19,7 @@
 # ------------------------------------------------------------ #
 
 
-import sklearn.ensemble
+import sklearn.neural_network
 import sklearn.metrics
 import numpy as np
 import settings
@@ -32,26 +38,18 @@ with settings.context as context:
         test_target = test_target.flatten()
 
         # Initialize the Model
-        model = sklearn.ensemble.RandomForestRegressor(
-            n_estimators=100,
-            criterion="mse",
-            max_depth=None,
-            min_samples_split=2,
-            min_samples_leaf=1,
-            min_weight_fraction_leaf=0.0,
-            max_features="auto",
-            max_leaf_nodes=None,
-            min_impurity_decrease=0.0,
-            bootstrap=True,
-            max_samples=None,
-            oob_score=False,
-            ccp_alpha=0.0,
-            verbose=0,
+        model = sklearn.neural_network.MLPRegressor(
+            hidden_layer_sizes=(100,),
+            activation="relu",
+            solver="adam",
+            max_iter=300,
+            early_stopping=False,
+            validation_fraction=0.1,
         )
 
         # Train the model and save
         model.fit(train_descriptors, train_target)
-        context.save(model, "random_forest")
+        context.save(model, "multilayer_perceptron")
         train_predictions = model.predict(train_descriptors)
         test_predictions = model.predict(test_descriptors)
 
@@ -82,7 +80,7 @@ with settings.context as context:
         descriptors = context.load("descriptors")
 
         # Restore model
-        model = context.load("random_forest")
+        model = context.load("multilayer_perceptron")
 
         # Make some predictions
         predictions = model.predict(descriptors)

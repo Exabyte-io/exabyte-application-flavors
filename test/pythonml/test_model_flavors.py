@@ -68,7 +68,7 @@ class TestModelFlavors(BaseUnitTest):
         ['regression', 'pyml:model:extreme_gradboosted_trees_regression:sklearn.pyi'],
         ['regression', 'pyml:model:kernel_ridge_regression:sklearn.pyi'],
         ['regression', 'pyml:model:lasso_regression:sklearn.pyi'],
-        ['regression', 'pyml:model:multilayer_perceptron:sklearn.pyi'],
+        ['regression', 'pyml:model:multilayer_perceptron_regression:sklearn.pyi'],
         ['regression', 'pyml:model:random_forest_regression:sklearn.pyi'],
         ['regression', 'pyml:model:ridge_regression:sklearn.pyi'],
         ['classification', "pyml:model:random_forest_classification:sklearn.pyi"],
