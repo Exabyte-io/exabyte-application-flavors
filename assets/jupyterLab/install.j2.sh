@@ -12,20 +12,10 @@
 export PYTHONDONTWRITEBYTECODE=1
 
 # Create and activate a virtual environment, to isolate the installed packages.
-envdir=$(pwd)
-python -m virtualenv -q .env
-source .env/bin/activate
-
-# Clean up virtual environment directory on exit to avoid occupying disk space.
-# The information about the packages installed is saved in the corresponding file.
-function cleanup () {
-    cd $envdir
-    python -m pip freeze > installed_packages_list.txt
-    deactivate
-    rm -rf .env
-    exit
-}
-trap cleanup INT TERM EXIT
+scratchdir="/scratch/$USER/$PBS_JOBID"
+envdir="$scratchdir/.env"
+python -m virtualenv -q "$envdir"
+source "$envdir/bin/activate"
 
 # Install Jupyter Lab
 python -m pip install -q jupyterlab=={{ application.version }}
