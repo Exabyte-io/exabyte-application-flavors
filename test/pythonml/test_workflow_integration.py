@@ -6,6 +6,8 @@ import functools
 import yaml
 from parameterized import parameterized, param
 from typing import Dict, List, Any, Tuple, Callable
+from unittest_baseclass import BaseUnitTest
+
 
 with open("integration_configuration.yaml", "r") as inp:
     configuration = yaml.safe_load(inp)
@@ -137,6 +139,9 @@ class BasePythonMLTest(unittest.TestCase):
             else:
                 shutil.copy(source, destination)
 
+            if to_copy == self.plot_unit:
+                BaseUnitTest.template_plot_names(unit_shortnames[to_copy], self.plot_names)
+
         for file in to_run:
             pipes = subprocess.Popen((sys.executable, file), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             stdout, stderr = pipes.communicate()
@@ -149,6 +154,7 @@ class BasePythonMLTest(unittest.TestCase):
             stderr_decoded = stderr.decode().replace(matplotlib_err_string, "").strip()
 
             self.assertFalse(stderr_decoded, f"\nSTDERR:\n{stderr_decoded}")
+
 
     def set_to_predict_phase(self):
         """
@@ -166,6 +172,7 @@ class BasePythonMLTest(unittest.TestCase):
             for line in edited_lines:
                 outp.write(line)
 
+
     def run_tests(self, units_in_test: List[str]):
         """
         Does the actual running of the tests. Begins by running every unit in the training workflow, then converts
@@ -178,7 +185,8 @@ class BasePythonMLTest(unittest.TestCase):
         # Training Phase
         self.simulate_workflow(units_in_test)
         if self.plot_unit in units_in_test:
-            self.assertTrue(os.path.exists(self.plot_name))
+            for plot_name in self.plot_names:
+                self.assertTrue(os.path.exists(plot_name))
 
         # Reconfigure for predictions
         self.set_to_predict_phase()
@@ -208,7 +216,7 @@ class TestRegression(BasePythonMLTest):
     end in failure.
     """
     category = "regression"
-    plot_name = "my_parity_plot.png"
+    plot_names = ["my_parity_plot.png"]
     plot_unit = "POS_plotParity"
 
     @parameterized.expand(tests_regression, testcase_func_name=custom_name_func(names_regression),
@@ -245,7 +253,7 @@ class TestClassification(BasePythonMLTest):
     end in failure.
     """
     category = "classification"
-    plot_name = "my_roc_curve.png"
+    plot_names = ["my_roc_curve.png"]
     plot_unit = "POS_plotROC"
 
     @parameterized.expand(tests_classification, testcase_func_name=custom_name_func(names_classification),
@@ -264,8 +272,8 @@ class TestClustering(BasePythonMLTest):
     end in failure.
     """
     category = "clustering"
-    plot_name = "train_clusters.png"
-    plot_unit = "POS_plotClust"
+    plot_names = ['train_test_split.png', 'train_clusters.png', 'test_clusters.png']
+    plot_unit = "POS_plotClusters"
 
     @parameterized.expand(tests_clustering, testcase_func_name=custom_name_func(names_clustering),
                           skip_on_empty=True)
