@@ -49,7 +49,7 @@ with settings.context as context:
         plt.xlabel("False Positive Rate")
         plt.ylabel("True Positive Rate")
         plt.tight_layout()
-        plt.savefig("my_roc_curve.png", dpi=600)
+        plt.savefig("{{ results[0].basename }}", dpi=600)
 
     # Predict
     else:

@@ -58,7 +58,7 @@ with settings.context as context:
 
         # Save the figure
         plt.tight_layout()
-        plt.savefig("my_parity_plot.png", dpi=600)
+        plt.savefig("{{ results[0].basename }}", dpi=600)
 
     # Predict
     else:

@@ -69,7 +69,7 @@ with settings.context as context:
         xmin, xmax, ymin, ymax = plt.axis()
         plt.legend()
         plt.tight_layout()
-        plt.savefig("train_test_split.png", dpi=600)
+        plt.savefig("{{ results[0].basename }}", dpi=600)
         plt.close()
 
         def clusters_legend(cluster_colors):
@@ -97,7 +97,7 @@ with settings.context as context:
         plt.scatter(train_descriptors[:, 0], train_descriptors[:, 1], c=train_colors)
         clusters_legend(colors)
         plt.tight_layout()
-        plt.savefig("train_clusters.png", dpi=600)
+        plt.savefig("{{ results[1].basename }}", dpi=600)
         plt.close()
 
         # Testing Set Clusters
@@ -109,7 +109,7 @@ with settings.context as context:
         plt.scatter(test_descriptors[:, 0], test_descriptors[:, 1], c=test_colors)
         clusters_legend(colors)
         plt.tight_layout()
-        plt.savefig("test_clusters.png", dpi=600)
+        plt.savefig("{{ results[2].basename }}", dpi=600)
         plt.close()
 
 
