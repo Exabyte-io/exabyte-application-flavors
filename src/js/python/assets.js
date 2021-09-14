@@ -148,7 +148,7 @@ export default () => {
             "executableName": executableName
         },
         {
-            "content": readAssetFile("python/ml", "pyml:model:multilayer_perceptron:sklearn.pyi"),
+            "content": readAssetFile("python/ml", "pyml:model:multilayer_perceptron_regression:sklearn.pyi"),
             "name": "model_mlp_sklearn.py",
             "contextProviders": [],
             "applicationName": applicationName,

@@ -34,9 +34,12 @@ with settings.context as context:
         else:
             target = data.pop(settings.target_column_name).to_numpy()
 
-        # Handle the case where we are classifying
+        # Handle the case where we are classifying. In this case, we must convert any labels provided to be categorical.
+        # Specifically, labels are encoded with values between 0 and (N_Classes - 1)
         if settings.is_classification:
-            target = target.astype(int)
+            label_encoder = sklearn.preprocessing.LabelEncoder()
+            target = label_encoder.fit_transform(target)
+            context.save(label_encoder, "label_encoder")
 
         target = target.reshape(-1, 1)  # Reshape array from a row vector into a column vector
 
