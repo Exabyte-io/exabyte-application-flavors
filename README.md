@@ -20,14 +20,20 @@ With a working NPM environment, do:
  npm test
 ```
 
-To build the library's source such that you can import it from another project during development, do:
+By this point, the 'lib' package inside application-flavors should be installed. It should be installed because we have
+implemented a postinstall hook in the package.json file that is triggered by the execution of 'npm install'.
+
+If you are developing the application-flavors package, and want to locally publish your updates, you can build the 
+library's source such that you can import it from another project during development, by executing:
 ```shell
 npm run prepublishOnly
 ```
+
 Then you can change your importing project's `package.json` to temporarily include the file path import instead of installing from NPM:
 ```
 "@exabyte-io/application-flavors.js": "file:/some/path/to/application-flavors",
 ```
+
 Remember to revert this line to an NPM version when you're done developing.
 
 ## Python Integration Tests
