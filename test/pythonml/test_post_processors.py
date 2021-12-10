@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import re
 import shutil
 import unittest
 import subprocess
@@ -25,6 +26,7 @@ class TestPostProcessingFlavors(BaseUnitTest):
         """
         self.set_pickle_fixtures_path_in_context_object(category, 'model_data')
         shutil.copy(os.path.join(self.asset_path, flavor), flavor)
+        BaseUnitTest.template_plot_names(flavor, plots)
         subprocess.call(['python', flavor])
         for plot in plots:
             assert os.path.isfile(plot)
