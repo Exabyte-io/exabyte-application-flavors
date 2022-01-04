@@ -28,7 +28,6 @@ class BaseTest(TestCase):
     category = "regression"
     data_type = "scaled_data"
     needs_data = False
-    manifest = load_manifest()
 
     @staticmethod
     def get_func_name(testcase_func, param_num, params):
@@ -43,9 +42,10 @@ class BaseTest(TestCase):
             param_num
         )
 
-    @classmethod
-    def get_workflow_flavors(cls):
-        flavor_map = cls.manifest["unit_shortnames"]
+    @staticmethod
+    def get_workflow_flavors(category: str):
+        manifest = load_manifest()
+        flavor_map = manifest["unit_shortnames"]
         flavors = [
             ({
                 "name": name,
@@ -53,8 +53,8 @@ class BaseTest(TestCase):
                     flavor_map[unit] for unit in test["units_to_run"]
                 ],
                 **test
-            },) for name, test in cls.manifest["tests"].items()
-            if test["category"] == cls.category
+            },) for name, test in manifest["tests"].items()
+            if test["category"] == category
         ]
         return flavors
 
