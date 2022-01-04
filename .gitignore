@@ -7,3 +7,5 @@ package-lock.json
 /test/pythonml/*.pyi
 /test/pythonml/settings.py
 /test/pythonml/.job_context
+**/__pycache__/
+
