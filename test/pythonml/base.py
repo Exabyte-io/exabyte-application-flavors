@@ -71,7 +71,7 @@ class BaseTest(TestCase):
         )
         out, err = proc.communicate()
         if proc.returncode:
-            raise Exception(f"{out=}, {err=}")
+            raise Exception(f"out={out}, err={err}")
 
     def relpath(self, basename: str) -> str:
         dirname = os.path.abspath(os.path.dirname(__file__))
