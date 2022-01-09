@@ -1,29 +1,14 @@
 #!/usr/bin/env python
 import os
-import re
-import unittest
-import subprocess
 from unittest import mock
 
+from base import BaseTest
 
-class TestContext(unittest.TestCase):
+
+class TestContext(BaseTest):
     """
     Unit tests for the methods in the Context class defined in the settings.py module
     """
-
-    def setUp(self):
-        with open('fixtures/settings.py', 'r') as file:
-            settings_template = file.readlines()
-        with open('settings.py', 'w') as file:
-            for line in settings_template:
-                line = re.sub("PROBLEM_CATEGORY_HERE", 'regression', line)
-                file.write(line)
-        import settings
-        self.context = settings.Context()
-
-    def tearDown(self):
-        for data in ['.job_context', 'settings.py']:
-            subprocess.call(['rm', '-rf', data])
 
     @mock.patch('builtins.open', new_callable=mock.mock_open)
     @mock.patch('pickle.dump')
@@ -80,7 +65,3 @@ class TestContext(unittest.TestCase):
         mock_pickle_calls = [mock.call(mock_builtin_open())]
         mock_pickle.assert_has_calls(mock_pickle_calls)
         assert mock_pickle() == obj
-
-
-if __name__ == '__main__':
-    unittest.main()
