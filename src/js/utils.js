@@ -1,13 +1,14 @@
-import path from "path";
 import fs from "fs";
+import path from "path";
 import _ from "underscore";
-
 
 export const makeObjectsFromContextProviderNames = (asset) => {
     return {
         ...asset,
-        contextProviders: asset.contextProviders.map(name => {return _.isObject(name) ? name : {name}})
-    }
+        contextProviders: asset.contextProviders.map((name) => {
+            return _.isObject(name) ? name : { name };
+        }),
+    };
 };
 
 /**
@@ -26,5 +27,5 @@ export function deepClone(obj) {
  */
 export function readAssetFile(applicationPath, filename) {
     const assetsDir = path.resolve(__dirname, "../../assets/");
-    return fs.readFileSync(path.resolve(assetsDir, applicationPath, filename), 'utf8');
+    return fs.readFileSync(path.resolve(assetsDir, applicationPath, filename), "utf8");
 }

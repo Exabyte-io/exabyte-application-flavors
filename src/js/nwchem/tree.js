@@ -1,22 +1,20 @@
 import _ from "underscore";
-import monitors from "../allowed_monitors";
-import results from "../allowed_results";
-import postProcessors from "../allowed_post-processors";
 
-const allowedMonitors = [
-    monitors.standard_output
-];
-const allowedPostProcessors = [
-    postProcessors.error_handler
-];
-const allowedResults = results
+import monitors from "../allowed_monitors";
+import postProcessors from "../allowed_post-processors";
+import results from "../allowed_results";
+
+const allowedMonitors = [monitors.standard_output];
+const allowedPostProcessors = [postProcessors.error_handler];
+const allowedResults = results;
 
 export default {
-    "nwchem": {
-        "advancedComputeOptions": false,
-        "postProcessors": allowedPostProcessors,
-        "monitors": allowedMonitors,
-        "results": _.without(allowedResults,
+    nwchem: {
+        advancedComputeOptions: false,
+        postProcessors: allowedPostProcessors,
+        monitors: allowedMonitors,
+        results: _.without(
+            allowedResults,
             "atomic_forces",
             "band_gaps",
             "band_structure",
@@ -33,22 +31,19 @@ export default {
             "reaction_energy_barrier",
             "reaction_energy_profile",
             "potential_profile",
-            "charge_density_profile"
+            "charge_density_profile",
         ),
-        "flavors": {
-            "nwchem_total_energy": {
-                "isDefault": true,
-                "input": [
+        flavors: {
+            nwchem_total_energy: {
+                isDefault: true,
+                input: [
                     {
-                        "name": "nwchem_total_energy.inp"
-                    }
+                        name: "nwchem_total_energy.inp",
+                    },
                 ],
-                "results": [
-                    "total_energy",
-                    "total_energy_contributions"
-                ],
-                "monitors": allowedMonitors
-            }
-        }
-    }
-}
+                results: ["total_energy", "total_energy_contributions"],
+                monitors: allowedMonitors,
+            },
+        },
+    },
+};
