@@ -1,6 +1,7 @@
 /.idea/
 /node_modules/
 /.nyc_output/
+/.husky/
 /lib/
 /venv/
 /test/pythonml/*.csv
