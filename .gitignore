@@ -1,7 +1,7 @@
 /.idea/
 /node_modules/
+/.nyc_output/
 /lib/
-package-lock.json
 /venv/
 /test/pythonml/*.csv
 /test/pythonml/*.pyi
