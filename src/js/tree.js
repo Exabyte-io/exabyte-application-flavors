@@ -7,13 +7,13 @@ import SHELL_TREE from "./shell/tree";
 import VASP_TREE from "./vasp/tree";
 
 const APP_TREES = {
-    'espresso': ESPRESSO_TREE,
-    'jupyterLab': JUPYTERLAB_TREE,
-    'ml': ML_TREE,
-    'nwchem': NWCHEM_TREE,
-    'python': PYTHON_TREE,
-    'shell': SHELL_TREE,
-    'vasp': VASP_TREE,
+    espresso: ESPRESSO_TREE,
+    jupyterLab: JUPYTERLAB_TREE,
+    ml: ML_TREE,
+    nwchem: NWCHEM_TREE,
+    python: PYTHON_TREE,
+    shell: SHELL_TREE,
+    vasp: VASP_TREE,
 };
 
 /**
@@ -23,7 +23,7 @@ const APP_TREES = {
  */
 export function getAppTree(appName) {
     if (!(appName in APP_TREES)) {
-        throw `${appName} is not a known application with a tree.`;
+        throw new Error(`${appName} is not a known application with a tree.`);
     }
     return APP_TREES[appName];
 }
