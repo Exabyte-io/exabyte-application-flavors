@@ -11,14 +11,19 @@
 
 export PYTHONDONTWRITEBYTECODE=1
 
-# Create and activate a virtual environment, to isolate the installed packages.
+# Load the default python environment for jupyterlab
+# TODO: fill in the release automatically
 scratchdir="/scratch/$USER/$PBS_JOBID"
 envdir="$scratchdir/.env"
-python -m virtualenv -q "$envdir"
-source "$envdir/bin/activate"
+jupyterlabdir="/export/compute/software/jupyterlab-env-2021.12.23/"
 
-# Install Jupyter Lab
-python -m pip install -q jupyterlab=={{ application.version }}
+# Copy the root jupterlab environment to user scratch disk, edit to ensure correct paths
+# then activate the virtual environment.
+# TODO: This doesn't work like we hoped. The pip paths continue to point to initial location.
+cp "$jupyterlabdir" "$envdir"
+cd "$envdir"
+sed -i "s|$jupyterlabdir|$envdir|g" *
+source "bin/activate"
 
 # Create a self-signed certificate to make communication with Jupyter Lab secure
 SUBJECT="/C=US/ST=CA/L=San Francisco/O=Exabyte Inc./CN=Jupyter Lab"
