@@ -27,7 +27,7 @@ export default {
                     monitors.standard_output,
                     monitors.jupyterNotebookEndpoint,
                 ],
-            }
+            },
             "notebook-fixed": {
                 "input": [
                     {
