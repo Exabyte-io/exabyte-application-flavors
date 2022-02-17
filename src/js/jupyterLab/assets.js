@@ -15,6 +15,13 @@ export default () => {
             "executableName": executableName
         },
         {
+            "content": readAssetFile(applicationName, "install-fixed.j2.sh"),
+            "name": "install-fixed.sh",
+            "contextProviders": [],
+            "applicationName": applicationName,
+            "executableName": executableName
+        },
+        {
             "content": readAssetFile(applicationName, "configure.pyi"),
             "name": "config.py",
             "contextProviders": [],

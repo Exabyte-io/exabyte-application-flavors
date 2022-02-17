@@ -11,14 +11,15 @@
 
 export PYTHONDONTWRITEBYTECODE=1
 
-# Create and activate a virtual environment, to isolate the installed packages.
+# Load the default python environment for jupyterlab
+# TODO: fill in the release automatically
 scratchdir="/scratch/$USER/$PBS_JOBID"
 envdir="$scratchdir/.env"
-python -m virtualenv -q "$envdir"
-source "$envdir/bin/activate"
+jupyterlabdir="/export/compute/software/jupyterlab-env-2021.12.23/"
 
-# Install Jupyter Lab
-python -m pip install -q jupyterlab=={{ application.version }}
+# activate the virtual environment.
+cd "$jupyterlabdir"
+source "bin/activate"
 
 # Create a self-signed certificate to make communication with Jupyter Lab secure
 SUBJECT="/C=US/ST=CA/L=San Francisco/O=Exabyte Inc./CN=Jupyter Lab"

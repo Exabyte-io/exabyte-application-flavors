@@ -28,6 +28,22 @@ export default {
                     monitors.jupyterNotebookEndpoint,
                 ],
             }
+            "notebook-fixed": {
+                "input": [
+                    {
+                        "name": "install-fixed.sh",
+                        "templateName": "install-fixed.sh",
+                    },
+                    {
+                        "name": "config.py",
+                        "templateName": "config.py",
+                    },
+                ],
+                "monitors": [
+                    monitors.standard_output,
+                    monitors.jupyterNotebookEndpoint,
+                ],
+            }
         }
     }
 }
