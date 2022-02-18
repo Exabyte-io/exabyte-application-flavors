@@ -18,7 +18,7 @@ export default () => {
             "name": "install-fixed.sh",
             "contextProviders": [],
             "applicationName": applicationName,
-            "executableName": "jupyter-fixed"
+            "executableName": "jupyter_fixed"
         },
         {
             "content": readAssetFile(applicationName, "configure.pyi"),

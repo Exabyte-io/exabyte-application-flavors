@@ -30,7 +30,7 @@ export default {
             }
         }
     },
-    "jupyter-fixed": {
+    "jupyter_fixed": {
         "monitors": [
             monitors.standard_output,
             monitors.jupyterNotebookEndpoint,
