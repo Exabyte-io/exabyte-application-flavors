@@ -1,304 +1,266 @@
 import monitors from "../allowed_monitors";
 
 export default {
-    "python": {
-        "monitors": [
-            monitors.standard_output
-        ],
-        "results": ['file_content', 'workflow:pyml_predict'],
-        "flavors": {
-            "hello_world": {
-                "input": [
+    python: {
+        monitors: [monitors.standard_output],
+        results: ["file_content", "workflow:pyml_predict"],
+        flavors: {
+            hello_world: {
+                input: [
                     {
-                        "name": "script.py",
-                        "templateName": "hello_world.py",
+                        name: "script.py",
+                        templateName: "hello_world.py",
                     },
                     {
-                        "name": "requirements.txt",
-                    }
+                        name: "requirements.txt",
+                    },
                 ],
-                "monitors": [
-                    monitors.standard_output
-                ],
+                monitors: [monitors.standard_output],
             },
-            "espresso_xml_get_qpt_irr": {
-                "input": [
+            espresso_xml_get_qpt_irr: {
+                input: [
                     {
-                        "name": "espresso_xml_get_qpt_irr.py",
+                        name: "espresso_xml_get_qpt_irr.py",
                     },
                 ],
-                "monitors": [
-                    monitors.standard_output
-                ],
+                monitors: [monitors.standard_output],
             },
             "pyml:setup_variables_packages": {
-                "input": [
+                input: [
                     {
-                        "name": "settings.py",
-                        "templateName": "pyml_settings.py"
+                        name: "settings.py",
+                        templateName: "pyml_settings.py",
                     },
                     {
-                        "name": "requirements.txt",
-                        "templateName": "pyml_requirements.txt"
-                    }
+                        name: "requirements.txt",
+                        templateName: "pyml_requirements.txt",
+                    },
                 ],
-                "monitors": [monitors.standard_output],
+                monitors: [monitors.standard_output],
             },
             "pyml:custom": {
-                "input": [
+                input: [
                     {
-                        "name": "pyml_custom.py",
-                        "templateName": "pyml_custom.py"
-                    }
+                        name: "pyml_custom.py",
+                        templateName: "pyml_custom.py",
+                    },
                 ],
-                "monitors": [monitors.standard_output],
+                monitors: [monitors.standard_output],
             },
             "pyml:data_input:read_csv:pandas": {
-                "input": [
+                input: [
                     {
-                        "name": "data_input_read_csv_pandas.py",
-                        "templateName": "data_input_read_csv_pandas.py"
-                    }
+                        name: "data_input_read_csv_pandas.py",
+                        templateName: "data_input_read_csv_pandas.py",
+                    },
                 ],
-                "monitors": [monitors.standard_output],
+                monitors: [monitors.standard_output],
             },
             "pyml:data_input:train_test_split:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "data_input_train_test_split_sklearn.py",
-                        "templateName": "data_input_train_test_split_sklearn.py"
-                    }
+                        name: "data_input_train_test_split_sklearn.py",
+                        templateName: "data_input_train_test_split_sklearn.py",
+                    },
                 ],
-                "monitors": [monitors.standard_output],
+                monitors: [monitors.standard_output],
             },
             "pyml:pre_processing:min_max_scaler:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "pre_processing_min_max_sklearn.py",
-                        "templateName": "pre_processing_min_max_sklearn.py"
-                    }
+                        name: "pre_processing_min_max_sklearn.py",
+                        templateName: "pre_processing_min_max_sklearn.py",
+                    },
                 ],
-                "monitors": [monitors.standard_output],
+                monitors: [monitors.standard_output],
             },
             "pyml:pre_processing:remove_duplicates:pandas": {
-                "input": [
+                input: [
                     {
-                        "name": "pre_processing_remove_duplicates_pandas.py",
-                        "templateName": "pre_processing_remove_duplicates_pandas.py"
-                    }
+                        name: "pre_processing_remove_duplicates_pandas.py",
+                        templateName: "pre_processing_remove_duplicates_pandas.py",
+                    },
                 ],
-                "monitors": [monitors.standard_output],
+                monitors: [monitors.standard_output],
             },
             "pyml:pre_processing:remove_missing:pandas": {
-                "input": [
+                input: [
                     {
-                        "name": "pre_processing_remove_missing_pandas.py",
-                        "templateName": "pre_processing_remove_missing_pandas.py"
-                    }
+                        name: "pre_processing_remove_missing_pandas.py",
+                        templateName: "pre_processing_remove_missing_pandas.py",
+                    },
                 ],
-                "monitors": [monitors.standard_output],
+                monitors: [monitors.standard_output],
             },
             "pyml:pre_processing:standardization:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "pre_processing_standardization_sklearn.py",
-                        "templateName": "pre_processing_standardization_sklearn.py"
-                    }
+                        name: "pre_processing_standardization_sklearn.py",
+                        templateName: "pre_processing_standardization_sklearn.py",
+                    },
                 ],
-                "monitors": [monitors.standard_output],
+                monitors: [monitors.standard_output],
             },
             "pyml:model:adaboosted_trees_regression:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "model_adaboosted_trees_regression_sklearn.py",
-                        "templateName": "model_adaboosted_trees_regression_sklearn.py"
-                    }
+                        name: "model_adaboosted_trees_regression_sklearn.py",
+                        templateName: "model_adaboosted_trees_regression_sklearn.py",
+                    },
                 ],
-                "monitors": [monitors.standard_output],
-                "results": [
-                    "workflow:pyml_predict"
-                ],
+                monitors: [monitors.standard_output],
+                results: ["workflow:pyml_predict"],
             },
             "pyml:model:bagged_trees_regression:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "model_bagged_trees_regression_sklearn.py",
-                        "templateName": "model_bagged_trees_regression_sklearn.py"
-                    }
+                        name: "model_bagged_trees_regression_sklearn.py",
+                        templateName: "model_bagged_trees_regression_sklearn.py",
+                    },
                 ],
-                "results": [
-                    "workflow:pyml_predict"
-                ],
-                "monitors": [monitors.standard_output],
+                results: ["workflow:pyml_predict"],
+                monitors: [monitors.standard_output],
             },
             "pyml:model:gradboosted_trees_regression:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "model_gradboosted_trees_regression_sklearn.py",
-                        "templateName": "model_gradboosted_trees_regression_sklearn.py"
-                    }
+                        name: "model_gradboosted_trees_regression_sklearn.py",
+                        templateName: "model_gradboosted_trees_regression_sklearn.py",
+                    },
                 ],
-                "results": [
-                    "workflow:pyml_predict"
-                ],
-                "monitors": [monitors.standard_output],
+                results: ["workflow:pyml_predict"],
+                monitors: [monitors.standard_output],
             },
             "pyml:model:extreme_gradboosted_trees_regression:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "model_extreme_gradboosted_trees_regression_sklearn.py",
-                        "templateName": "model_extreme_gradboosted_trees_regression_sklearn.py"
-                    }
+                        name: "model_extreme_gradboosted_trees_regression_sklearn.py",
+                        templateName: "model_extreme_gradboosted_trees_regression_sklearn.py",
+                    },
                 ],
-                "results": [
-                    "workflow:pyml_predict"
-                ],
-                "monitors": [monitors.standard_output],
+                results: ["workflow:pyml_predict"],
+                monitors: [monitors.standard_output],
             },
             "pyml:model:k_means_clustering:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "model_k_means_clustering_sklearn.py",
-                        "templateName": "model_k_means_clustering_sklearn.py"
-                    }
+                        name: "model_k_means_clustering_sklearn.py",
+                        templateName: "model_k_means_clustering_sklearn.py",
+                    },
                 ],
-                "results": [
-                    "workflow:pyml_predict"
-                ],
-                "monitors": [monitors.standard_output],
+                results: ["workflow:pyml_predict"],
+                monitors: [monitors.standard_output],
             },
             "pyml:model:kernel_ridge_regression:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "model_kernel_ridge_regression_sklearn.py",
-                        "templateName": "model_kernel_ridge_regression_sklearn.py"
-                    }
+                        name: "model_kernel_ridge_regression_sklearn.py",
+                        templateName: "model_kernel_ridge_regression_sklearn.py",
+                    },
                 ],
-                "results": [
-                    "workflow:pyml_predict"
-                ],
-                "monitors": [monitors.standard_output],
+                results: ["workflow:pyml_predict"],
+                monitors: [monitors.standard_output],
             },
             "pyml:model:lasso_regression:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "model_lasso_regression_sklearn.py",
-                        "templateName": "model_lasso_regression_sklearn.py"
-                    }
+                        name: "model_lasso_regression_sklearn.py",
+                        templateName: "model_lasso_regression_sklearn.py",
+                    },
                 ],
-                "results": [
-                    "workflow:pyml_predict"
-                ],
-                "monitors": [monitors.standard_output],
+                results: ["workflow:pyml_predict"],
+                monitors: [monitors.standard_output],
             },
             "pyml:model:multilayer_perceptron:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "model_mlp_sklearn.py",
-                        "templateName": "model_mlp_sklearn.py"
-                    }
+                        name: "model_mlp_sklearn.py",
+                        templateName: "model_mlp_sklearn.py",
+                    },
                 ],
-                "results": [
-                    "workflow:pyml_predict"
-                ],
-                "monitors": [monitors.standard_output],
+                results: ["workflow:pyml_predict"],
+                monitors: [monitors.standard_output],
             },
             "pyml:model:random_forest_classification:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "model_random_forest_classification_sklearn.py",
-                        "templateName": "model_random_forest_classification_sklearn.py"
-                    }
+                        name: "model_random_forest_classification_sklearn.py",
+                        templateName: "model_random_forest_classification_sklearn.py",
+                    },
                 ],
-                "results": [
-                    "workflow:pyml_predict"
-                ],
-                "monitors": [monitors.standard_output],
+                results: ["workflow:pyml_predict"],
+                monitors: [monitors.standard_output],
             },
             "pyml:model:gradboosted_trees_classification:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "model_gradboosted_trees_classification_sklearn.py",
-                        "templateName": "model_gradboosted_trees_classification_sklearn.py"
-                    }
+                        name: "model_gradboosted_trees_classification_sklearn.py",
+                        templateName: "model_gradboosted_trees_classification_sklearn.py",
+                    },
                 ],
-                "results": [
-                    "workflow:pyml_predict"
-                ],
-                "monitors": [monitors.standard_output],
+                results: ["workflow:pyml_predict"],
+                monitors: [monitors.standard_output],
             },
             "pyml:model:extreme_gradboosted_trees_classification:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "model_extreme_gradboosted_trees_classification_sklearn.py",
-                        "templateName": "model_extreme_gradboosted_trees_classification_sklearn.py"
-                    }
+                        name: "model_extreme_gradboosted_trees_classification_sklearn.py",
+                        templateName: "model_extreme_gradboosted_trees_classification_sklearn.py",
+                    },
                 ],
-                "results": [
-                    "workflow:pyml_predict"
-                ],
-                "monitors": [monitors.standard_output],
+                results: ["workflow:pyml_predict"],
+                monitors: [monitors.standard_output],
             },
             "pyml:model:random_forest_regression:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "model_random_forest_regression_sklearn.py",
-                        "templateName": "model_random_forest_regression_sklearn.py"
-                    }
+                        name: "model_random_forest_regression_sklearn.py",
+                        templateName: "model_random_forest_regression_sklearn.py",
+                    },
                 ],
-                "results": [
-                    "workflow:pyml_predict"
-                ],
-                "monitors": [monitors.standard_output],
+                results: ["workflow:pyml_predict"],
+                monitors: [monitors.standard_output],
             },
             "pyml:model:ridge_regression:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "model_ridge_regression_sklearn.py",
-                        "templateName": "model_ridge_regression_sklearn.py"
-                    }
+                        name: "model_ridge_regression_sklearn.py",
+                        templateName: "model_ridge_regression_sklearn.py",
+                    },
                 ],
-                "results": [
-                    "workflow:pyml_predict"
-                ],
-                "monitors": [monitors.standard_output],
+                results: ["workflow:pyml_predict"],
+                monitors: [monitors.standard_output],
             },
             "pyml:post_processing:parity_plot:matplotlib": {
-                "input": [
+                input: [
                     {
-                        "name": "post_processing_parity_plot_matplotlib.py",
-                        "templateName": "post_processing_parity_plot_matplotlib.py"
-                    }
+                        name: "post_processing_parity_plot_matplotlib.py",
+                        templateName: "post_processing_parity_plot_matplotlib.py",
+                    },
                 ],
-                "results": [
-                    "file_content"
-                ],
-                "monitors": [monitors.standard_output],
+                results: ["file_content"],
+                monitors: [monitors.standard_output],
             },
             "pyml:post_processing:pca_2d_clusters:matplotlib": {
-                "input": [
+                input: [
                     {
-                        "name": "post_processing_pca_2d_clusters_matplotlib.py",
-                        "templateName": "post_processing_pca_2d_clusters_matplotlib.py"
-                    }
+                        name: "post_processing_pca_2d_clusters_matplotlib.py",
+                        templateName: "post_processing_pca_2d_clusters_matplotlib.py",
+                    },
                 ],
-                "results": [
-                    "file_content"
-                ],
-                "monitors": [monitors.standard_output],
+                results: ["file_content"],
+                monitors: [monitors.standard_output],
             },
             "pyml:post_processing:roc_curve:sklearn": {
-                "input": [
+                input: [
                     {
-                        "name": "post_processing_roc_curve_sklearn.py",
-                        "templateName": "post_processing_roc_curve_sklearn.py"
-                    }
+                        name: "post_processing_roc_curve_sklearn.py",
+                        templateName: "post_processing_roc_curve_sklearn.py",
+                    },
                 ],
-                "results": [
-                    "file_content"
-                ],
-                "monitors": [monitors.standard_output],
+                results: ["file_content"],
+                monitors: [monitors.standard_output],
             },
-        }
-    }
-}
+        },
+    },
+};

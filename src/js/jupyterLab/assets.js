@@ -1,4 +1,4 @@
-import {makeObjectsFromContextProviderNames, readAssetFile} from "../utils";
+import { makeObjectsFromContextProviderNames, readAssetFile } from "../utils";
 
 const applicationName = "jupyterLab"
 
@@ -7,35 +7,34 @@ const applicationName = "jupyterLab"
 export default () => {
     const allAssets = [
         {
-            "content": readAssetFile(applicationName, "install.j2.sh"),
-            "name": "install.sh",
-            "contextProviders": [],
-            "applicationName": applicationName,
-            "executableName": "jupyter"
+            content: readAssetFile(applicationName, "install.j2.sh"),
+            name: "install.sh",
+            contextProviders: [],
+            applicationName: applicationName,
+            executableName: "jupyter"
         },
         {
-            "content": readAssetFile(applicationName, "install-fixed.j2.sh"),
-            "name": "install-fixed.sh",
-            "contextProviders": [],
-            "applicationName": applicationName,
-            "executableName": "jupyter_fixed"
+            content: readAssetFile(applicationName, "install-fixed.j2.sh"),
+            name: "install-fixed.sh",
+            contextProviders: [],
+            applicationName: applicationName,
+            executableName: "jupyter_fixed"
         },
         {
-            "content": readAssetFile(applicationName, "configure.pyi"),
-            "name": "config.py",
-            "contextProviders": [],
-            "applicationName": applicationName,
-            "executableName": "jupyter"
+            content: readAssetFile(applicationName, "configure.pyi"),
+            name: "config.py",
+            contextProviders: [],
+            applicationName: applicationName,
+            executableName: "jupyter"
         },
         {
-            "content": readAssetFile(applicationName, "configure.j2.sh"),
-            "name": "configure.sh",
-            "contextProviders": [],
-            "applicationName": applicationName,
-            "executableName": "jupyter"
+            content: readAssetFile(applicationName, "configure.j2.sh"),
+            name: "configure.sh",
+            contextProviders: [],
+            applicationName: applicationName,
+            executableName: "jupyter"
         },
-
     ];
 
-    return allAssets.map(a => makeObjectsFromContextProviderNames(a));
+    return allAssets.map((a) => makeObjectsFromContextProviderNames(a));
 };

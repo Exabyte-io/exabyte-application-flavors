@@ -1,9 +1,12 @@
 /.idea/
 /node_modules/
+/.nyc_output/
+/.husky/
 /lib/
-package-lock.json
 /venv/
 /test/pythonml/*.csv
 /test/pythonml/*.pyi
 /test/pythonml/settings.py
 /test/pythonml/.job_context
+**/__pycache__/
+
