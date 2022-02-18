@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# ---------------------------------------------------------------- #
-#                                                                  #
-#  JUPYTER LAB INSTALLATION SCRIPT FOR EXABYTE.IO PLATFORM.        #
-#                                                                  #
-#  DO NOT MODIFY THIS FILE! ADJUST "configure.sh" SCRIPT           #
-#  IF YOU NEED TO CUSTOMIZE YOUR JUPYTER LAB ENVIRONMENT.          #
-#                                                                  #
-# ---------------------------------------------------------------- #
+# ------------------------------------------------------------ #
+#                                                              #
+#   JUPYTER LAB INSTALLATION SCRIPT FOR EXABYTE.IO PLATFORM.   #
+#                                                              #
+#    DO NOT MODIFY THIS FILE! ADJUST "configure.sh" SCRIPT     #
+#    IF YOU NEED TO CUSTOMIZE YOUR JUPYTER LAB ENVIRONMENT.    #
+#                                                              #
+# ------------------------------------------------------------ #
 
 export PYTHONDONTWRITEBYTECODE=1
 

@@ -27,8 +27,17 @@ export default {
                     monitors.standard_output,
                     monitors.jupyterNotebookEndpoint,
                 ],
-            },
-            "notebook-fixed": {
+            }
+        }
+    },
+    "jupyter-fixed": {
+        "monitors": [
+            monitors.standard_output,
+            monitors.jupyterNotebookEndpoint,
+        ],
+        "results": [],
+        "flavors": {
+            "notebook": {
                 "input": [
                     {
                         "name": "install-fixed.sh",

@@ -1,7 +1,6 @@
 import {makeObjectsFromContextProviderNames, readAssetFile} from "../utils";
 
 const applicationName = "jupyterLab"
-const executableName = "jupyter"
 
 // Here, we're returning a delayed-evaluation lambda, to avoid loading the asset files in scenarios where they're not
 // available, like on the client.
@@ -12,28 +11,28 @@ export default () => {
             "name": "install.sh",
             "contextProviders": [],
             "applicationName": applicationName,
-            "executableName": executableName
+            "executableName": "jupyter"
         },
         {
             "content": readAssetFile(applicationName, "install-fixed.j2.sh"),
             "name": "install-fixed.sh",
             "contextProviders": [],
             "applicationName": applicationName,
-            "executableName": executableName
+            "executableName": "jupyter-fixed"
         },
         {
             "content": readAssetFile(applicationName, "configure.pyi"),
             "name": "config.py",
             "contextProviders": [],
             "applicationName": applicationName,
-            "executableName": executableName
+            "executableName": "jupyter"
         },
         {
             "content": readAssetFile(applicationName, "configure.j2.sh"),
             "name": "configure.sh",
             "contextProviders": [],
             "applicationName": applicationName,
-            "executableName": executableName
+            "executableName": "jupyter"
         },
 
     ];

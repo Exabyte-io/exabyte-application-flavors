@@ -1,21 +1,24 @@
 #!/bin/bash
 
-# ---------------------------------------------------------------- #
-#                                                                  #
-#  JUPYTER LAB INSTALLATION SCRIPT FOR EXABYTE.IO PLATFORM.        #
-#                                                                  #
-#  DO NOT MODIFY THIS FILE! ADJUST "configure.sh" SCRIPT           #
-#  IF YOU NEED TO CUSTOMIZE YOUR JUPYTER LAB ENVIRONMENT.          #
-#                                                                  #
-# ---------------------------------------------------------------- #
+# ------------------------------------------------------------ #
+#                                                              #
+#   JUPYTER LAB INSTALLATION SCRIPT FOR EXABYTE.IO PLATFORM.   #
+#                                                              #
+#    DO NOT MODIFY THIS FILE! ADJUST "configure.sh" SCRIPT     #
+#    IF YOU NEED TO CUSTOMIZE YOUR JUPYTER LAB ENVIRONMENT.    #
+#                                                              #
+# ------------------------------------------------------------ #
 
 export PYTHONDONTWRITEBYTECODE=1
 
-# Load the default python environment for jupyterlab
-# TODO: fill in the release automatically
+# Load the fixed python environment for jupyterlab
+# This is a consistent set of packages installable in Python 3, obtained by:
+# > pip3 install "jupyterlab==3.0.3" "exabyte-api-client>=2020.10.19" numpy>=1.17.3 \
+# >  pandas>=1.1.4 matplotlib seaborn ase pymatgen rdkit-pypi "matminer==0.7.0" scikit-learn xgboost
+
 scratchdir="/scratch/$USER/$PBS_JOBID"
 envdir="$scratchdir/.env"
-jupyterlabdir="/export/compute/software/jupyterlab-env-2021.12.23/"
+jupyterlabdir="/export/compute/software/jupyterlab-envs/py-3.8.6-jl-{{ application.version }}/"
 
 # activate the virtual environment.
 cd "$jupyterlabdir"
