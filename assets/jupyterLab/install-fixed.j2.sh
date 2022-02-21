@@ -15,10 +15,7 @@ export PYTHONDONTWRITEBYTECODE=1
 # This is a consistent set of packages installable in Python 3, obtained by:
 # > pip3 install "jupyterlab==3.0.3" "exabyte-api-client>=2020.10.19" numpy>=1.17.3 \
 # >  pandas>=1.1.4 matplotlib seaborn ase pymatgen rdkit-pypi "matminer==0.7.0" scikit-learn xgboost
-
-scratchdir="/scratch/$USER/$PBS_JOBID"
-envdir="$scratchdir/.env"
-jupyterlabdir="/export/compute/software/jupyterlab-envs/py-3.8.6-jl-{{ application.version }}/"
+jupyterlabdir="/export/compute/software/python-applications/jupyterlab/py-3.8.6/3.0.3/"
 
 # activate the virtual environment.
 cd "$jupyterlabdir"
