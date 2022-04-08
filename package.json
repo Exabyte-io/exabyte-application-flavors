@@ -4,6 +4,7 @@
   "description": "Input file templates and related computational configuration parameters for the applications used in the platform.",
   "scripts": {
     "prepublishOnly": "rm -rf lib; npm run transpile",
+    "postinstall": "npm run transpile",
     "transpile": "mkdir -p lib; babel src/js --out-dir lib/js",
     "test": "nyc --reporter=text mocha --require @babel/register tests",
     "lint": "eslint src/js && prettier --write src/js",
