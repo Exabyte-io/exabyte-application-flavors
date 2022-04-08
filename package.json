@@ -5,7 +5,7 @@
   "scripts": {
     "prepublishOnly": "rm -rf lib; npm run transpile",
     "transpile": "mkdir -p lib; babel src/js --out-dir lib/js",
-    "test": "nyc --reporter=text mocha --require @babel/register src/js/tests/test.js",
+    "test": "nyc --reporter=text mocha --require @babel/register tests",
     "lint": "eslint src/js && prettier --write src/js",
     "lint:fix": "eslint --fix --cache src/js && prettier --write src/js",
     "prettier": "prettier --check src/js",
