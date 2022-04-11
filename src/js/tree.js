@@ -9,7 +9,7 @@ import VASP_TREE from "./vasp/tree";
 const APP_TREES = {
     espresso: ESPRESSO_TREE,
     jupyterLab: JUPYTERLAB_TREE,
-    ml: ML_TREE,
+    exabyteml: ML_TREE,
     nwchem: NWCHEM_TREE,
     python: PYTHON_TREE,
     shell: SHELL_TREE,

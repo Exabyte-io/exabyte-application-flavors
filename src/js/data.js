@@ -9,7 +9,7 @@ import VASP_DATA from "./vasp/data";
 const APP_DATA = {
     espresso: ESPRESSO_DATA,
     jupyterLab: JUPYTERLAB_DATA,
-    ml: ML_DATA,
+    exabyteml: ML_DATA,
     nwchem: NWCHEM_DATA,
     python: PYTHON_DATA,
     shell: SHELL_DATA,
