@@ -18,8 +18,8 @@ export default {
         monitors: [monitors.standard_output],
         results: [],
         flavors: {
-            isDefault: true,
             score: {
+                isDefault: true,
                 input: [],
                 monitors: [monitors.standard_output],
             },

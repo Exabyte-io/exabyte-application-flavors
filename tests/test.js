@@ -1,8 +1,13 @@
 import assert from "assert";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { expect } from "chai";
 
-import { allowedMonitors, allowedResults, getAllAppTemplates, getAppTree } from "../index";
+import {
+    allowedMonitors,
+    allowedResults,
+    getAllAppTemplates,
+    getAppTree,
+    getAppData,
+} from "../src/js/index";
 
 describe("allowedResults", () => {
     it("should not be empty", () => {
@@ -41,5 +46,18 @@ describe("getAppTree", () => {
         expect(() => {
             getAppTree("unknown_app");
         }).to.throw("unknown_app is not a known application with a tree.");
+    });
+});
+
+describe("getAppData", () => {
+    it("returns results", () => {
+        const data = getAppData("nwchem");
+        assert("name" in data);
+        assert(data.name === "nwchem");
+    });
+    it("raises on unknown application", () => {
+        expect(() => {
+            getAppData("unknown_app");
+        }).to.throw("unknown_app is not a known application with data.");
     });
 });
