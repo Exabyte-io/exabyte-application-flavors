@@ -10,6 +10,7 @@ const allowedResults = results;
 
 export default {
     nwchem: {
+        isDefault: true,
         advancedComputeOptions: false,
         postProcessors: allowedPostProcessors,
         monitors: allowedMonitors,
