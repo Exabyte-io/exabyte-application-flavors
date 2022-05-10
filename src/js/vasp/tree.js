@@ -22,6 +22,7 @@ const getTreeKeyWithMixin = (branch, flavorKey, mixinName) => {
     const addPostfix = (name) => name + "_" + mixinName;
     const flavor = branch[flavorKey];
     const adjustedFlavor = deepClone(flavor);
+    adjustedFlavor.isDefault = false;
     // assuming that mixins are only relevant for INCAR
     adjustedFlavor.input.forEach((inputObject) => {
         if (inputObject.name === "INCAR") {
