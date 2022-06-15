@@ -1,0 +1,16 @@
+flavor_list_display_name: "pyml:custom"
+true_extension: "py"
+source_filename: "pyml:custom.pyi"
+
+---
+
+flavor_list_display_name: "pyml:setup_variables_packages"
+true_extension: "py"
+filename_when_the_job_is_running: "settings.py"
+source_filename: "pyml:setup_variables_packages.pyi"
+extra_inputs: "requirements.txt"
+
+---
+
+flavor_list_display_name: "requirements"
+true_extension: "txt"

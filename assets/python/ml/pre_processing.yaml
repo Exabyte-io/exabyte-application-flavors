@@ -1,0 +1,17 @@
+name: "min_max_scaler"
+provider: "sklearn"
+
+---
+
+name: "remove_duplicates"
+provider: "pandas"
+
+---
+
+name: "remove_missing"
+provider: "pandas"
+
+---
+
+name: "standardization"
+provider: "sklearn"

@@ -1,0 +1,29 @@
+import monitors from "../allowed_monitors";
+
+export default {
+    "python": {
+        "monitors": [
+            monitors.standard_output
+        ],
+        "results": [],
+        "flavors": {
+            {% for config in configs %}
+                {{ config.flavorListDisplayName  | quotedstrings | safe }}: {
+                    "input": [
+                        {
+                            "name": {{ (config.flavorListDisplayName + config.trueExtension) | quotedstrings | safe}},
+                            "templateName": {{ config.flavorListTemplateName | quotedstrings | safe}},
+                        },
+                    {% for input in config.additionalInputs %}
+                        {
+                           "name": {{ input.name | quotedstrings | safe }},
+                           "templateName": {{ input.templateName | quotedstrings | safe }},
+                        },
+                    {% endfor %}
+                ],
+                "monitors": [monitors.standard_output],
+                },
+            {% endfor %}
+        }
+    }
+}

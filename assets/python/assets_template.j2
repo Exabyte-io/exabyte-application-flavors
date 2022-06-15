@@ -1,0 +1,25 @@
+import {makeObjectsFromContextProviderNames, readAssetFile} from "../utils";
+
+const applicationName = "python";
+const executableName = "python";
+
+// Here, we're returning a delayed-evaluation lambda, to avoid loading the asset files in scenarios where they're not
+// available, like on the client.
+export default () => {
+    const allAssets = [
+        /*
+         *  PYTHON
+         */
+        {% for config in configs %}
+            {
+            "content": readAssetFile({{ config.applicationDirname }}, {{ config.sourceFilename | quotedstrings | safe }}),
+            "name": {{ (config.flavorListDisplayName + config.trueExtension)  | quotedstrings | safe }},
+            "contextProviders": {{ config.contextProviders  | quotedstrings | safe }},
+            "applicationName": applicationName,
+            "executableName": executableName,
+            },
+        {% endfor %}
+    ];
+
+    return allAssets.map(a => makeObjectsFromContextProviderNames(a));
+};
