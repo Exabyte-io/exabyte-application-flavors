@@ -3,10 +3,12 @@ import allowedResults from "../allowed_results";
 
 export default {
     sh: {
+        isDefault: true,
         monitors: [monitors.standard_output],
         results: allowedResults,
         flavors: {
             hello_world: {
+                isDefault: true,
                 input: [
                     {
                         name: "hello_world.sh",

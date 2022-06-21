@@ -2,10 +2,12 @@ import monitors from "../allowed_monitors";
 
 export default {
     python: {
+        isDefault: true,
         monitors: [monitors.standard_output],
         results: ["file_content", "workflow:pyml_predict"],
         flavors: {
             hello_world: {
+                isDefault: true,
                 input: [
                     {
                         name: "script.py",
