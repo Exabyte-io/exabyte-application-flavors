@@ -4,7 +4,7 @@ export default {
     train: {
         isDefault: true,
         monitors: [monitors.standard_output],
-        results: [],
+        results: ["workflow:ml_predict"],
         flavors: {
             train: {
                 isDefault: true,
@@ -16,7 +16,7 @@ export default {
     score: {
         isDefault: false,
         monitors: [monitors.standard_output],
-        results: [],
+        results: ["predicted_properties"],
         flavors: {
             score: {
                 isDefault: true,
