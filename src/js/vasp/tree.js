@@ -22,7 +22,7 @@ const getTreeKeyWithMixin = (branch, flavorKey, mixinName) => {
     const addPostfix = (name) => name + "_" + mixinName;
     const flavor = branch[flavorKey];
     const adjustedFlavor = deepClone(flavor);
-    delete adjustedFlavor.isDefault;
+    adjustedFlavor.isDefault = false;
     // assuming that mixins are only relevant for INCAR
     adjustedFlavor.input.forEach((inputObject) => {
         if (inputObject.name === "INCAR") {
@@ -34,6 +34,7 @@ const getTreeKeyWithMixin = (branch, flavorKey, mixinName) => {
 
 const tree = {
     vasp: {
+        isDefault: true,
         postProcessors: allowedPostProcessors,
         monitors: allowedMonitors,
         results: _.without(allowedResults, "phonon_dos", "phonon_dispersions"),

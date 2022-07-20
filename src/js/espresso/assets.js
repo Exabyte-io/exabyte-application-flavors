@@ -163,14 +163,14 @@ export default () => {
             name: "matdyn_grid.in",
             contextProviders: ["IGridFormDataManager"],
             applicationName,
-            executableName: "ph.x",
+            executableName: "matdyn.x",
         },
         {
             content: readAssetFile(applicationName, "matdyn_path.j2.in"),
             name: "matdyn_path.in",
             contextProviders: ["IPathFormDataManager"],
             applicationName,
-            executableName: "ph.x",
+            executableName: "matdyn.x",
         },
 
         /*
