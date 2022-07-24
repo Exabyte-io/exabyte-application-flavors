@@ -20,7 +20,7 @@ const allowedPostProcessors = [
 export default {
     "pw.x": {
         isDefault: true,
-        advancedComputeOptions: true,
+        hasAdvancedComputeOptions: true,
         postProcessors: allowedPostProcessors,
         monitors: allowedMonitors,
         results: _.without(

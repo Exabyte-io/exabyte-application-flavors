@@ -11,7 +11,7 @@ const allowedResults = results;
 export default {
     nwchem: {
         isDefault: true,
-        advancedComputeOptions: false,
+        hasAdvancedComputeOptions: false,
         postProcessors: allowedPostProcessors,
         monitors: allowedMonitors,
         results: _.without(
